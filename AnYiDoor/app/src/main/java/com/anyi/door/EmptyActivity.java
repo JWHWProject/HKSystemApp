@@ -29,6 +29,8 @@ public class EmptyActivity extends BaseActivity
         setContentView(R.layout.activity_empty);
         ButterKnife.bind(this);
         try
+
+
         {
             tvShow.setText("机型"+android.os.Build.MODEL+"\n厂商"+android.os.Build.MANUFACTURER);
         } catch (Exception e)

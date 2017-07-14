@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/common_back"
+        layout="@layout/layout_top"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="企业人员" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="外来人员" />
+    </android.support.design.widget.TabLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/pxtodp30"
+            android:text="卡号"
+            android:textColor="@color/title_black"
+            android:textSize="@dimen/pxtodp30"/>
+
+        <EditText
+            android:id="@+id/et_card_number"
+            style="@style/register_input_user_infos_et"
+            android:hint="请输入卡号"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/pxtodp30"
+            android:text="姓名"
+            android:textColor="@color/title_black"
+            android:textSize="@dimen/pxtodp30"/>
+
+        <EditText
+            android:id="@+id/et_name"
+            style="@style/register_input_user_infos_et"
+            android:hint="请输入姓名"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/pxtodp30"
+            android:text="性别"
+            android:textColor="@color/title_black"
+            android:textSize="@dimen/pxtodp30"/>
+
+        <TextView
+            android:id="@+id/tv_sex"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/pxtodp12"
+            android:drawableRight="@mipmap/listright_arrow"
+            android:paddingRight="@dimen/pxtodp20"
+            android:text="请选择"
+            android:textColor="@color/txt_nol_col"
+            android:textSize="@dimen/pxtosp30" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"/>
+
+</LinearLayout>

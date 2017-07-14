@@ -195,6 +195,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
             //发卡
             case R.id.ll_fk:
+                startActivity(new Intent(mContext,GiveCardActivity.class));
                 break;
             //测试
             case R.id.ll_test:
