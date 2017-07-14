@@ -50,6 +50,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
     {
         initTitle();
         listView = (ExpandableListView) findViewById(R.id.list);
+        listView.setGroupIndicator(null);
         final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
         listView.setAdapter(adapter);
         //只展开一个

@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/view1"
-        android:layout_width="@dimen/pxtodp10"
-        android:layout_height="100px"
+        android:layout_width="@dimen/pxtodp16"
+        android:layout_height="90px"
         android:src="@color/white"
         />
 

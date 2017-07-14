@@ -35,6 +35,7 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
         listView = (ExpandableListView) findViewById(R.id.list);
         final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
         listView.setAdapter(adapter);
+        listView.setGroupIndicator(null);
         //只展开一个
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 

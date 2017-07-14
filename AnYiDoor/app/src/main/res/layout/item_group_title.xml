@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="@dimen/pxtodp10"
+                android:paddingLeft="@dimen/pxtodp16"
                 android:paddingRight="@dimen/pxtodp10"
     >
 
@@ -12,16 +12,17 @@
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/pxtodp10"
-        android:paddingTop="@dimen/pxtodp10"
+        android:paddingBottom="@dimen/pxtodp16"
+        android:paddingTop="@dimen/pxtodp16"
         android:text="ddd"   android:textColor="@color/register_black_text"
-        android:textSize="@dimen/pxtodp34"
+        android:textSize="@dimen/pxtodp36"
         />
 
     <ImageView
         android:id="@+id/icon_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/pxtodp10"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
     <View
