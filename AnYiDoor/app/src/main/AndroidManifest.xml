@@ -42,6 +42,7 @@
 
         </activity>
         <activity android:name=".SearchTrainListActy"/>
+        <activity android:name=".OuterGetReasonActivity"/>
         <activity
             android:name=".TrainListActy"
             android:launchMode="singleTask">

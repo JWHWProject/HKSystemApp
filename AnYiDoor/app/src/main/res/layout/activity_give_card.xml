@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/pxtodp1"
         android:background="@color/line"/>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
@@ -24,20 +25,25 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="企业人员" />
+            android:text="企业人员"/>
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="外来人员" />
+            android:text="外来人员"/>
     </android.support.design.widget.TabLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"
+        android:paddingLeft="@dimen/pxtodp20"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/pxtodp20"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/pxtodp80"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/pxtodp20">
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,14 +61,15 @@
 
     <View
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/pxtodp20"
         android:layout_height="@dimen/pxtodp1"
-        android:background="@drawable/line_view"/>
+        android:background="@drawable/line_view"
+        android:paddingLeft="@dimen/pxtodp20"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/pxtodp20"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/pxtodp80"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/pxtodp20">
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,48 +85,268 @@
             android:hint="请输入姓名"/>
     </LinearLayout>
 
+
     <View
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/pxtodp20"
         android:layout_height="@dimen/pxtodp1"
-        android:background="@drawable/line_view"/>
-    <LinearLayout
+        android:background="@drawable/line_view"
+        android:paddingLeft="@dimen/pxtodp20"/>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/pxtodp20"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/pxtodp80"
+        android:background="@color/white_color"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/pxtodp20">
 
         <TextView
+            android:id="@+id/tv_sex_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/pxtodp30"
+            android:layout_centerVertical="true"
             android:text="性别"
             android:textColor="@color/title_black"
             android:textSize="@dimen/pxtodp30"/>
+
 
         <TextView
             android:id="@+id/tv_sex"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_sex_left"
             android:drawablePadding="@dimen/pxtodp12"
-            android:drawableRight="@mipmap/listright_arrow"
+            android:drawableRight="@mipmap/arrow_down"
+            android:gravity="center_vertical|right"
             android:paddingRight="@dimen/pxtodp20"
             android:text="请选择"
             android:textColor="@color/txt_nol_col"
-            android:textSize="@dimen/pxtosp30" />
+            android:textSize="@dimen/pxtosp30"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"
+        android:paddingLeft="@dimen/pxtodp20"/>
+
+    <!--内部人员-->
+    <LinearLayout
+        android:id="@+id/ll_inner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp80"
+            android:background="@color/white_color"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:id="@+id/tv_department_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="部门"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+
+            <TextView
+                android:id="@+id/tv_department"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_department_left"
+                android:drawablePadding="@dimen/pxtodp12"
+                android:drawableRight="@mipmap/arrow_down"
+                android:gravity="center_vertical|right"
+                android:paddingRight="@dimen/pxtodp20"
+                android:text="请选择"
+                android:textColor="@color/txt_nol_col"
+                android:textSize="@dimen/pxtosp30"/>
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp1"
+            android:background="@drawable/line_view"
+            android:paddingLeft="@dimen/pxtodp20"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp80"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/pxtodp30"
+                android:text="工号"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+            <EditText
+                android:id="@+id/et_number"
+                style="@style/register_input_user_infos_et"
+                android:hint="请输入工号"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <View
+
+    <LinearLayout
+        android:id="@+id/ll_outer"
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/pxtodp20"
-        android:layout_height="@dimen/pxtodp1"
-        android:background="@drawable/line_view"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/pxtodp30"
+                android:gravity="center_vertical"
+                android:text="联系\n方式"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/register_input_user_infos_et"
+                android:hint="请输入手机号码"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp1"
+            android:background="@drawable/line_view"
+            android:paddingLeft="@dimen/pxtodp20"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/pxtodp30"
+                android:gravity="center_vertical"
+                android:text="来自\n单位"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+            <EditText
+                android:id="@+id/et_company"
+                style="@style/register_input_user_infos_et"
+                android:hint="请输入单位名称"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp1"
+            android:background="@drawable/line_view"
+            android:paddingLeft="@dimen/pxtodp20"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/pxtodp30"
+                android:gravity="center_vertical"
+                android:text="身份\n证号"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+            <EditText
+                android:id="@+id/et_id"
+                style="@style/register_input_user_infos_et"
+                android:hint="请输入身份证号码"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp1"
+            android:background="@drawable/line_view"
+            android:paddingLeft="@dimen/pxtodp20"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp80"
+            android:background="@color/white_color"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pxtodp20">
+
+            <TextView
+                android:id="@+id/tv_reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="事由"
+                android:textColor="@color/title_black"
+                android:textSize="@dimen/pxtodp30"/>
+
+
+            <TextView
+                android:id="@+id/tv_explain"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_reason"
+                android:drawablePadding="@dimen/pxtodp12"
+                android:drawableRight="@mipmap/listright_arrow"
+                android:gravity="center_vertical|right"
+                android:paddingRight="@dimen/pxtodp20"
+                android:text="请填写"
+                android:textColor="@color/txt_nol_col"
+                android:textSize="@dimen/pxtosp30"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp1"
+            android:background="@drawable/line_view"
+            android:paddingLeft="@dimen/pxtodp20"/>
+
+    </LinearLayout>
 
 
     <View
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/pxtodp20"
         android:layout_height="@dimen/pxtodp1"
-        android:background="@drawable/line_view"/>
+        android:background="@drawable/line_view"
+        android:paddingLeft="@dimen/pxtodp20"/>
+
+
+    <Button
+        android:id="@+id/app_submit_bn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp90"
+        android:layout_marginLeft="@dimen/pxtodp30"
+        android:layout_marginRight="@dimen/pxtodp30"
+        android:layout_marginTop="@dimen/pxtodp54"
+        android:background="@drawable/common_pink_bn"
+        android:text="提交"
+        android:textColor="@color/white_color"
+        android:textSize="@dimen/pxtosp34"/>
 
 </LinearLayout>

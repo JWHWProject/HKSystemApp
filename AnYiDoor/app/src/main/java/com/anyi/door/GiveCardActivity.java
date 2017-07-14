@@ -7,6 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +42,48 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.tv_sex)
     TextView tvSex;
+
+    @Bind(R.id.et_card_number)
+    EditText etCardNumber;
+
+    @Bind(R.id.et_name)
+    EditText etName;
+
+    @Bind(R.id.tv_sex_left)
+    TextView tvSexLeft;
+
+    @Bind(R.id.tv_department_left)
+    TextView tvDepartmentLeft;
+
+    @Bind(R.id.tv_department)
+    TextView tvDepartment;
+
+    @Bind(R.id.et_number)
+    EditText etNumber;
+
+    @Bind(R.id.ll_inner)
+    LinearLayout llInner;
+
+    @Bind(R.id.et_phone)
+    EditText etPhone;
+
+    @Bind(R.id.et_company)
+    EditText etCompany;
+
+    @Bind(R.id.et_id)
+    EditText etId;
+
+    @Bind(R.id.tv_reason)
+    TextView tvReason;
+
+    @Bind(R.id.tv_explain)
+    TextView tvExplain;
+
+    @Bind(R.id.ll_outer)
+    LinearLayout llOuter;
+
+    @Bind(R.id.app_submit_bn)
+    Button appSubmitBn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -92,10 +136,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                                     switch (tab.getPosition())
                                                     {
                                                         case 0:
-                                                            ToastUtil.makeText(mContext, "企业人员");
+                                                          llInner.setVisibility(View.VISIBLE);
+                                                            llOuter.setVisibility(View.GONE);
                                                             break;
                                                         case 1:
-                                                            ToastUtil.makeText(mContext, "外来人员");
+                                                            llInner.setVisibility(View.GONE);
+                                                            llOuter.setVisibility(View.VISIBLE);
                                                             break;
                                                     }
                                                 }
@@ -160,6 +206,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             }
         }
     }
+
     private String[] resonArr = new String[]{"男", "女"};
 
     private String refundReson = resonArr[0];
