@@ -20,10 +20,12 @@
     <EditText
         android:id="@+id/app_login_name_et"
         android:layout_width="match_parent"
-        android:background="@color/white"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/pxtodp100"
-        android:hint="请输入事由，不少于30字"/>
+        android:background="@color/white"
+        android:gravity="top|left"
+        android:hint="请输入事由，不少于30字"
+        android:minHeight="@dimen/pxtodp300"
+        android:padding="@dimen/pxtodp30"/>
 
 
     <Button

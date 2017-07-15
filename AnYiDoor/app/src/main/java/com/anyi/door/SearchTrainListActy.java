@@ -2,8 +2,13 @@ package com.anyi.door;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
@@ -17,31 +22,75 @@ import cn.nj.www.my_module.tools.ToastUtil;
 /**
  * train list
  */
-public class SearchTrainListActy extends BaseActivity implements View.OnClickListener {
-    public String tagStr="";
+public class SearchTrainListActy extends BaseActivity implements View.OnClickListener
+{
+    public String tagStr = "";
+
+    @Bind(R.id.finish_iv)
+    ImageView finishIv;
+
+    @Bind(R.id.iv_search_clear)
+    ImageView ivSearchClear;
+
+    @Bind(R.id.tv_cancel)
+    TextView tvSearch;
+
+    @Bind(R.id.et_search)
+    EditText etSearch;
 
     private ExpandableListView listView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_train_list);
+        ButterKnife.bind(this);
         initAll();
     }
 
 
     @Override
-    public void initView() {
+    public void initView()
+    {
         listView = (ExpandableListView) findViewById(R.id.list);
+        finishIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+            }
+        });
+        ivSearchClear.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                etSearch.setText("");
+            }
+        });
+        tvSearch.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //TODO:对输入的内容搜索
+            }
+        });
         final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
         listView.setAdapter(adapter);
         //只展开一个
-        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
+        {
 
             @Override
-            public void onGroupExpand(int groupPosition) {
-                for (int i = 0; i <4; i++) {
-                    if (groupPosition != i) {
+            public void onGroupExpand(int groupPosition)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (groupPosition != i)
+                    {
                         listView.collapseGroup(i);
                     }
                 }
@@ -56,22 +105,25 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
 
 
             @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view,	int groupPosition, int childPosition, long id) {
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
+            {
 
-                DialogUtil.showNoTipTwoBnttonDialog(mContext,"确定开始培训","取消","确定",NotiTag.TAG_DLG_CANCEL,NotiTag.TAG_DLG_OK);
-                tagStr=groupPosition+"  "+childPosition;
+                DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+                tagStr = groupPosition + "  " + childPosition;
                 return false;
             }
         });
     }
 
     @Override
-    public void initViewData() {
+    public void initViewData()
+    {
 
     }
 
     @Override
-    public void initEvent() {
+    public void initEvent()
+    {
 
     }
 
@@ -82,16 +134,22 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void onEventMainThread(BaseResponse event) {
-        if (event instanceof NoticeEvent) {
+    public void onEventMainThread(BaseResponse event)
+    {
+        if (event instanceof NoticeEvent)
+        {
             String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 finish();
             }
-            if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                ToastUtil.makeText(mContext,tagStr);
+            if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                ToastUtil.makeText(mContext, tagStr);
             }
-        } else if (event instanceof NetResponseEvent) {
+        }
+        else if (event instanceof NetResponseEvent)
+        {
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
@@ -101,8 +159,8 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
     }
 
 
-
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
     }
 }

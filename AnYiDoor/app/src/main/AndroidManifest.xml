@@ -9,8 +9,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoSelectorActivity"/>
+        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoPreviewActivity"/>
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".RegistSetPasswordActy"
+            android:launchMode="singleTask"/>
+        <activity android:name=".EmptyActivity">
+        </activity>
+        <activity
+            android:name=".LoginActy"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,19 +30,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistSetPasswordActy"
-            android:launchMode="singleTask"/>
-        <activity android:name=".EmptyActivity">
-
-        </activity>
-        <activity
-            android:name=".LoginActy"
-            android:launchMode="singleTask">
-        </activity>
-        <activity
             android:name=".GiveCardActivity"
-            android:launchMode="singleTask">
-
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
         </activity>
         <activity
             android:name=".FindPasswordCodeActy"
@@ -39,14 +40,15 @@
         <activity
             android:name=".GiveBackCardActivity"
             android:launchMode="singleTask">
-
         </activity>
         <activity android:name=".SearchTrainListActy"/>
         <activity android:name=".OuterGetReasonActivity"/>
         <activity
             android:name=".TrainListActy"
             android:launchMode="singleTask">
-
+        </activity>
+        <!--发布时要用这个-->
+        <activity android:name=".WelcomeAndJudgeActivity">
         </activity>
     </application>
 

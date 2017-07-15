@@ -121,12 +121,13 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.app_login_bn:
+                startActivity(new Intent(mContext,MainActivity.class));
                 if (GeneralUtils.isNotNullOrZeroLenght(psdET.getText().toString())) {
                     if (GeneralUtils.isNotNullOrZeroLenght(nameET.getText().toString())) {
                         NetLoadingDialog.getInstance().loading(mContext);
 //                        UserServiceImpl.instance().login(nameET.getText().toString().trim(), StringEncrypt.Encrypt(psdET.getText().toString().trim()),
 //                                LoginResponse.class.getName());
-                        startActivity(new Intent(mContext,MainActivity.class));
+
                     } else {
                         ToastUtil.makeText(mContext, "请输入用户名");
                     }
