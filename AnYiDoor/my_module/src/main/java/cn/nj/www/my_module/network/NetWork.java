@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -44,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.URLUtil;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.tools.ACache;
@@ -247,21 +249,19 @@ public class NetWork {
                 HttpConnectionParams.setConnectionTimeout(httpParams, 20000);
                 HttpConnectionParams.setSoTimeout(httpParams, 30000);
                 httpPost.setParams(httpParams);
-//                //设备类型ID,由服务端为每类客户端分配不同的设备类型ID及相应的私有密码。
-//                httpPost.setHeader("x-s-deviceID", BaseApplication.DEVICE_TOKEN);
-//                //服务端分配的设备请求密码。需要使用SHA256算法进行加密传输。
-//                httpPost.setHeader("x-s-x-s-password", Global.getXS_PASSWORD_WORD());
-//                String pass = Global.getXS_PASSWORD_WORD();
-//                //时间戳
-//                httpPost.setHeader("x-s-timestamp", GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN));
-//                String time = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
-//                //校验码
+                //设备类型ID,由服务端为每类客户端分配不同的设备类型ID及相应的私有密码。
+                httpPost.setHeader("x-s-deviceID", BaseApplication.DEVICE_TOKEN);
+                //服务端分配的设备请求密码。需要使用SHA256算法进行加密传输。
+//                httpPost.setHeader("x-s-password", Global.getXS_PASSWORD_WORD());
+                //时间戳
+                httpPost.setHeader("x-s-timestamp", GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN));
+                String time = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
+                //校验码
 //                httpPost.setHeader("x-s-security", Global.getXSSecurity());
-//                String se = Global.getXSSecurity();
-//                //登录账户
-//                httpPost.setHeader("x-s-loginName",Global.getUserName());
-//                //客户端版本号
-//                httpPost.setHeader("x-s-clientVersion", ""+ Constants.VERSION_NAME);
+                //登录账户
+                httpPost.setHeader("x-s-loginName",Global.getUserName());
+                //客户端版本号
+                httpPost.setHeader("x-s-clientVersion", ""+ Constants.VERSION_NAME);
                 String ver = Constants.VERSION_NAME + "";
                 SchemeRegistry schReg = new SchemeRegistry();
                 schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
