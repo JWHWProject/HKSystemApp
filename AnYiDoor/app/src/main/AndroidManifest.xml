@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.anyi.door"
           xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:name="cn.nj.www.my_module.main.base.BaseApplication"
         android:allowBackup="true"
@@ -19,6 +20,16 @@
             android:name=".RegistSetPasswordActy"
             android:launchMode="singleTask"/>
         <activity android:name=".EmptyActivity">
+        </activity>
+        <activity
+            android:name=".video.base.TinyWindowPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActy"
