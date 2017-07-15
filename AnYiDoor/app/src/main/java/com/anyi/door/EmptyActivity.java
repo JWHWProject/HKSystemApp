@@ -29,6 +29,8 @@ public class EmptyActivity extends BaseActivity
         setContentView(R.layout.activity_empty);
         ButterKnife.bind(this);
         try
+
+
         {
 
 

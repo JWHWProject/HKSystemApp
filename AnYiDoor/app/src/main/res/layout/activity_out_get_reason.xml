@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/app_add_friend_dialog_bg"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/common_back"
+        layout="@layout/layout_top"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
+
+
+    <EditText
+        android:id="@+id/app_login_name_et"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/pxtodp100"
+        android:hint="请输入事由，不少于30字"/>
+
+
+    <Button
+        android:id="@+id/app_login_bn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp90"
+        android:layout_marginLeft="@dimen/pxtodp30"
+        android:layout_marginRight="@dimen/pxtodp30"
+        android:layout_marginTop="@dimen/pxtodp54"
+        android:background="@drawable/common_pink_bn"
+        android:text="提交"
+        android:textColor="@color/white_color"
+        android:textSize="@dimen/pxtosp34"/>
+
+
+</LinearLayout>

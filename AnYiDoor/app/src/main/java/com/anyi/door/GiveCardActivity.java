@@ -1,9 +1,19 @@
 package com.anyi.door;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
@@ -27,12 +37,60 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 {
 
 
+    @Bind(R.id.sliding_tabs)
+    TabLayout mTabLayout;
+
+    @Bind(R.id.tv_sex)
+    TextView tvSex;
+
+    @Bind(R.id.et_card_number)
+    EditText etCardNumber;
+
+    @Bind(R.id.et_name)
+    EditText etName;
+
+    @Bind(R.id.tv_sex_left)
+    TextView tvSexLeft;
+
+    @Bind(R.id.tv_department_left)
+    TextView tvDepartmentLeft;
+
+    @Bind(R.id.tv_department)
+    TextView tvDepartment;
+
+    @Bind(R.id.et_number)
+    EditText etNumber;
+
+    @Bind(R.id.ll_inner)
+    LinearLayout llInner;
+
+    @Bind(R.id.et_phone)
+    EditText etPhone;
+
+    @Bind(R.id.et_company)
+    EditText etCompany;
+
+    @Bind(R.id.et_id)
+    EditText etId;
+
+    @Bind(R.id.tv_reason)
+    TextView tvReason;
+
+    @Bind(R.id.tv_explain)
+    TextView tvExplain;
+
+    @Bind(R.id.ll_outer)
+    LinearLayout llOuter;
+
+    @Bind(R.id.app_submit_bn)
+    Button appSubmitBn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_back_card);
+        setContentView(R.layout.activity_give_card);
+        ButterKnife.bind(this);
         initAll();
     }
 
@@ -41,7 +99,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
-        headView.setTitleText("还卡");
+        headView.setTitleText("发卡");
         headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
     }
@@ -51,6 +109,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     public void initView()
     {
         initTitle();
+        tvSex.setOnClickListener(this);
+        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
+                R.drawable.layout_divider_vertical));
 
     }
 
@@ -64,6 +127,39 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     public void initEvent()
     {
 
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+
+                                            {
+                                                @Override
+                                                public void onTabSelected(TabLayout.Tab tab)
+                                                {
+                                                    switch (tab.getPosition())
+                                                    {
+                                                        case 0:
+                                                          llInner.setVisibility(View.VISIBLE);
+                                                            llOuter.setVisibility(View.GONE);
+                                                            break;
+                                                        case 1:
+                                                            llInner.setVisibility(View.GONE);
+                                                            llOuter.setVisibility(View.VISIBLE);
+                                                            break;
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onTabUnselected(TabLayout.Tab tab)
+                                                {
+
+                                                }
+
+                                                @Override
+                                                public void onTabReselected(TabLayout.Tab tab)
+                                                {
+
+                                                }
+                                            }
+
+        );
     }
 
     @Override
@@ -111,12 +207,33 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private String[] resonArr = new String[]{"男", "女"};
+
+    private String refundReson = resonArr[0];
+
+    private int whitchIndex = 0;
 
     @Override
     public void onClick(View v)
     {
         switch (v.getId())
         {
+            case R.id.tv_sex:
+                AlertDialog Builder = new AlertDialog.Builder(mContext).setTitle("请选择")
+                        .setSingleChoiceItems(
+                                resonArr, whitchIndex,
+                                new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        refundReson = resonArr[which];
+                                        tvSex.setText(refundReson);
+                                        whitchIndex = which;
+                                        dialog.dismiss();
+                                    }
+
+                                }).show();
+                break;
         }
     }
 
