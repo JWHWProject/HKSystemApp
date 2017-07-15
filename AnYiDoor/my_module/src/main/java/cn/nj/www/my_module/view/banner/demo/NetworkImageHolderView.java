@@ -5,8 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 
-import cn.nj.www.my_module.R;
-import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.view.banner.holder.Holder;
 
 
@@ -31,6 +30,7 @@ public class NetworkImageHolderView implements Holder<String>
     public void UpdateUI(Context context, int position, String data)
     {
         imageView.setBackgroundColor(Color.GRAY);
-        GeneralUtils.setImageViewWithUrl(context, data, imageView, R.color.gray);
+//        GeneralUtils.setImageViewWithUrl(context, data, imageView, R.color.gray);
+        ImageLoaderUtil.getInstance().initImage(context,data,imageView,"");
     }
 }

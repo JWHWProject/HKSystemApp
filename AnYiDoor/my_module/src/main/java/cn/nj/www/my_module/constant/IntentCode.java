@@ -21,6 +21,7 @@ public class IntentCode
     public static String COMMON_WEB_VIEW_URL_INSTRUCTION = "common_web_view_instruction";
 
     public static String COMMON_WEB_VIEW_URL_TAG = "common_web_view_url_tag";
+    public static String GIVE_OUTER_CARD_REASON = "GIVE_OUTER_CARD_REASON";
 
     //相册中图片对象集合
     public static final String EXTRA_IMAGE_LIST = "image_list";

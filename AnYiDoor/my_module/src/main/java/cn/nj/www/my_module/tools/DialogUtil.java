@@ -9,14 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import cn.nj.www.my_module.R;
-import cn.nj.www.my_module.bean.NoticeDialogInfoEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.constant.Global;
-import cn.nj.www.my_module.constant.NotiTag;
-import cn.nj.www.my_module.view.birthdate.MyDayView;
-import cn.nj.www.my_module.view.birthdate.MyMonthView;
-import cn.nj.www.my_module.view.birthdate.MyYearView;
-import cn.nj.www.my_module.view.wheel.widget.WheelView;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -96,66 +90,6 @@ public class DialogUtil {
 
 
 
-    /**
-     * 省市选择的Dialog
-     */
-    public static void chooseCityDialog(final Context context, final String dialogTag) {
-        final Dialog dialog = initDialog(context, R.layout.dialog_location);
-        WheelView provinceWV = (WheelView) dialog.findViewById(R.id.id_province);
-        WheelView cityWV = (WheelView) dialog.findViewById(R.id.id_city);
-        WheelView arwaWV = (WheelView) dialog.findViewById(R.id.id_district);
-        TextView tvCancel = (TextView) dialog.findViewById(R.id.location_cancel_tv);
-        TextView tvComfirm = (TextView) dialog.findViewById(R.id.location_comfirm_tv);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        EventBus.getDefault().post(new NoticeDialogInfoEvent(dialogTag, dialog, provinceWV, cityWV, arwaWV, tvCancel, tvComfirm));
-    }
-
-    /**
-     * 日期选择的Dialog
-     */
-    public static void chooseDateDialog(final Context context, final String dialogTag) {
-        final Dialog dialog = initDialog(context, R.layout.dialog_birth_time);
-        final MyYearView yearWV = (MyYearView) dialog.findViewById(R.id.year_wv);
-        final MyMonthView monthWV = (MyMonthView) dialog.findViewById(R.id.month_wv);
-        final MyDayView dayWV = (MyDayView) dialog.findViewById(R.id.day_wv);
-        TextView tvCancel = (TextView) dialog.findViewById(R.id.location_cancel_tv);
-        TextView tvComfirm = (TextView) dialog.findViewById(R.id.location_comfirm_tv);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        tvComfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                String dateStr = yearWV.getTime()+ "-";
-                if (monthWV.getTime().length() == 1) {
-                    dateStr = dateStr + "0" + monthWV.getTime()+ "-";
-                } else {
-                    dateStr = dateStr + monthWV.getTime()+ "-";
-                }
-                if (dayWV.getTime().length() == 1) {
-                    dateStr = dateStr + "0" + dayWV.getTime();
-                } else {
-                    dateStr += dayWV.getTime();
-                }
-                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_CHOOSE_TIME_OK, dateStr));
-            }
-        });
-        EventBus.getDefault().post(new NoticeDialogInfoEvent(dialogTag, dialog, yearWV, monthWV, dayWV));
-    }
 
 
     public static Dialog initDialog(Context context, int layout) {
