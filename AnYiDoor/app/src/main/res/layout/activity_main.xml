@@ -44,8 +44,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/pxtodp24"
                 android:background="@drawable/app_img_bg_circle"
-                android:paddingLeft="@dimen/pxtodp34"
-                android:paddingRight="@dimen/pxtodp34"
+                android:paddingLeft="@dimen/pxtodp40"
+                android:paddingRight="@dimen/pxtodp40"
                 android:text="--"
                 android:textColor="@color/app_blue"
                 android:textSize="@dimen/pxtosp32"/>
@@ -57,7 +57,6 @@
                 android:layout_centerHorizontal="true"
                 android:drawableLeft="@mipmap/icon_give"
                 android:text="今日发卡"
-                android:drawablePadding="@dimen/pxtodp4"
                 android:textColor="@color/text_gray"
                 android:textSize="@dimen/pxtodp24"/>
         </RelativeLayout>
@@ -82,8 +81,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/pxtodp24"
                 android:background="@drawable/app_img_bg_circle"
-                android:paddingLeft="@dimen/pxtodp34"
-                android:paddingRight="@dimen/pxtodp34"
+                android:paddingLeft="@dimen/pxtodp40"
+                android:paddingRight="@dimen/pxtodp40"
                 android:text="--"
                 android:textColor="@color/app_blue"
                 android:textSize="@dimen/pxtosp32"/>
@@ -91,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" android:drawablePadding="@dimen/pxtodp4"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:drawableLeft="@mipmap/icon_train_small"
                 android:text="今日培训"
@@ -119,15 +118,15 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/pxtodp24"
                 android:background="@drawable/app_img_bg_circle"
-                android:paddingLeft="@dimen/pxtodp34"
-                android:paddingRight="@dimen/pxtodp34"
+                android:paddingLeft="@dimen/pxtodp40"
+                android:paddingRight="@dimen/pxtodp40"
                 android:text="--"
                 android:textColor="@color/app_blue"
                 android:textSize="@dimen/pxtosp32"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:drawablePadding="@dimen/pxtodp4"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:drawableLeft="@mipmap/icon_test_small"
@@ -139,7 +138,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/pxtodp16"
+        android:layout_height="@dimen/pxtodp20"
         android:background="@color/white_grey_new"/>
 
     <LinearLayout
@@ -164,7 +163,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pxtodp16"
+                android:layout_marginTop="@dimen/pxtodp20"
                 android:text="发卡"
                 android:textColor="@color/register_black_text"
                 android:textSize="@dimen/pxtodp32"/>
@@ -187,7 +186,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pxtodp16"
+                android:layout_marginTop="@dimen/pxtodp20"
                 android:text="培训"
                 android:textColor="@color/register_black_text"
                 android:textSize="@dimen/pxtodp32"/>
@@ -210,7 +209,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pxtodp16"
+                android:layout_marginTop="@dimen/pxtodp20"
                 android:text="考核"
                 android:textColor="@color/register_black_text"
                 android:textSize="@dimen/pxtodp32"/>
@@ -239,7 +238,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pxtodp16"
+                android:layout_marginTop="@dimen/pxtodp20"
                 android:text="还卡"
                 android:textColor="@color/register_black_text"
                 android:textSize="@dimen/pxtodp32"/>

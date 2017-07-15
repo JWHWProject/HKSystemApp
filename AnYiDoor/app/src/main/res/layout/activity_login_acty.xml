@@ -11,10 +11,6 @@
         android:id="@+id/common_back"
         layout="@layout/layout_top"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/pxtodp1"
-        android:background="@color/line"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,10 +94,10 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/pxtodp30"
             android:paddingTop="@dimen/pxtodp38"
+            android:visibility="gone"
             android:text="手机快速注册"
             android:textColor="@color/title_black"
-            android:textSize="@dimen/pxtosp30"
-            android:visibility="gone"/>
+            android:textSize="@dimen/pxtosp30"/>
 
         <View
             android:layout_width="@dimen/pxtodp0"

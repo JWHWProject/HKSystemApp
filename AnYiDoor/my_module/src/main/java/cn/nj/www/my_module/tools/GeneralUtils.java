@@ -17,13 +17,9 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1249,40 +1245,7 @@ public final class GeneralUtils
     }
 
 
-    public static void setImageViewWithUrl(final Context context, final String url, ImageView iv, int defaultImg)
-    {
-        if (GeneralUtils.isNotNullOrZeroLenght(url))
-        {//getTemporaryPath
-            Glide.with(context)
-                    .load(url)
-                    .placeholder(defaultImg)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存转换后的资源
-                    .into(iv);
-        }
-        else
-        {
-            iv.setImageResource(defaultImg);
-        }
-    }
 
-    public static void setRoundImageViewWithUrl(final Context context, final String url, ImageView iv, int defaultImg)
-    {
-        if (GeneralUtils.isNotNullOrZeroLenght(url))
-        {//getTemporaryPath
-            Glide.with(context)
-                    .load(url)
-                    .placeholder(defaultImg)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存转换后的资源
-                    .transform(new CircleTransform(context))
-                    .into(iv);
-        }
-        else
-        {
-            iv.setImageResource(defaultImg);
-        }
-    }
 
     public static void saveImageToGallery(Context context, Bitmap bmp, String path)
     {

@@ -24,7 +24,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_regist_set_password);
+        setContentView(R.layout.acty_train_pic);
         initAll();
     }
 

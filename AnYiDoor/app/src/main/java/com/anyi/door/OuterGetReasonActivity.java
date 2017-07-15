@@ -1,20 +1,27 @@
 package com.anyi.door;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.YZMResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -27,12 +34,21 @@ public class OuterGetReasonActivity extends BaseActivity implements View.OnClick
 {
 
 
+    @Bind(R.id.app_login_name_et)
+    EditText appLoginNameEt;
+
+    @Bind(R.id.app_login_bn)
+    Button appLoginBn;
+
+    private String reasonStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_back_card);
+        setContentView(R.layout.activity_out_get_reason);
+        ButterKnife.bind(this);
+        reasonStr = getIntent().getStringExtra(IntentCode.GIVE_OUTER_CARD_REASON);
         initAll();
     }
 
@@ -57,13 +73,14 @@ public class OuterGetReasonActivity extends BaseActivity implements View.OnClick
     @Override
     public void initViewData()
     {
+        appLoginNameEt.setText(reasonStr);
 
     }
 
     @Override
     public void initEvent()
     {
-
+        appLoginBn.setOnClickListener(this);
     }
 
     @Override
@@ -80,7 +97,11 @@ public class OuterGetReasonActivity extends BaseActivity implements View.OnClick
             String tag = ((NoticeEvent) event).getTag();
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-                finish();
+                comfirmExit();
+            }
+            if (NotiTag.TAG_COMFIRM_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+               finish();
             }
         }
         if (event instanceof NetResponseEvent)
@@ -117,8 +138,27 @@ public class OuterGetReasonActivity extends BaseActivity implements View.OnClick
     {
         switch (v.getId())
         {
+            case R.id.app_login_bn:
+                if (GeneralUtils.isNotNullOrZeroLenght(appLoginNameEt.getText().toString())&& appLoginNameEt.getText().toString().length()>=30){
+                    Intent data = new Intent();
+                    data.putExtra("reason",appLoginNameEt.getText().toString());
+                    setResult(1,data);
+                    finish();
+                }else {
+                    ToastUtil.makeText(mContext,"请输入事由，不少于30字");
+                }
+                break;
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        comfirmExit();
+    }
 
+    private void comfirmExit()
+    {
+        DialogUtil.showNoTipTwoBnttonDialog(mContext,"是否放弃编辑","确定","取消",NotiTag.TAG_COMFIRM_CLOSE,"");
+    }
 }

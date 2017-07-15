@@ -110,7 +110,6 @@
     <!--底部导航栏-->
     <color name="default_tab_view_selected_color">#FF45C01A</color>
     <color name="default_tab_view_unselected_color">#FF555555</color>
-    <color name="order_sel_col">#e4007f</color>
     <color name="order_nol_col">#4d4d4d</color>
 
     <color name="bg_col">#f2f2f2</color>

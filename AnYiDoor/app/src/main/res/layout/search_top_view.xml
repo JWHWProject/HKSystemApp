@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/pxtodp20"
-        android:text="取消"
+        android:text="搜索"
         android:textColor="@color/register_code_phone"
         android:textSize="@dimen/pxtodp28"/>
 </LinearLayout>
