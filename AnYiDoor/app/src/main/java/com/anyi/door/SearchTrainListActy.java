@@ -12,10 +12,18 @@ import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.SearchTrainListResponse;
+import cn.nj.www.my_module.bean.index.StartTrainResponse;
+import cn.nj.www.my_module.bean.index.TrainListResponse;
+import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
+import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
 
@@ -32,7 +40,7 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
     @Bind(R.id.iv_search_clear)
     ImageView ivSearchClear;
 
-    @Bind(R.id.tv_cancel)
+    @Bind(R.id.tv_search)
     TextView tvSearch;
 
     @Bind(R.id.et_search)
@@ -76,6 +84,12 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
             public void onClick(View view)
             {
                 //TODO:对输入的内容搜索
+                if (GeneralUtils.isNotNullOrZeroLenght(etSearch.getText().toString())){
+                    UserServiceImpl.instance().trainList(etSearch.getText().toString(),
+                            SearchTrainListResponse.class.getName());
+                }else {
+                    ToastUtil.makeText(mContext,"请输入搜索内容");
+                }
             }
         });
         final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
@@ -146,6 +160,7 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 ToastUtil.makeText(mContext, tagStr);
+                UserServiceImpl.instance().startTrain(tagStr,StartTrainResponse.class.getName());
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -153,10 +168,22 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-
+            if (tag.equals(SearchTrainListResponse.class.getName())) {
+                SearchTrainListResponse mTrainListResponse = GsonHelper.toType(result, SearchTrainListResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode())) {
+                    } else {
+//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+                    }
+                } else {
+                    ToastUtil.showError(this);
+                }
+            }
         }
 
     }
+
+
 
 
     @Override

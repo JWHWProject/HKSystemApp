@@ -9,11 +9,19 @@ import android.widget.ExpandableListView;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.StartTrainResponse;
+import cn.nj.www.my_module.bean.index.TrainListResponse;
+import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
+import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
 
@@ -92,7 +100,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
     @Override
     public void initViewData()
     {
-
+        UserServiceImpl.instance().trainList(TrainListResponse.class.getName());
     }
 
     @Override
@@ -123,6 +131,8 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 ToastUtil.makeText(mContext,tagStr);
+                //调用开始培训的接口
+                UserServiceImpl.instance().startTrain(tagStr,StartTrainResponse.class.getName());
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -130,10 +140,21 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-
+            if (tag.equals(LoginResponse.class.getName())) {
+                TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode())) {
+                    } else {
+//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+                    }
+                } else {
+                    ToastUtil.showError(this);
+                }
+            }
         }
 
     }
+
 
 
     @Override

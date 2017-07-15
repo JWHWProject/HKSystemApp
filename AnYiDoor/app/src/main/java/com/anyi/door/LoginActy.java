@@ -20,8 +20,10 @@ import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
+import cn.nj.www.my_module.tools.StringEncrypt;
 import cn.nj.www.my_module.tools.ToastUtil;
 
 public class LoginActy extends BaseActivity implements View.OnClickListener {
@@ -101,9 +103,7 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
                         Global.savePassword(psdET.getText().toString());
                         Global.saveLoginName(nameET.getText().toString());
                         ToastUtil.makeText(mContext, "登录成功");
-                        //发个通知，让其他页面知道已经退出了
-//                        EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_LOGIN_SUCCESS));
-//                        TabIndicatorActivity.getUpLoadImageUrl();
+                        startActivity(new Intent(mContext,MainActivity.class));
                         finish();
                     } else {
 //                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
@@ -125,8 +125,8 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
                 if (GeneralUtils.isNotNullOrZeroLenght(psdET.getText().toString())) {
                     if (GeneralUtils.isNotNullOrZeroLenght(nameET.getText().toString())) {
                         NetLoadingDialog.getInstance().loading(mContext);
-//                        UserServiceImpl.instance().login(nameET.getText().toString().trim(), StringEncrypt.Encrypt(psdET.getText().toString().trim()),
-//                                LoginResponse.class.getName());
+                        UserServiceImpl.instance().login(nameET.getText().toString().trim(), StringEncrypt.Encrypt(psdET.getText().toString().trim()),
+                                LoginResponse.class.getName());
 
                     } else {
                         ToastUtil.makeText(mContext, "请输入用户名");

@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.FinishTrainResponse;
+import cn.nj.www.my_module.bean.index.StartTrainResponse;
+import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 
 /**
@@ -18,7 +22,7 @@ import cn.nj.www.my_module.tools.NetLoadingDialog;
  */
 public class TrainPicActivity extends BaseActivity implements View.OnClickListener {
 
-
+private String trainId;
 
 
     @Override
@@ -46,7 +50,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initViewData() {
-
+        UserServiceImpl.instance().trainContent(trainId,TrainListResponse.class.getName());
     }
 
     @Override
@@ -82,6 +86,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bn_finish:
+                UserServiceImpl.instance().finishTrain(trainId,FinishTrainResponse.class.getName());
                 break;
         }
     }
