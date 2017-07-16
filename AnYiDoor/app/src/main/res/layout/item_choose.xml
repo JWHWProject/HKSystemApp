@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:paddingTop="@dimen/pxtodp30"
+              android:paddingBottom="@dimen/pxtodp30"
+              android:paddingLeft="@dimen/pxtodp20"
+              android:paddingRight="@dimen/pxtodp20"
+              android:background="@color/white"
+              android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textColor="@color/txt_col"
+        android:textSize="@dimen/pxtodp28"
+        android:layout_marginBottom="@dimen/pxtodp44"
+        android:layout_height="wrap_content"/>
+    <RadioGroup
+        android:id="@+id/mRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <!--四个选项-->
+
+        <RadioButton
+            android:id="@+id/RadioA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大帅哥" />
+
+        <RadioButton
+            android:id="@+id/RadioB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参照A" />
+
+        <RadioButton
+            android:id="@+id/RadioC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参照B" />
+
+        <RadioButton
+            android:id="@+id/RadioD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参照C" />
+
+        <!--正确答案，默认是隐藏的-->
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="正确答案：肯定选A呀！"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+    </RadioGroup>
+
+</LinearLayout>

@@ -40,7 +40,7 @@
     <color name="study_fragment_tab">#3c3c3c</color>
     <color name="study_user_text">#3c3c3c</color>
     <color name="app_dark_black">#3c3c3c</color>
-    <color name="app_blue">#35BBEE</color>
+    <color name="app_blue">#37a1f6</color>
     <color name="app_blue2">#0076FF</color>
     <color name="app_blue1">#5c9de8</color>
     <color name="app_title_blue">#35BBEE</color>
@@ -126,7 +126,7 @@
     <color name="bg_gray">#e1e1e1</color>
     <color name="btn_gray">#d1d1d1</color>
     <color name="glass_gall">#c2ebef</color>
-    <color name="light_blue">#87d0f2</color>
+    <color name="light_blue">#37a1f6</color>
     <color name="f2">#f2f2f2</color>
 
     <color name="divider">#E5E5E5</color>
