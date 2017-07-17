@@ -78,7 +78,7 @@ public class UserServiceImpl {
                 .startPost(URLUtil.GIVE_CARD, param, tag);
     }
 
-    public void giveCard(String cardNo, String name, int gender, String phone,String fromCompany,String idCard,String tag) {
+    public void giveCard(String cardNo, String name, int gender, String phone,String fromCompany,String idCard,List<String> urls,String tag) {
         Map<String, String> param = new HashMap<String, String>();
         param.put("cardNo", cardNo);
         param.put("name", name);
@@ -86,9 +86,25 @@ public class UserServiceImpl {
         param.put("phone", phone);
         param.put("fromCompany", fromCompany);
         param.put("idCard", idCard);
+        if(urls!=null&&urls.size()>0){
+            param.put("picUrlList", GsonHelper.toJson(urls));
+        }
         new NetWork()
                 .startPost(URLUtil.GIVE_OUT_CARD, param, tag);
     }
+
+    /**
+     * 上传图片
+     */
+    public void uploadPic(List<File> files, String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        Map<String, List<File>> fileparams = new HashMap<String, List<File>>();
+        fileparams.put("file", files);
+//        fileparams.put("file", files);
+        new NetWork().startPost(URLUtil.UPLOAD_PIC, param, fileparams, tag);
+    }
+
     public void returnCard(String cardNo, String tag) {
         Map<String, String> param = new HashMap<String, String>();
         param.put("cardNo", cardNo);

@@ -39,7 +39,10 @@ public class URLUtil {
     public static final String ONLINE_TEST = SERVER_BASE + "onlineTrainingExam/start";
     public static final String FINISH_TEST = SERVER_BASE + "onlineTrainingExam/finish";
     public static final String uploaderFile = SERVER_BASE + "onlineTrainingExam/finish";
-
+    /**
+     * 上传图片
+     */
+    public static final String UPLOAD_PIC = SERVER_BASE + "file/upload";
 
 
 }

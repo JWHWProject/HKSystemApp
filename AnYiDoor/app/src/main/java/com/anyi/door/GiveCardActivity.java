@@ -43,6 +43,7 @@ import com.zzti.fengyongge.imagepicker.model.PhotoModel;
 import com.zzti.fengyongge.imagepicker.util.CommonUtils;
 import com.zzti.fengyongge.imagepicker.util.FileUtils;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.GiveInnerCardResponse;
 import cn.nj.www.my_module.bean.index.GiveOutterCardResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.UploadFileResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
@@ -455,6 +457,22 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     ToastUtil.showError(mContext);
                 }
             }
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                        UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                                etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(),uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
+                    }
+                    else {
+                        ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                    }
+                }
+                else {
+                    ToastUtil.showError(mContext);
+                }
+            }
+
         }
     }
 
@@ -550,9 +568,9 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
-
+    int sexIndex=1;
     private void upLoadData() {
-        int sexIndex = 1;
+        sexIndex = 1;
         if (GeneralUtils.isNullOrZeroLenght(etCardNumber.getText().toString())) {
             ToastUtil.makeText(mContext, "请填写卡号");
             return;
@@ -602,9 +620,16 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请输入事由，不少于30字");
                 return;
             }
-            UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                  etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(), GiveOutterCardResponse.class.getName());
-
+            if(img_uri!=null&&img_uri.size()>0) {
+                List<File> files = new ArrayList<>();
+                for (UploadGoodsBean item : img_uri) {
+                    files.add(new File(item.getUrl()));
+                }
+                UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+            }else{
+                UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                        etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(),null, GiveOutterCardResponse.class.getName());
+            }
         }
     }
 
