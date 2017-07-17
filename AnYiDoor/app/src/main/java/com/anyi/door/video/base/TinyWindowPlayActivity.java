@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 
 public class TinyWindowPlayActivity extends AppCompatActivity {
@@ -53,7 +54,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             }
         });
     }
-
+    boolean flag=true;
+    int time=1;
+    int maxtime=1;
+    private int picCount=1;
     private void init() {
         bnFinish = (Button) findViewById(R.id.app_finish_bn);
         mNiceVideoPlayer = (NiceVideoPlayer) findViewById(R.id.nice_video_player);
@@ -70,10 +74,39 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         bnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TakePicture();
+                if(time>maxtime) {
+                    picCount=3;
+                    TakePicture();
+                }else{
+                    Toast.makeText(TinyWindowPlayActivity.this,"您现在还无法完成培训,还没有达到培训时间!",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+        picCount=1;
         TakePicture();
+        long halftime=mNiceVideoPlayer.getDuration()/2;
+        maxtime=(int)(halftime/1000f);
+        Random random = new Random();
+        final int randomTime=random.nextInt(maxtime);
+        time=1;
+        flag=true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (flag){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(time==randomTime){
+                        picCount=2;
+                        TakePicture();
+                    }
+                    time++;
+                }
+            }
+        }).start();
 
     }
 
@@ -87,6 +120,12 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        flag=false;
     }
 
     @Override
@@ -134,6 +173,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                             if (path != null && !path.trim().equals("")) {
                                 resizePhoto();
                             }
+
 //                            //将图片显示到textView上面
 //                            Glide.with(TinyWindowPlayActivity.this).load(file).asBitmap().into(mPhoto);
                         } catch (Exception e) {
@@ -183,7 +223,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
 
         try {
             // 因为开启摄像头需要时间，这里让线程睡两秒
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

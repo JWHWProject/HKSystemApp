@@ -83,7 +83,12 @@ public class GiveBackCardActivity extends BaseActivity  {
     @Override
     protected void onResume() {
         super.onResume();
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, mFilters,
+        if (nfcAdapter == null) {
+            return;
+        } else if (!nfcAdapter.isEnabled()) {
+            return;
+        }
+        nfcAdapter.enableForegroundDispatch(GiveBackCardActivity.this, pendingIntent, mFilters,
                 mTechLists);
         if (isFirst) {
             if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
