@@ -41,9 +41,10 @@ import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.GiveInnerCardResponse;
 import cn.nj.www.my_module.bean.index.GiveOutterCardResponse;
-import cn.nj.www.my_module.bean.index.YZMResponse;
+import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
@@ -51,6 +52,7 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -114,10 +116,13 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.rl_reason)
     RelativeLayout rlReason;
 
+    @Bind(R.id.rl_department)
+    RelativeLayout rlDepartment;
+
     @Bind(R.id.tv_reason_detail)
     TextView tvReasonDetail;
 
-    private int maxSize = 4;
+    private int maxSize = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +146,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     public void initView() {
         initTitle();
         tvSex.setOnClickListener(this);
+        rlDepartment.setOnClickListener(this);
         LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
@@ -336,14 +342,14 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             NetLoadingDialog.getInstance().dismissDialog();
-            if (tag.equals(YZMResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (tag.equals(GiveInnerCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    YZMResponse mYZMResponse = GsonHelper.toType(result, YZMResponse.class);
-                    if (Constants.SUCESS_CODE.equals(mYZMResponse.getResultCode())) {
-                        //获取验证码成功后，跳转到注册页面
+                    GiveInnerCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveInnerCardResponse.class);
+                    if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode())) {
+                        DialogUtil.showDialogOneButton(mContext,"发卡成功","我知道了",NotiTag.TAG_CLOSE_ACTIVITY);
                     }
                     else {
-                        ErrorCode.doCode(mContext, mYZMResponse.getResultCode(), mYZMResponse.getDesc());
+                        ErrorCode.doCode(mContext, mGiveInnerCardResponse.getResultCode(), mGiveInnerCardResponse.getDesc());
                     }
                 }
                 else {
@@ -354,10 +360,13 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     private String[] resonArr = new String[]{"男", "女"};
+    List departList = GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getDepartmentList();
+    private String[] departmentArr = (String[])departList.toArray(new String[departList.size()]);
 
     private String refundReson = resonArr[0];
 
     private int whitchIndex = 0;
+    private int departmentIndex = 0;
 
     @Override
     public void onClick(View v) {
@@ -371,6 +380,19 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                         refundReson = resonArr[which];
                                         tvSex.setText(refundReson);
                                         whitchIndex = which;
+                                        dialog.dismiss();
+                                    }
+
+                                }).show();
+                break;
+            case R.id.rl_department:
+                new AlertDialog.Builder(mContext).setTitle("请选择")
+                        .setSingleChoiceItems(
+                                departmentArr, departmentIndex,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        tvDepartment.setText(departmentArr[which]);
+                                        departmentIndex = which;
                                         dialog.dismiss();
                                     }
 
@@ -432,11 +454,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     private void upLoadData() {
         int sexIndex = 1;
-        if (GeneralUtils.isNotNullOrZeroLenght(etCardNumber.getText().toString())) {
+        if (GeneralUtils.isNullOrZeroLenght(etCardNumber.getText().toString())) {
             ToastUtil.makeText(mContext, "请填写卡号");
             return;
         }
-        if (GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())) {
+        if (GeneralUtils.isNullOrZeroLenght(etName.getText().toString())) {
             ToastUtil.makeText(mContext, "请填写姓名");
             return;
         }
@@ -458,23 +480,22 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请选择部门");
                 return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etNumber.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etNumber.getText().toString())) {
                 ToastUtil.makeText(mContext, "请填写工号");
                 return;
             }
-            //TODO：获取到数据
             UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex, tvDepartment.getText().toString(), etNumber.getText().toString(), GiveInnerCardResponse.class.getName());
         }
         else {
-            if (GeneralUtils.isNotNullOrZeroLenght(etPhone.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etPhone.getText().toString())) {
                 ToastUtil.makeText(mContext, "请填写联系方式");
                 return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etCompany.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etCompany.getText().toString())) {
                 ToastUtil.makeText(mContext, "请填写来自单位");
                 return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etId.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etId.getText().toString())) {
                 ToastUtil.makeText(mContext, "请填写身份证号");
                 return;
             }

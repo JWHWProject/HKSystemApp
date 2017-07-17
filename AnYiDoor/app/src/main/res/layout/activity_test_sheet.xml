@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/app_add_friend_dialog_bg"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/common_back"
+        layout="@layout/layout_top"/>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/getBn"
+            android:layout_height="wrap_content"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:text="单选"
+         android:layout_height="wrap_content"/>
+        <cn.nj.www.my_module.view.MyListView
+            android:id="@+id/ListView01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </cn.nj.www.my_module.view.MyListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/a9b"
+            android:text="多选"
+            android:layout_height="100dp"/>
+        <cn.nj.www.my_module.view.MyListView
+            android:id="@+id/ListView02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </cn.nj.www.my_module.view.MyListView>
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>

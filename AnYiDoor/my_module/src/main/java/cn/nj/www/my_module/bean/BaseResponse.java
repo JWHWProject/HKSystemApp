@@ -13,25 +13,25 @@ public class BaseResponse
     /**
      * 返回状态
      */
-    private boolean success;
+    private String resultCode;
     /**
      * 返回信息
      */
-    private String message;
+    private String desc;
 
-    public boolean getResultCode() {
-      return success;
+    public String getResultCode() {
+        return resultCode;
     }
 
-    public void setResultCode(boolean resultCode) {
-        this.success = resultCode;
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
     }
 
     public String getDesc() {
-        return message;
+        return desc;
     }
 
     public void setDesc(String desc) {
-        this.message = desc;
+        this.desc = desc;
     }
 }

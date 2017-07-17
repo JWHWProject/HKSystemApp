@@ -8,7 +8,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -16,6 +15,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -113,7 +113,6 @@ public class NetWork {
         mPendingTasks.offer(task);
         task.mFuture = mExecutor.submit(task);
     }
-
     /**
      * <网络层交互 纯文本> <功能详细描述>
      */
@@ -123,7 +122,6 @@ public class NetWork {
         mPendingTasks.offer(task);
         task.mFuture = mExecutor.submit(task);
     }
-
     /**
      * <网络层交互 文件上传> <功能详细描述>
      */
@@ -170,13 +168,11 @@ public class NetWork {
             mParamMap = paramMap;
             mfileParameters = fileParameters;
         }
-
         private HttpTask(String tag, String uri, Map<String, Object> objectMap) {
             this.tag = tag;
             mUri = uri;
             objectParamMap = objectMap;
         }
-
         private void cancel() {
             if (null != mFuture) {
                 mFuture.cancel(true);
@@ -196,15 +192,15 @@ public class NetWork {
                     ACache mCache = ACache.get(mContext);
                     if (GeneralUtils.isNullOrZeroLenght(result)) {
                         result = mCache.getAsString(mUri + ":" + GsonHelper.toJson(mParamMap));
-                        CMLog.e("hq", mUri + ":" + GsonHelper.toJson(mParamMap));
+                        CMLog.e("hq",mUri + ":" + GsonHelper.toJson(mParamMap));
                         if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                             EventBus.getDefault().post(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isCache));
                         }
                     }
                 }
-                if (objectParamMap != null) {
-                    result = doPost2(mUri, objectParamMap, mfileParameters);
-                } else {
+                if(objectParamMap!=null){
+                    result= doPost2(mUri, objectParamMap, mfileParameters);
+                }else{
                     result = doPost(mUri, mParamMap, mfileParameters);
                 }
 
@@ -252,17 +248,19 @@ public class NetWork {
                 //设备类型ID,由服务端为每类客户端分配不同的设备类型ID及相应的私有密码。
                 httpPost.setHeader("x-s-deviceID", BaseApplication.DEVICE_TOKEN);
                 //服务端分配的设备请求密码。需要使用SHA256算法进行加密传输。
-//                httpPost.setHeader("x-s-password", Global.getXS_PASSWORD_WORD());
+                httpPost.setHeader("x-s-x-s-password", Global.getXS_PASSWORD_WORD());
+                String pass = Global.getXS_PASSWORD_WORD();
                 //时间戳
                 httpPost.setHeader("x-s-timestamp", GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN));
                 String time = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
                 //校验码
-//                httpPost.setHeader("x-s-security", Global.getXSSecurity());
+                httpPost.setHeader("x-s-security", Global.getXSSecurity());
+                String se = Global.getXSSecurity();
                 //登录账户
                 httpPost.setHeader("x-s-loginName",Global.getUserName());
                 //客户端版本号
                 httpPost.setHeader("x-s-clientVersion", ""+ Constants.VERSION_NAME);
-                String ver = Constants.VERSION_NAME + "";
+                String ver = Constants.VERSION_NAME+"";
                 SchemeRegistry schReg = new SchemeRegistry();
                 schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
                 schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
@@ -298,18 +296,6 @@ public class NetWork {
                             multipartEntity.addPart(valuePair.getName(), strBody);
                             hashValue += value;
                         }
-//                        hashValue += Constants.localKey;
-//                        if (url.contains(URLUtil.SERVER_ENCRYPT))
-//                        {
-//                            hashValue += Global.getUserToken();
-//                        }
-//                        BasicNameValuePair valuePair =
-//                                new BasicNameValuePair("hash", SecurityUtils.get32MD5Str(hashValue));
-//                        CMLog.i(TAG, "hash " + SecurityUtils.get32MD5Str(hashValue));
-////                        CMLog.i(TAG, "hash " + "加密前:" + hashValue);
-//                        StringBody strBody =
-//                                new StringBody(String.valueOf(valuePair.getValue()), Charset.forName("UTF-8"));
-//                        multipartEntity.addPart(valuePair.getName(), strBody);
                     }
 
                     String fileExtension = null;
@@ -321,6 +307,7 @@ public class NetWork {
                         {
                             fileExtension = FileExtensionUtil.getFileExtensionFromName(file.getName());
                             mineType = MimeTypeUtil.getSingleton().getMimeTypeFromExtension(fileExtension);
+                            //MIME 消息能包含文本、图像、音频、视频以及其他应用程序专用的数据
                             if (StringUtil.isNotEmpty(mineType))
                             {
                                 multipartEntity.addPart(entry.getKey(), new FileBody(file, mineType)); // 添加文件参数,带上mimeType
@@ -356,18 +343,8 @@ public class NetWork {
                             nameValuePairs.add(valuePair);
                             hashValue += value;
                         }
-//                        hashValue += Constants.localKey;
-//                        if (url.contains(URLUtil.SERVER_ENCRYPT))
-//                        {
-//                            hashValue += Global.getUserToken();
-//                        }
-//                        BasicNameValuePair valuePair =
-//                                new BasicNameValuePair("hash", SecurityUtils.get32MD5Str(hashValue));
-//                        CMLog.i(TAG, "hash " + SecurityUtils.get32MD5Str(hashValue));
-//                        CMLog.i(TAG, "hash " + "加密前:" + hashValue);
-//                        nameValuePairs.add(valuePair);
                     }
-                    HttpEntity httpEntity = new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8);
+                    HttpEntity httpEntity = new StringEntity(GsonHelper.toJson(map), HTTP.UTF_8);
                     httpPost.setEntity(httpEntity);
                 }
                 HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
@@ -386,7 +363,7 @@ public class NetWork {
                         CMLog.i(TAG, "request was sucessful, but paser value was null or empty");
                         return null;
                     }
-//                    CMLog.i(TAG, "respnse result:" + result);
+                    CMLog.i(TAG, "respnse result:" + result);
                     KLog.json(TAG, result);
                     return result;
                 } else {
@@ -401,102 +378,73 @@ public class NetWork {
 
         private String doPost2(String url, Map<String, Object> map, Map<String, List<File>> fileParameters)
                 throws ConnectTimeoutException, IOException, InterruptedException {
-//            CMLog.i(TAG, "参数名     " + url);
-//            try {
-//                //                defaultHttpClient = new DefaultHttpClient();
-//                httpPost = new HttpPost(url);
-//                HttpParams httpParams = new BasicHttpParams();
-//                HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
-//                HttpProtocolParams.setContentCharset(httpParams, CHARSET);
-//                HttpProtocolParams.setUseExpectContinue(httpParams, false);
-//
-//                HttpConnectionParams.setConnectionTimeout(httpParams, 20000);
-//                HttpConnectionParams.setSoTimeout(httpParams, 30000);
-//                httpPost.setParams(httpParams);
-//                //设备类型ID,由服务端为每类客户端分配不同的设备类型ID及相应的私有密码。
-//                httpPost.setHeader("x-s-deviceID", BaseApplication.DEVICE_TOKEN);
-//                //服务端分配的设备请求密码。需要使用SHA256算法进行加密传输。
-//                httpPost.setHeader("x-s-x-s-password", Global.getXS_PASSWORD_WORD());
-//                String pass = Global.getXS_PASSWORD_WORD();
-//                //时间戳
-//                httpPost.setHeader("x-s-timestamp", GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN));
-//                String time = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
-//                //校验码
-//                httpPost.setHeader("x-s-security", Global.getXSSecurity());
-//                String se = Global.getXSSecurity();
-//                //登录账户
-//                httpPost.setHeader("x-s-loginName", Global.getUserName());
-//                //客户端版本号
-//                httpPost.setHeader("x-s-clientVersion", "" + Constants.VERSION_NAME);
-//                SchemeRegistry schReg = new SchemeRegistry();
-//                schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-//                schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-//                ThreadSafeClientConnManager conMgr = new ThreadSafeClientConnManager(httpParams, schReg);
-//                defaultHttpClient = new DefaultHttpClient(conMgr, httpParams);
-//                SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
-//
-//                if (GeneralUtils.isNotNull(BaseApplication.cookieStore)) {
-//                    defaultHttpClient.setCookieStore(BaseApplication.cookieStore);
-//                }
-//                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-//                    List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-//                    if (map != null)
-//                    {
-//                        String hashValue = "";
-//                        ArrayList<String> keys = GeneralUtils.doSort(map);
-//                        for (int i = 0; i < keys.size(); i++)
-//                        {
-//                            if ("hash".equals(keys.get(i)))
-//                            {
-//                                continue;
-//                            }
-//                            String key = keys.get(i);
-//                            String value = map.get(keys.get(i));
-//                            CMLog.i(TAG, "参数名     " + key);
-//                            CMLog.i(TAG, "参数值     " + value);
-//                            BasicNameValuePair valuePair = new BasicNameValuePair(key, value);
-//                            nameValuePairs.add(valuePair);
-//                            hashValue += value;
-//                        }
-////                        BasicNameValuePair valuePair =
-////                                new BasicNameValuePair("hash", GsonHelper.toJson(map));
-////                        BasicNameValuePair valuePair =
-////                                new BasicNameValuePair("hash", SecurityUtils.get32MD5Str(hashValue));
-////                        CMLog.i(TAG, "hash " + SecurityUtils.get32MD5Str(hashValue));
-////                        CMLog.i(TAG, "hash " + "加密前:" +  GsonHelper.toJson(map));
-////                        nameValuePairs.add(valuePair);
-//                    }
-//                CMLog.e("HTTP", "参数2：\n" + GsonHelper.toJson(map));
-//                HttpEntity httpEntity = new StringEntity(GsonHelper.toJson(map), HTTP.UTF_8);
-//                httpPost.setEntity(httpEntity);
-//
-////            }
-//                HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
-//                if (httpResponse == null) {
-//                    CMLog.i(TAG, "http response result null");
-//                    return null;
-//                }
-//
-//                if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-//                    if (url.contains(URLUtil.LOGIN)) {
-//                        BaseApplication.cookieStore = defaultHttpClient.getCookieStore();
-//                    }
-//                    String result = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
-//                    CMLog.i(TAG, "http response sucessful");
-//                    if (result == null || "".equals(result) || result.indexOf("<html>") > -1) {
-//                        CMLog.i(TAG, "request was sucessful, but paser value was null or empty");
-//                        return null;
-//                    }
-////                    CMLog.i(TAG, "respnse result:" + result);
-//                    KLog.json(TAG, result);
-//                    return result;
-//                } else {
-//                    CMLog.i(TAG, "http response code:" + httpResponse.getStatusLine().getStatusCode());
-//                    return null;
-//                }
-//            } catch (ClientProtocolException e) {
-//                CMLog.i(TAG, "client protocol exception" + e.getMessage());
-//            }
+            CMLog.i(TAG, "参数名     " + url);
+            try {
+                //                defaultHttpClient = new DefaultHttpClient();
+                httpPost = new HttpPost(url);
+                HttpParams httpParams = new BasicHttpParams();
+                HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
+                HttpProtocolParams.setContentCharset(httpParams, CHARSET);
+                HttpProtocolParams.setUseExpectContinue(httpParams, false);
+
+                HttpConnectionParams.setConnectionTimeout(httpParams, 20000);
+                HttpConnectionParams.setSoTimeout(httpParams, 30000);
+                httpPost.setParams(httpParams);
+                //设备类型ID,由服务端为每类客户端分配不同的设备类型ID及相应的私有密码。
+                httpPost.setHeader("x-s-deviceID", BaseApplication.DEVICE_TOKEN);
+                //服务端分配的设备请求密码。需要使用SHA256算法进行加密传输。
+                httpPost.setHeader("x-s-x-s-password", Global.getXS_PASSWORD_WORD());
+                String pass = Global.getXS_PASSWORD_WORD();
+                //时间戳
+                httpPost.setHeader("x-s-timestamp", GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN));
+                String time = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
+                //校验码
+                httpPost.setHeader("x-s-security", Global.getXSSecurity());
+                String se = Global.getXSSecurity();
+                //登录账户
+                httpPost.setHeader("x-s-loginName",Global.getUserName());
+                //客户端版本号
+                httpPost.setHeader("x-s-clientVersion",""+ Constants.VERSION_NAME);
+                SchemeRegistry schReg = new SchemeRegistry();
+                schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+                schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+                ThreadSafeClientConnManager conMgr = new ThreadSafeClientConnManager(httpParams, schReg);
+                defaultHttpClient = new DefaultHttpClient(conMgr, httpParams);
+                SSLSocketFactory.getSocketFactory().setHostnameVerifier(new AllowAllHostnameVerifier());
+
+                if (GeneralUtils.isNotNull(BaseApplication.cookieStore)) {
+                    defaultHttpClient.setCookieStore(BaseApplication.cookieStore);
+                }
+                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+                CMLog.e("HTTP", "参数2：\n" + GsonHelper.toJson(map));
+                HttpEntity httpEntity = new StringEntity(GsonHelper.toJson(map), HTTP.UTF_8);
+                httpPost.setEntity(httpEntity);
+                HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
+                if (httpResponse == null) {
+                    CMLog.i(TAG, "http response result null");
+                    return null;
+                }
+
+                if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    if (url.contains(URLUtil.LOGIN)) {
+                        BaseApplication.cookieStore = defaultHttpClient.getCookieStore();
+                    }
+                    String result = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
+                    CMLog.i(TAG, "http response sucessful");
+                    if (result == null || "".equals(result) || result.indexOf("<html>") > -1) {
+                        CMLog.i(TAG, "request was sucessful, but paser value was null or empty");
+                        return null;
+                    }
+                    CMLog.i(TAG, "respnse result:" + result);
+                    KLog.json(TAG, result);
+                    return result;
+                } else {
+                    CMLog.i(TAG, "http response code:" + httpResponse.getStatusLine().getStatusCode());
+                    return null;
+                }
+            } catch (ClientProtocolException e) {
+                CMLog.i(TAG, "client protocol exception" + e.getMessage());
+            }
             return null;
         }
     }

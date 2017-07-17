@@ -20,9 +20,39 @@ import de.greenrobot.event.EventBus;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class DialogUtil {
+public class DialogUtil
+{
 
-    public static void showNoTipTwoBnttonDialog(Context context, String title, String left, String right, final String leftTag, final String rightTag) {
+
+    /**
+     * <一个按钮的dialog>
+     */
+    public static void showDialogOneButton(Context context, String title, String sumbit, final String tag)
+    {
+        final Dialog dialog = new Dialog(context, R.style.main_dialog);
+        dialog.setContentView(R.layout.one_button_dialog);
+        dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView tvContent = (TextView) dialog.findViewById(R.id.dialogName_tv);
+        Button btSubmit = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        tvContent.setText(title);
+        btSubmit.setText(sumbit);
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        btSubmit.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                EventBus.getDefault().post(new NoticeEvent(tag));
+            }
+        });
+    }
+
+    public static void showNoTipTwoBnttonDialog(Context context, String title, String left, String right, final String leftTag, final String rightTag)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.person_save_barcode_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -37,24 +67,29 @@ public class DialogUtil {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.main_dialog);
-        leftBn.setOnClickListener(new View.OnClickListener() {
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 EventBus.getDefault().post(new NoticeEvent(leftTag));
                 dialog.dismiss();
             }
         });
-        rightBn.setOnClickListener(new View.OnClickListener() {
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 EventBus.getDefault().post(new NoticeEvent(rightTag));
                 dialog.dismiss();
             }
         });
     }
 
-    public static void exitAccountDialog(final Context context) {
+    public static void exitAccountDialog(final Context context)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.person_save_barcode_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -71,16 +106,20 @@ public class DialogUtil {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.main_dialog);
-        leftBn.setOnClickListener(new View.OnClickListener() {
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 dialog.dismiss();
             }
         });
-        rightBn.setOnClickListener(new View.OnClickListener() {
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
                 Global.loginOut(context);
                 dialog.dismiss();
@@ -89,10 +128,8 @@ public class DialogUtil {
     }
 
 
-
-
-
-    public static Dialog initDialog(Context context, int layout) {
+    public static Dialog initDialog(Context context, int layout)
+    {
         Dialog oneButtonDialog = new Dialog(context, R.style.from_bottom_dialog);
         oneButtonDialog.setContentView(layout);
         oneButtonDialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;

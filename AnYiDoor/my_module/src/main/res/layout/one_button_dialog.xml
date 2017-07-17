@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/money_transferdebt_dialogll"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="360px"
+              android:layout_gravity="center"
+              android:layout_marginLeft="@dimen/pxtodp60"
+              android:layout_marginRight="@dimen/pxtodp60"
+              android:background="@drawable/money_transfer_dialogbg"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/pxtodp10">
+
+
+    <TextView
+        android:id="@+id/dialogName_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp130"
+        android:gravity="center"
+        android:textColor="@color/register_success_reward"
+        android:textSize="@dimen/pxtosp36"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
+
+    <LinearLayout
+        android:id="@+id/dialog_bottom_bns"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp90"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/transfer_ok_bn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/money_nocolor_dialogbg"
+            android:gravity="center"
+            android:textColor="@color/money_dialog_blue_text"
+            android:textSize="@dimen/pxtosp36"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

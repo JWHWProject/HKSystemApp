@@ -3,12 +3,16 @@ package cn.nj.www.my_module.constant;
 import android.app.Activity;
 import android.content.Context;
 
-import cn.nj.www.my_module.bean.index.UserBean;
+import java.util.Date;
+
+import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.CookieUtils;
+import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.SharePref;
+import cn.nj.www.my_module.tools.StringEncrypt;
 
 /**
  * <全局静态缓存数据>
@@ -51,6 +55,8 @@ public class Global
      * 密码
      */
     private static final String PASSWORD = "password";
+
+    private static final String LOGIN_DATA = "LOGIN_DATA";
 
     /**
      * 昵称
@@ -178,22 +184,53 @@ public class Global
     }
 
 
-    public static void saveLoginUserData(Context context, UserBean userBean,String pwd)
+    public static void saveLoginUserData(Context context, String result)
     {
+        LoginResponse loginResponse = GsonHelper.toType(result, LoginResponse.class);
+        LoginResponse.UserBean userBean = loginResponse.getUser();
         saveUserName(userBean.getUserName());
-        saveUserId(userBean.getUserId() + "");
-        saveLoginName(userBean.getLoginName());
-        saveuserType(userBean.getType() + "");
-        savePassword(pwd);
-        saveUserRole(userBean.getUserRole());
-        savecaptcha(userBean.getCaptcha() + "");
-        //保存权限
-        if (userBean.getPermInstanceDtos().size()>0){
-            savepermInstanceDtos(GsonHelper.toJson(userBean.getPermInstanceDtos()));
-        }
-
+        saveUserId(userBean.getUserID() + "");
+        savePassword(userBean.getPassword());
+        saveloginData(result);
     }
 
+
+    /**
+     * 获取密码
+     */
+    public static String getXS_PASSWORD_WORD()
+    {
+        return SharePref.getString(XS_PASSWORD_WORD, "");
+    }
+
+    public static void saveXS_PASSWORD_WORD(String username)
+    {
+        SharePref.saveString(XS_PASSWORD_WORD, username);
+    }
+
+    /**
+     * 客户端标识密码（x-s-password），加密时使用明文
+     */
+    private static final String XS_PASSWORD_WORD = "XS_PASSWORD_WORD";
+
+    /**
+     * 未加密字符串
+     */
+    private static String XS_SECURITY = "";
+
+    public static String getXSSecurity()
+    {
+        if (GeneralUtils.isNullOrZeroLenght(XS_SECURITY))
+        {
+            String part1 = "webContent";
+            String part2 = BaseApplication.DEVICE_TOKEN;
+            String part3 = getXS_PASSWORD_WORD();
+            String part4 = GeneralUtils.formatDate(new Date(), GeneralUtils.DATE_PATTERN);
+            String part5 = getLoginName();
+            XS_SECURITY = StringEncrypt.Encrypt(part1 + part2 + part3 + part4 + part5);
+        }
+        return XS_SECURITY;
+    }
 
     /**
      * 获取用户名
@@ -245,7 +282,23 @@ public class Global
 
     public static void savePassword(String username)
     {
+
         SharePref.saveString(PASSWORD, username);
+        saveXS_PASSWORD_WORD(StringEncrypt.Encrypt(username));
+    }
+
+    /**
+     * 密码
+     */
+    public static String getLoginData()
+    {
+        return SharePref.getString(LOGIN_DATA, "");
+    }
+
+    public static void saveloginData(String username)
+    {
+
+        SharePref.saveString(LOGIN_DATA, username);
     }
 
     /**

@@ -16,27 +16,33 @@ import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
-import cn.nj.www.my_module.bean.index.LoginResponse;
-import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.constant.Constants;
-import cn.nj.www.my_module.constant.Global;
+import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.constant.URLUtil;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
+import cn.nj.www.my_module.main.base.CommonWebViewActivity;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
-import cn.nj.www.my_module.tools.StringEncrypt;
 import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.banner.ConvenientBanner;
 import cn.nj.www.my_module.view.banner.demo.LocalImageHolderView;
+import cn.nj.www.my_module.view.banner.demo.NetworkImageHolderView;
 import cn.nj.www.my_module.view.banner.holder.CBViewHolderCreator;
+import cn.nj.www.my_module.view.banner.listener.OnItemClickListener;
+
+import static cn.nj.www.my_module.constant.Constants.BANNER_RESULT;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener
+{
 
     @Bind(R.id.index_banner)
     ConvenientBanner indexBanner;
@@ -75,7 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ConvenientBanner mBanner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -85,17 +92,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void initView() {
+    public void initView()
+    {
 
     }
 
     @Override
-    public void initViewData() {
+    public void initViewData()
+    {
         UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
     }
 
     @Override
-    public void initEvent() {
+    public void initEvent()
+    {
         llBack.setOnClickListener(this);
         llFk.setOnClickListener(this);
         llTest.setOnClickListener(this);
@@ -103,59 +113,85 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void netResponse(BaseResponse event) {
+    public void netResponse(BaseResponse event)
+    {
 
     }
 
     /**
      * 初始化Banner
      */
-    private void bannerFirstInit() {
+    private void bannerFirstInit()
+    {
         //第一次展示默认本地图片
         localImages.add(R.mipmap.ic_launcher);//默认图片
         localImages.add(R.mipmap.about_icon);//默认图片
         mBanner = (ConvenientBanner) findViewById(R.id.index_banner);
         mBanner.setPages(
-                new CBViewHolderCreator<LocalImageHolderView>() {
+                new CBViewHolderCreator<LocalImageHolderView>()
+                {
                     @Override
-                    public LocalImageHolderView createHolder() {
+                    public LocalImageHolderView createHolder()
+                    {
                         return new LocalImageHolderView();
                     }
                 }, localImages)
                 //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
                 .setPageIndicator(new int[]{R.mipmap.icon_banner_focus, R.mipmap.icon_banner_nofocus});
-        String result = SharePref.getString(Constants.BANNER_RESULT, "");
-//        if (GeneralUtils.isNotNullOrZeroLenght(result))
-//        {
-//            BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
-//            initBanner(mBannerResponse.getData());
-//        }
+        String result = SharePref.getString(BANNER_RESULT, "");
+        if (GeneralUtils.isNotNullOrZeroLenght(result))
+        {
+            BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
+            initBanner(mBannerResponse.getBannerList());
+            //显示头部三个数据
+            bnCardNumber.setText(mBannerResponse.getCardCount()+"");
+            bnTrainNumber.setText(mBannerResponse.getTrainingCount()+"");
+            bnTestNumber.setText(mBannerResponse.getExamCount()+"");
+        }
     }
 
 
     @Override
-    public void onEventMainThread(BaseResponse event) {
-        if (event instanceof NoticeEvent) {
+    public void onEventMainThread(BaseResponse event)
+    {
+        if (event instanceof NoticeEvent)
+        {
             String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 finish();
-            }  if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            }
+            if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
 //                UserServiceImpl.instance().startOnlineTest(tagStr,StartTrainResponse.class.getName());
             }
         }
-        if (event instanceof NetResponseEvent) {
+        if (event instanceof NetResponseEvent)
+        {
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-            if (tag.equals(BannerResponse.class.getName())) {
+            if (tag.equals(BannerResponse.class.getName()))
+            {
                 BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mBannerResponse.getResultCode())) {
-                    } else {
-//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mBannerResponse.getResultCode()))
+                    {
+                        initBanner(mBannerResponse.getBannerList());
+                        SharePref.saveString(BANNER_RESULT, result);
+                        //显示头部三个数据
+                        bnCardNumber.setText(mBannerResponse.getCardCount()+"");
+                        bnTrainNumber.setText(mBannerResponse.getTrainingCount()+"");
+                        bnTestNumber.setText(mBannerResponse.getExamCount()+"");
                     }
-                } else {
+                    else
+                    {
+                        ErrorCode.doCode(this, mBannerResponse.getResultCode(), mBannerResponse.getDesc());
+                    }
+                }
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
@@ -167,63 +203,67 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     /**
      * Banner展示网络数据
      */
-//    private synchronized void initBanner(final List<BannerListBean> ad)
-//    {
-//        if (ad == null || ad.size() < 1)
-//        {
-//            return;
-//        }
-//        networkImages.clear();
-//        for (int i = 0; i < ad.size(); i++)
-//        {
-//            if (!networkImages.contains(ad.get(i).getImageUrl()))
-//            {
-//                networkImages.add(URLUtil.IMAGE_BASE + ad.get(i).getImageUrl());
-//                CMLog.e(Constants.HTTP_TAG, URLUtil.IMAGE_BASE + ad.get(i).getImageUrl());
-//            }
-//        }
-//        mBanner.stopTurning();
-//        mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>()
-//        {
-//            @Override
-//            public NetworkImageHolderView createHolder()
-//            {
-//                return new NetworkImageHolderView();
-//            }
-//        }, networkImages).setOnItemClickListener(new OnItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(int position)
-//            {
-//                if (GeneralUtils.isNotNullOrZeroLenght(ad.get(position).getImageLink()))
-//                {
-//                    Intent intentDoFile = new Intent(getActivity(), CommonWebViewActivity.class);
-//                    intentDoFile.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, ad.get(position).getImageDesc());
-//                    intentDoFile.putExtra(IntentCode.COMMON_WEB_VIEW_URL, ad.get(position).getImageLink());
-//                    startActivity(intentDoFile);
-//                }
-//            }
-//        });
-//    }
+    private synchronized void initBanner(final List<BannerResponse.BannerListBean> ad)
+    {
+        if (ad == null || ad.size() < 1)
+        {
+            return;
+        }
+        networkImages.clear();
+        for (int i = 0; i < ad.size(); i++)
+        {
+            if (!networkImages.contains(ad.get(i).getRequestUrl()))
+            {
+                networkImages.add(ad.get(i).getRequestUrl());
+                CMLog.e(Constants.HTTP_TAG, URLUtil.IMAGE_BASE + ad.get(i).getRequestUrl());
+            }
+        }
+        mBanner.stopTurning();
+        mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>()
+        {
+            @Override
+            public NetworkImageHolderView createHolder()
+            {
+                return new NetworkImageHolderView();
+            }
+        }, networkImages).setOnItemClickListener(new OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(int position)
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(ad.get(position).getLink()))
+                {
+                    Intent intentDoFile = new Intent(mContext, CommonWebViewActivity.class);
+                    intentDoFile.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, ad.get(position).getTitle());
+                    intentDoFile.putExtra(IntentCode.COMMON_WEB_VIEW_URL, ad.get(position).getLink());
+                    startActivity(intentDoFile);
+                }
+            }
+        });
+    }
 
     // 停止自动翻页
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         //停止翻页
         mBanner.stopTurning();
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         mBanner.startTurning(Constants.BANNER_TURN_TIME);
     }
 
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
             case R.id.ll_back:
                 startActivity(new Intent(mContext, GiveBackCardActivity.class));
                 break;

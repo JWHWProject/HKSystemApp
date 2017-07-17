@@ -1,64 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:paddingTop="@dimen/pxtodp30"
-              android:paddingBottom="@dimen/pxtodp30"
-              android:paddingLeft="@dimen/pxtodp20"
-              android:paddingRight="@dimen/pxtodp20"
-              android:background="@color/white"
-              android:layout_height="wrap_content">
+              android:layout_height="match_parent"
+              android:orientation="vertical" >
 
     <TextView
-        android:layout_width="match_parent"
-        android:textColor="@color/txt_col"
-        android:textSize="@dimen/pxtodp28"
-        android:layout_marginBottom="@dimen/pxtodp44"
-        android:layout_height="wrap_content"/>
-    <RadioGroup
-        android:id="@+id/mRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <!--四个选项-->
+    <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal" >
 
-        <RadioButton
-            android:id="@+id/RadioA"
+        <CheckBox
+            android:id="@+id/cb1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="大帅哥" />
+            android:text="选项1" />
 
-        <RadioButton
-            android:id="@+id/RadioB"
+        <CheckBox
+            android:id="@+id/cb2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="参照A" />
+            android:text="选项2" />
 
-        <RadioButton
-            android:id="@+id/RadioC"
+        <CheckBox
+            android:id="@+id/cb3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="参照B" />
+            android:text="选项3" />
 
-        <RadioButton
-            android:id="@+id/RadioD"
+        <CheckBox
+            android:id="@+id/cb4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="参照C" />
+            android:text="选项4" />
 
-        <!--正确答案，默认是隐藏的-->
-
-        <TextView
-            android:visibility="invisible"
-            android:id="@+id/tv_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="正确答案：肯定选A呀！"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp" />
-
-    </RadioGroup>
+    </LinearLayout>
 
 </LinearLayout>

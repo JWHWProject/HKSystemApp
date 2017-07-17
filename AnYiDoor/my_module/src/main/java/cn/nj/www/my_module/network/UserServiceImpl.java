@@ -56,6 +56,7 @@ public class UserServiceImpl {
         param.put("userName", userName);
         param.put("password", password);
         param.put("loginType", "1");
+        param.put("smsCode", "");
         new NetWork()
                 .startPost(URLUtil.LOGIN, param, tag);
     }

@@ -22,6 +22,7 @@ import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -134,7 +135,7 @@ public class FindPasswordCodeActy extends BaseActivity implements View.OnClickLi
                         //成功发送验证码，
                         startTime();
                     } else {
-                        ErrorCode.doCode(mContext, mCheck.getResultCode(), mCheck.getDesc());
+//                        ErrorCode.doCode(mContext, mCheck.getResultCode(), mCheck.getDesc());
                     }
                 } else {
                     ToastUtil.showError(mContext);

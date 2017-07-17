@@ -14,6 +14,7 @@ import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
@@ -99,14 +100,12 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
                 LoginResponse loginResponse = GsonHelper.toType(result, LoginResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     if (Constants.SUCESS_CODE.equals(loginResponse.getResultCode())) {
-//                        Global.saveLoginUserData(mContext, loginResponse.getUser());
-                        Global.savePassword(psdET.getText().toString());
-                        Global.saveLoginName(nameET.getText().toString());
+                        Global.saveLoginUserData(mContext,result);
                         ToastUtil.makeText(mContext, "登录成功");
                         startActivity(new Intent(mContext,MainActivity.class));
                         finish();
                     } else {
-//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
                     }
                 } else {
                     ToastUtil.showError(this);
@@ -121,7 +120,6 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.app_login_bn:
-                startActivity(new Intent(mContext,MainActivity.class));
                 if (GeneralUtils.isNotNullOrZeroLenght(psdET.getText().toString())) {
                     if (GeneralUtils.isNotNullOrZeroLenght(nameET.getText().toString())) {
                         NetLoadingDialog.getInstance().loading(mContext);

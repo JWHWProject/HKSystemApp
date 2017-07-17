@@ -30,7 +30,7 @@ public class ErrorCode {
     }
 
 
-    public static void doCode(Context context, boolean code, String info) {
+    public static void doCode(Context context, String code, String info) {
             ToastUtil.makeText(context, info);
     }
     public static void doCode(Context context, String code, String info, boolean close) {
