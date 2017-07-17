@@ -13,16 +13,30 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
+import cn.nj.www.my_module.bean.NetResponseEvent;
+import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.BannerResponse;
+import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.Global;
+import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
+import cn.nj.www.my_module.main.base.BaseApplication;
+import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
+import cn.nj.www.my_module.tools.StringEncrypt;
+import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.banner.ConvenientBanner;
 import cn.nj.www.my_module.view.banner.demo.LocalImageHolderView;
 import cn.nj.www.my_module.view.banner.holder.CBViewHolderCreator;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener
-{
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.index_banner)
     ConvenientBanner indexBanner;
@@ -61,8 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     private ConvenientBanner mBanner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -72,20 +85,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void initView()
-    {
+    public void initView() {
 
     }
 
     @Override
-    public void initViewData()
-    {
-
+    public void initViewData() {
+        UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
     }
 
     @Override
-    public void initEvent()
-    {
+    public void initEvent() {
         llBack.setOnClickListener(this);
         llFk.setOnClickListener(this);
         llTest.setOnClickListener(this);
@@ -93,26 +103,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void netResponse(BaseResponse event)
-    {
+    public void netResponse(BaseResponse event) {
 
     }
 
     /**
      * 初始化Banner
      */
-    private void bannerFirstInit()
-    {
+    private void bannerFirstInit() {
         //第一次展示默认本地图片
         localImages.add(R.mipmap.ic_launcher);//默认图片
         localImages.add(R.mipmap.about_icon);//默认图片
         mBanner = (ConvenientBanner) findViewById(R.id.index_banner);
         mBanner.setPages(
-                new CBViewHolderCreator<LocalImageHolderView>()
-                {
+                new CBViewHolderCreator<LocalImageHolderView>() {
                     @Override
-                    public LocalImageHolderView createHolder()
-                    {
+                    public LocalImageHolderView createHolder() {
                         return new LocalImageHolderView();
                     }
                 }, localImages)
@@ -124,6 +130,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 //            BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
 //            initBanner(mBannerResponse.getData());
 //        }
+    }
+
+
+    @Override
+    public void onEventMainThread(BaseResponse event) {
+        if (event instanceof NoticeEvent) {
+            String tag = ((NoticeEvent) event).getTag();
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+                finish();
+            }  if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+//                UserServiceImpl.instance().startOnlineTest(tagStr,StartTrainResponse.class.getName());
+            }
+        }
+        if (event instanceof NetResponseEvent) {
+            NetLoadingDialog.getInstance().dismissDialog();
+            String tag = ((NetResponseEvent) event).getTag();
+            String result = ((NetResponseEvent) event).getResult();
+            if (tag.equals(BannerResponse.class.getName())) {
+                BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    if (Constants.SUCESS_CODE.equals(mBannerResponse.getResultCode())) {
+                    } else {
+//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+                    }
+                } else {
+                    ToastUtil.showError(this);
+                }
+            }
+        }
+
     }
 
 
@@ -171,37 +208,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 
     // 停止自动翻页
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         //停止翻页
         mBanner.stopTurning();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         mBanner.startTurning(Constants.BANNER_TURN_TIME);
     }
 
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.ll_back:
-                startActivity(new Intent(mContext,GiveBackCardActivity.class));
+                startActivity(new Intent(mContext, GiveBackCardActivity.class));
                 break;
             //发卡
             case R.id.ll_fk:
-                startActivity(new Intent(mContext,GiveCardActivity.class));
+                startActivity(new Intent(mContext, GiveCardActivity.class));
                 break;
             //测试
             case R.id.ll_test:
+                DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+
                 break;
             case R.id.ll_train:
-                startActivity(new Intent(mContext,TrainListActy.class));
+                startActivity(new Intent(mContext, TrainListActy.class));
                 break;
         }
     }

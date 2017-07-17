@@ -9,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.anyi.door.EmptyActivity">
+    tools:context="com.anyi.door.EmptyActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:textSize="40sp"
@@ -22,4 +23,28 @@
         android:id="@+id/bnCopy"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"/>
+    <include
+        layout="@layout/item_choose"/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RadioButton
+            android:id="@+id/excellent"
+            android:layout_width="wrap_content"
+            android:layout_height="42px"
+            android:layout_marginLeft="30dp"
+            android:text="优：" />
+
+        <RadioButton
+            android:id="@+id/fine"
+            android:layout_width="wrap_content"
+            android:layout_height="42px"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="-42px"
+            android:text="良：" />
+
+
+    </RadioGroup>
 </RelativeLayout>

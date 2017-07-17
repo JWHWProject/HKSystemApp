@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.GiveInnerCardResponse;
+import cn.nj.www.my_module.bean.index.GiveOutterCardResponse;
 import cn.nj.www.my_module.bean.index.YZMResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
@@ -48,6 +50,7 @@ import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -57,8 +60,7 @@ import cn.nj.www.my_module.tools.ToastUtil;
 /**
  * 发卡
  */
-public class GiveCardActivity extends BaseActivity implements View.OnClickListener
-{
+public class GiveCardActivity extends BaseActivity implements View.OnClickListener {
 
 
     @Bind(R.id.sliding_tabs)
@@ -118,8 +120,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     private int maxSize = 4;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_card);
         ButterKnife.bind(this);
@@ -127,8 +128,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    private void initTitle()
-    {
+    private void initTitle() {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
         headView.setTitleText("发卡");
@@ -138,8 +138,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
 
     @Override
-    public void initView()
-    {
+    public void initView() {
         initTitle();
         tvSex.setOnClickListener(this);
         LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
@@ -161,8 +160,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     GridImgAdapter gridImgsAdapter;
 
     @Override
-    public void initViewData()
-    {
+    public void initViewData() {
         Config.ScreenMap = Config.getScreenSize(this, this);
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
@@ -175,41 +173,34 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         gridImgsAdapter.notifyDataSetChanged();
     }
 
-    class GridImgAdapter extends BaseAdapter implements ListAdapter
-    {
+    class GridImgAdapter extends BaseAdapter implements ListAdapter {
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return img_uri.size();
         }
 
         @Override
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return null;
         }
 
         @Override
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return position;
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent)
-        {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = LayoutInflater.from(GiveCardActivity.this).inflate(R.layout.activity_addstory_img_item, null);
 
             ViewHolder holder;
 
-            if (convertView != null)
-            {
+            if (convertView != null) {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(GiveCardActivity.this).inflate(R.layout.activity_addstory_img_item, null);
                 convertView.setTag(holder);
             }
-            else
-            {
+            else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
@@ -218,24 +209,19 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
             AbsListView.LayoutParams param = new AbsListView.LayoutParams(screen_widthOffset, screen_widthOffset);
             convertView.setLayoutParams(param);
-            if (img_uri.get(position) == null)
-            {
+            if (img_uri.get(position) == null) {
                 holder.delete_IV.setVisibility(View.GONE);
 
                 ImageLoaderUtil.getInstance().initImage(mContext, "drawable://" + R.drawable.iv_add_the_pic, holder.add_IB, "");
-                holder.add_IB.setOnClickListener(new View.OnClickListener()
-                {
+                holder.add_IB.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onClick(View arg0)
-                    {
+                    public void onClick(View arg0) {
 
-                        if (maxSize - (img_uri.size() - 1) == 0)
-                        {
+                        if (maxSize - (img_uri.size() - 1) == 0) {
                             ToastUtil.makeText(mContext, "最多添加" + maxSize + "张");
                         }
-                        else
-                        {
+                        else {
                             Intent intent = new Intent(GiveCardActivity.this, PhotoSelectorActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             intent.putExtra("limit", maxSize - (img_uri.size() - 1));
@@ -245,28 +231,22 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 });
 
             }
-            else
-            {
+            else {
                 ImageLoaderUtil.getInstance().initImage(mContext, "file://" + img_uri.get(position).getUrl(), holder.add_IB, "");
-                holder.delete_IV.setOnClickListener(new View.OnClickListener()
-                {
+                holder.delete_IV.setOnClickListener(new View.OnClickListener() {
                     private boolean is_addNull;
 
                     @Override
-                    public void onClick(View arg0)
-                    {
+                    public void onClick(View arg0) {
                         is_addNull = true;
                         String img_url = img_uri.remove(position).getUrl();
-                        for (int i = 0; i < img_uri.size(); i++)
-                        {
-                            if (img_uri.get(i) == null)
-                            {
+                        for (int i = 0; i < img_uri.size(); i++) {
+                            if (img_uri.get(i) == null) {
                                 is_addNull = false;
                                 continue;
                             }
                         }
-                        if (is_addNull)
-                        {
+                        if (is_addNull) {
                             img_uri.add(null);
                         }
 
@@ -276,11 +256,9 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
 
-                holder.add_IB.setOnClickListener(new View.OnClickListener()
-                {
+                holder.add_IB.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("photos", (Serializable) single_photos);
                         bundle.putInt("position", position);
@@ -293,8 +271,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             return convertView;
         }
 
-        class ViewHolder
-        {
+        class ViewHolder {
             ImageView add_IB;
 
             ImageView delete_IV;
@@ -302,13 +279,10 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void initEvent()
-    {
-        appSubmitBn.setOnClickListener(new View.OnClickListener()
-        {
+    public void initEvent() {
+        appSubmitBn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 upLoadData();
             }
         });
@@ -317,10 +291,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
                                             {
                                                 @Override
-                                                public void onTabSelected(TabLayout.Tab tab)
-                                                {
-                                                    switch (tab.getPosition())
-                                                    {
+                                                public void onTabSelected(TabLayout.Tab tab) {
+                                                    switch (tab.getPosition()) {
                                                         case 0:
                                                             llInner.setVisibility(View.VISIBLE);
                                                             llOuter.setVisibility(View.GONE);
@@ -333,14 +305,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                                 }
 
                                                 @Override
-                                                public void onTabUnselected(TabLayout.Tab tab)
-                                                {
+                                                public void onTabUnselected(TabLayout.Tab tab) {
 
                                                 }
 
                                                 @Override
-                                                public void onTabReselected(TabLayout.Tab tab)
-                                                {
+                                                public void onTabReselected(TabLayout.Tab tab) {
 
                                                 }
                                             }
@@ -349,44 +319,34 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void netResponse(BaseResponse event)
-    {
+    public void netResponse(BaseResponse event) {
 
     }
 
     @Override
-    public void onEventMainThread(BaseResponse event)
-    {
-        if (event instanceof NoticeEvent)
-        {
+    public void onEventMainThread(BaseResponse event) {
+        if (event instanceof NoticeEvent) {
             String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
-            {
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 finish();
             }
         }
-        if (event instanceof NetResponseEvent)
-        {
+        if (event instanceof NetResponseEvent) {
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             NetLoadingDialog.getInstance().dismissDialog();
-            if (tag.equals(YZMResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
-            {
-                if (GeneralUtils.isNotNullOrZeroLenght(result))
-                {
+            if (tag.equals(YZMResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     YZMResponse mYZMResponse = GsonHelper.toType(result, YZMResponse.class);
-                    if (Constants.SUCESS_CODE.equals(mYZMResponse.getResultCode()))
-                    {
+                    if (Constants.SUCESS_CODE.equals(mYZMResponse.getResultCode())) {
                         //获取验证码成功后，跳转到注册页面
                     }
-                    else
-                    {
+                    else {
                         ErrorCode.doCode(mContext, mYZMResponse.getResultCode(), mYZMResponse.getDesc());
                     }
                 }
-                else
-                {
+                else {
                     ToastUtil.showError(mContext);
                 }
             }
@@ -400,18 +360,14 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     private int whitchIndex = 0;
 
     @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.tv_sex:
                 AlertDialog Builder = new AlertDialog.Builder(mContext).setTitle("请选择")
                         .setSingleChoiceItems(
                                 resonArr, whitchIndex,
-                                new DialogInterface.OnClickListener()
-                                {
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         refundReson = resonArr[which];
                                         tvSex.setText(refundReson);
                                         whitchIndex = which;
@@ -430,51 +386,40 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null)
-        {
-            if (resultCode == 1)
-            {
+        if (data != null) {
+            if (resultCode == 1) {
                 String result = data.getStringExtra("reason");
                 tvReasonDetail.setText(result);
-                if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString()))
-                {
+                if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString())) {
                     tvReasonDetail.setVisibility(View.VISIBLE);
                 }
-                else
-                {
+                else {
                     tvReasonDetail.setVisibility(View.GONE);
                 }
                 return;
             }
         }
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case 0:
-                if (data != null)
-                {
+                if (data != null) {
                     List<String> paths = (List<String>) data.getExtras().getSerializable("photos");
-                    if (img_uri.size() > 0)
-                    {
+                    if (img_uri.size() > 0) {
                         img_uri.remove(img_uri.size() - 1);
                     }
 
-                    for (int i = 0; i < paths.size(); i++)
-                    {
+                    for (int i = 0; i < paths.size(); i++) {
                         img_uri.add(new UploadGoodsBean(paths.get(i), false));
                         //上传参数
                     }
-                    for (int i = 0; i < paths.size(); i++)
-                    {
+                    for (int i = 0; i < paths.size(); i++) {
                         PhotoModel photoModel = new PhotoModel();
                         photoModel.setOriginalPath(paths.get(i));
                         photoModel.setChecked(true);
                         single_photos.add(photoModel);
                     }
-                    if (img_uri.size() < 9)
-                    {
+                    if (img_uri.size() < 9) {
                         img_uri.add(null);
                     }
                     gridImgsAdapter.notifyDataSetChanged();
@@ -485,46 +430,61 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void upLoadData()
-    {
-        if (GeneralUtils.isNotNullOrZeroLenght(etCardNumber.getText().toString())){
-            ToastUtil.makeText(mContext,"请填写卡号");
+    private void upLoadData() {
+        int sexIndex = 1;
+        if (GeneralUtils.isNotNullOrZeroLenght(etCardNumber.getText().toString())) {
+            ToastUtil.makeText(mContext, "请填写卡号");
             return;
         }
-        if (GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())){
-            ToastUtil.makeText(mContext,"请填写姓名");    return;
+        if (GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())) {
+            ToastUtil.makeText(mContext, "请填写姓名");
+            return;
         }
-        if (tvSex.getText().toString().equals("请选择")){
-            ToastUtil.makeText(mContext,"请选择性别");    return;
+        if (tvSex.getText().toString().equals("请选择")) {
+            ToastUtil.makeText(mContext, "请选择性别");
+            return;
+        }
+        else {
+            if (tvSex.getText().toString().equals("男")) {
+                sexIndex = 1;
+            }
+            else {
+                sexIndex = 2;
+            }
         }
 
-        if (llInner.getVisibility() == View.VISIBLE)
-        {
-            if (tvDepartment.getText().toString().equals("请选择")){
-                ToastUtil.makeText(mContext,"请选择部门");
+        if (llInner.getVisibility() == View.VISIBLE) {
+            if (tvDepartment.getText().toString().equals("请选择")) {
+                ToastUtil.makeText(mContext, "请选择部门");
                 return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etNumber.getText().toString())){
-                ToastUtil.makeText(mContext,"请填写工号");
+            if (GeneralUtils.isNotNullOrZeroLenght(etNumber.getText().toString())) {
+                ToastUtil.makeText(mContext, "请填写工号");
                 return;
             }
             //TODO：获取到数据
+            UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex, tvDepartment.getText().toString(), etNumber.getText().toString(), GiveInnerCardResponse.class.getName());
         }
-        else
-        {
-            if (GeneralUtils.isNotNullOrZeroLenght(etPhone.getText().toString())){
-                ToastUtil.makeText(mContext,"请填写联系方式");    return;
+        else {
+            if (GeneralUtils.isNotNullOrZeroLenght(etPhone.getText().toString())) {
+                ToastUtil.makeText(mContext, "请填写联系方式");
+                return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etCompany.getText().toString())){
-                ToastUtil.makeText(mContext,"请填写来自单位");    return;
+            if (GeneralUtils.isNotNullOrZeroLenght(etCompany.getText().toString())) {
+                ToastUtil.makeText(mContext, "请填写来自单位");
+                return;
             }
-            if (GeneralUtils.isNotNullOrZeroLenght(etId.getText().toString())){
-                ToastUtil.makeText(mContext,"请填写身份证号");    return;
+            if (GeneralUtils.isNotNullOrZeroLenght(etId.getText().toString())) {
+                ToastUtil.makeText(mContext, "请填写身份证号");
+                return;
             }
-            if (tvReasonDetail.getText().toString().length()<30){
-                ToastUtil.makeText(mContext,"请输入事由，不少于30字");    return;
+            if (tvReasonDetail.getText().toString().length() < 30) {
+                ToastUtil.makeText(mContext, "请输入事由，不少于30字");
+                return;
             }
-            //TODO:
+            UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                  etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(), GiveOutterCardResponse.class.getName());
+
         }
     }
 

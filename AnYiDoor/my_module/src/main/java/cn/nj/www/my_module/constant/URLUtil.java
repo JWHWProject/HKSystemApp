@@ -22,71 +22,26 @@ public class URLUtil {
     /************************************************************************************/
 
 
-    /**
-     * 登录
-     */
-    public static final String LOGIN = SERVER_BASE + "login.do";
-    public static final String UPDATE_VERSION = SERVER_BASE + "updateVersion.do";
 
-    /**
-     *
-     */
-    public static final String BANNER = SERVER_BASE + "listBannerImage.do";
-    public static final String listVideoNode = SERVER_BASE + "listVideoNode.do";
-    /**
-     * 3.5.单位信息接口
-     */
-    public static final String INSTITUTION_INFO = SERVER_BASE + "listEnterprise.do";
-    /**
-     * 3.6.指标查询接口
-     */
-    public static final String TARGET_INFO = SERVER_BASE + "listIndicatorData.do";
-    /**
-     * 3.6.指标查询接口线性图表烟气
-     */
-    public static final String TARGET_INFO2 = SERVER_BASE + "listIndicatorData2Charts.do";
-    /**
-     * 3.6.指标查询接口线性图表二恶英
-     */
-    public static final String TARGET_INFO3 = SERVER_BASE + "listDioxinData2Charts.do";
-    /**
-     * 3.7.超标记录接口
-     */
-    public static final String OVER_RECORD = SERVER_BASE + "listExceedRecord.do";
-    /**
-     * 3.8.超标统计接口
-     */
-    public static final String OVER_RECORD_HISTORY = SERVER_BASE + "listExceedRecordForCharts.do";
-    /**
-     * 3.9.问题登记接口
-     */
-    public static final String UPLOAD_PROBLEM = SERVER_BASE + "assessmentRegister.do";
-    /**
-     * 3.10.历史登记查询接口
-     */
-    public static final String PROBLEM_HISTORY = SERVER_BASE + "listHistoryRegister.do";
-    /**
-     * 3.11.考核项查询接口
-     */
-    public static final String TEST_PROJECT = SERVER_BASE + "listAssessItemObject.do";
-    /**
-     * 3.12.监管考核上报接口
-     */
-    public static final String uploadTestProjects = SERVER_BASE + "assessmentRegister.do";
-    /**
-     * 3.14.修改用户信息（用户名，密码）接口
-     */
-    public static final String editUserInfo = SERVER_BASE + "changeUserInfo.do";
-    /**
-     * 上传附件
-     */
-    public static final String uploaderFile = SERVER_BASE + "uploadAttachments.do";
-    /**
-     * 上传附件后列表
-     */
-    public static final String uploaderFileList = SERVER_BASE + "listAttachments.do";
-    /**
-     * 删除附件
-     */
-    public static final String deleteFile = SERVER_BASE + "deleteAttachment.do";
+
+    public static final String INIT = SERVER_BASE + "app/init";
+    public static final String BANNER = SERVER_BASE + "door/banner/list";
+    public static final String LOGIN = SERVER_BASE + "user/login";
+    public static final String INDEX_DATA = SERVER_BASE + "door/user/stat";
+    public static final String GIVE_CARD = SERVER_BASE + "door/user/addCard";
+    public static final String GIVE_OUT_CARD = SERVER_BASE + "door/outsiders/addCard";
+    public static final String RETURN_CARD = SERVER_BASE + "card/return";
+    public static final String TRAINLIST = SERVER_BASE + "onlineTraining/list";
+    public static final String TRAIN_CONTENT = SERVER_BASE + "onlineTraining/detail";
+    public static final String START_TRAIN = SERVER_BASE + "onlineTraining/start";
+    public static final String FINISH_TRAIN = SERVER_BASE + "onlineTraining/finish";
+    public static final String TEST_DETAIL = SERVER_BASE + "onlineTrainingExam/detail";
+    public static final String ONLINE_TEST = SERVER_BASE + "onlineTrainingExam/start";
+    public static final String FINISH_TEST = SERVER_BASE + "onlineTrainingExam/finish";
+    public static final String uploaderFile = SERVER_BASE + "onlineTrainingExam/finish";
+
+
+
+
+
 }

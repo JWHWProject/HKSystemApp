@@ -53,7 +53,7 @@
 
 
     <Button
-        android:id="@+id/app_login_bn"
+        android:id="@+id/app_back_bn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/pxtodp90"
         android:layout_marginLeft="@dimen/pxtodp30"
