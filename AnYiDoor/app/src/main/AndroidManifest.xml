@@ -54,7 +54,11 @@
         <activity
             android:name=".LoginActy"
             android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".GiveCardActivity"
@@ -73,17 +77,9 @@
         <activity
             android:name=".TrainListActy"
             android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".TrainListCopyActy"
-            android:launchMode="singleTask">
 
         </activity>
+
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
         </activity>

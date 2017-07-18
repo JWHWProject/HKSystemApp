@@ -26,6 +26,7 @@ public class NotiTag
      * 错误页面
      */
     public static final String TAG_ERROR_VIEW = "TAG_ERROR_VIEW";
+    public static final String TAG_TRAIN_DETAIL = "TAG_ERROR_VIEW";
 
 
     /**

@@ -32,7 +32,7 @@ public class URLUtil {
     public static final String GIVE_OUT_CARD = SERVER_BASE + "card/addOutsidersCard";
     public static final String RETURN_CARD = SERVER_BASE + "card/return";
     public static final String TRAINLIST = SERVER_BASE + "onlineTraining/list";
-    public static final String TRAIN_CONTENT = SERVER_BASE + "onlineTraining/detail";
+    public static final String TRAIN_CONTENT = SERVER_BASE + "online/detail";
     public static final String START_TRAIN = SERVER_BASE + "onlineTraining/start";
     public static final String FINISH_TRAIN = SERVER_BASE + "onlineTraining/finish";
     public static final String TEST_DETAIL = SERVER_BASE + "onlineTrainingExam/detail";

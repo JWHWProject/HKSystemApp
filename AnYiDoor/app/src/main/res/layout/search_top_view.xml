@@ -51,7 +51,7 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:singleLine="true"
-            android:textColor="@color/gray"
+            android:textColor="@color/register_black_text"
             android:textColorHint="@color/gray"
             android:textSize="14sp"
             tools:ignore="RtlHardcoded"/>

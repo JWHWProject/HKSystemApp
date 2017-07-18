@@ -12,10 +12,10 @@
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/pxtodp10"
-        android:paddingTop="@dimen/pxtodp10"
+        android:paddingBottom="@dimen/pxtodp12"
+        android:paddingTop="@dimen/pxtodp12"
         android:text="ddd"   android:textColor="@color/register_black_text"
-        android:textSize="@dimen/pxtodp34"
+        android:textSize="@dimen/pxtodp36"
         />
 
     <ImageView
