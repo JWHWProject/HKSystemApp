@@ -25,7 +25,7 @@ public class URLUtil {
 
 
     public static final String INIT = SERVER_BASE + "app/init";
-    public static final String BANNER = SERVER_BASE + "onlineTrainingbanner/list";
+    public static final String BANNER = SERVER_BASE + "onlineTrainingBanner/list";
     public static final String LOGIN = SERVER_BASE + "user/login";
     public static final String INDEX_DATA = SERVER_BASE + "door/user/stat";
     public static final String GIVE_CARD = SERVER_BASE + "card/addCard";
@@ -39,6 +39,7 @@ public class URLUtil {
     public static final String ONLINE_TEST = SERVER_BASE + "onlineTrainingExam/start";
     public static final String FINISH_TEST = SERVER_BASE + "onlineTrainingExam/finish";
     public static final String uploaderFile = SERVER_BASE + "onlineTrainingExam/finish";
+    public static final String outerType = SERVER_BASE + "card/outsidersTypeList";
     /**
      * 上传图片
      */

@@ -8,7 +8,6 @@ import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.FinishTrainResponse;
-import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
@@ -86,7 +85,7 @@ private String trainId;
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bn_finish:
-                UserServiceImpl.instance().finishTrain(trainId,FinishTrainResponse.class.getName());
+                UserServiceImpl.instance().finishTrain(trainId,null,FinishTrainResponse.class.getName());
                 break;
         }
     }

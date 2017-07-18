@@ -13,7 +13,6 @@ import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.Constants;
-import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -100,6 +99,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
     @Override
     public void initViewData()
     {
+        NetLoadingDialog.getInstance().loading(mContext);
         UserServiceImpl.instance().trainList(TrainListResponse.class.getName());
     }
 
@@ -132,7 +132,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 ToastUtil.makeText(mContext,tagStr);
                 //调用开始培训的接口
-                UserServiceImpl.instance().startTrain(tagStr,StartTrainResponse.class.getName());
+                UserServiceImpl.instance().startTrain(tagStr,"",StartTrainResponse.class.getName());
             }
         }
         else if (event instanceof NetResponseEvent)

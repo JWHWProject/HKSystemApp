@@ -14,10 +14,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.nj.www.my_module.view.CircleImageView;
 
 
 /**
@@ -332,31 +327,6 @@ public class BitmapUtil
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-    public static void destoryViewImage(ViewGroup root) {
-        if(root==null)return;
-        try {
-            for (int i = 0; i < root.getChildCount(); i++) {
-                View v = root.getChildAt(i);
-                if (v instanceof ImageView) {
-                    BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
-                    destoryImg(drawable);
-                    ((ImageView) v).setImageDrawable(null);
-                } else if (v instanceof ImageButton) {
-                    BitmapDrawable drawable = (BitmapDrawable) ((ImageButton) v).getDrawable();
-                    destoryImg(drawable);
-                    ((ImageButton) v).setImageDrawable(null);
-                } else if (v instanceof CircleImageView) {
-                    BitmapDrawable drawable = (BitmapDrawable) ((CircleImageView) v).getDrawable();
-                    destoryImg(drawable);
-                    ((CircleImageView) v).setImageDrawable(null);
-                } else if (v instanceof ViewGroup) {
-                    destoryViewImage((ViewGroup) v);
-                }
-            }
-
-        } catch (Exception e) {
         }
     }
 

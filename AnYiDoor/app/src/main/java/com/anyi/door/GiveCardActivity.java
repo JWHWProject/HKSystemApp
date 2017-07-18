@@ -1,4 +1,3 @@
-
 package com.anyi.door;
 
 import android.annotation.SuppressLint;
@@ -31,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anyi.door.utils.Config;
 import com.anyi.door.utils.DbTOPxUtils;
@@ -56,11 +56,11 @@ import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.GiveInnerCardResponse;
 import cn.nj.www.my_module.bean.index.GiveOutterCardResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.OuterTypeResponse;
 import cn.nj.www.my_module.bean.index.UploadFileResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
-import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -71,7 +71,9 @@ import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
+import cn.nj.www.my_module.tools.SharePref;
 import cn.nj.www.my_module.tools.ToastUtil;
+import cn.nj.www.my_module.view.AmountView;
 
 import static com.anyi.door.R.id.et_card_number;
 
@@ -79,7 +81,8 @@ import static com.anyi.door.R.id.et_card_number;
 /**
  * 发卡
  */
-public class GiveCardActivity extends BaseActivity implements View.OnClickListener {
+public class GiveCardActivity extends BaseActivity implements View.OnClickListener
+{
 
 
     @Bind(R.id.sliding_tabs)
@@ -94,8 +97,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.et_name)
     EditText etName;
 
-    @Bind(R.id.tv_sex_left)
-    TextView tvSexLeft;
+    @Bind(R.id.tv_user_type)
+    TextView tvUserType;
 
     @Bind(R.id.tv_department_left)
     TextView tvDepartmentLeft;
@@ -133,33 +136,54 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.rl_reason)
     RelativeLayout rlReason;
 
+    @Bind(R.id.rl_user_type)
+    RelativeLayout rlUserType;
+
     @Bind(R.id.rl_department)
     RelativeLayout rlDepartment;
 
     @Bind(R.id.tv_reason_detail)
-    TextView tvReasonDetail;
+    EditText tvReasonDetail;
+
+    @Bind(R.id.amount_view)
+    AmountView amountView;
+
+    @Bind(R.id.tv_user_train)
+    TextView tvUserTrain;
+
+    @Bind(R.id.rl_train)
+    RelativeLayout rlTrain;
 
     /**
      * 图片最多上传两张，身份证正反面
      */
     private int maxSize = 2;
+
     private NfcAdapter nfcAdapter;
+
     private PendingIntent pendingIntent;
+
     private IntentFilter[] mFilters;
+
     private String[][] mTechLists;
+
     private boolean isFirst = true;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_card);
         ButterKnife.bind(this);
         initAll();
         // 获取nfc适配器，判断设备是否支持NFC功能
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
+        if (nfcAdapter == null)
+        {
             return;
-        } else if (!nfcAdapter.isEnabled()) {
+        }
+        else if (!nfcAdapter.isEnabled())
+        {
             return;
         }
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -171,35 +195,46 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 new String[]{MifareClassic.class.getName()},
                 new String[]{NfcA.class.getName()}};// 允许扫描的标签类型
     }
+
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-        if (nfcAdapter == null) {
+        if (nfcAdapter == null)
+        {
             return;
-        } else if (!nfcAdapter.isEnabled()) {
+        }
+        else if (!nfcAdapter.isEnabled())
+        {
             return;
         }
         nfcAdapter.enableForegroundDispatch(GiveCardActivity.this, pendingIntent, mFilters,
                 mTechLists);
-        if (isFirst) {
-            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+        if (isFirst)
+        {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction()))
+            {
                 String result = processIntent(getIntent());
-                String str= Util.hex2Decimal(result);
-                etCardNumber.setText(str+"");
+                String str = Util.hex2Decimal(result);
+                etCardNumber.setText(str + "");
             }
             isFirst = false;
         }
     }
+
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent)
+    {
         // TODO Auto-generated method stub
         super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))
+        {
             String result = processIntent(intent);
-            String str=Util.hex2Decimal(result);
-            etCardNumber.setText(str+"");
+            String str = Util.hex2Decimal(result);
+            etCardNumber.setText(str + "");
         }
     }
+
     /**
      * 获取tab标签中的内容
      *
@@ -207,30 +242,35 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
      * @return
      */
     @SuppressLint("NewApi")
-    private String processIntent(Intent intent) {
-        Intent intent1=intent;
-        String intentActionStr=intent1.getAction();
-        String strId="";
-        Log.e("sub","intentActionStr="+intentActionStr);
+    private String processIntent(Intent intent)
+    {
+        Intent intent1 = intent;
+        String intentActionStr = intent1.getAction();
+        String strId = "";
+        Log.e("sub", "intentActionStr=" + intentActionStr);
 //        if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intentActionStr)
 //                ||NfcAdapter.ACTION_TECH_DISCOVERED.equals(intentActionStr)
 //                ||NfcAdapter.ACTION_TAG_DISCOVERED.equals(intentActionStr)) {
         byte[] bytesId = intent1.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 //            Tag tag = intent1.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 //            byte[] bytesId = tag.getId();
-        strId= Util.toHexString(bytesId,0,bytesId.length);
+        strId = Util.toHexString(bytesId, 0, bytesId.length);
 //        }
-        if(strId!=null&&!strId.equals("")){
+        if (strId != null && !strId.equals(""))
+        {
             return strId;
         }
         Parcelable[] rawmsgs = intent
                 .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        if (rawmsgs != null && rawmsgs.length > 0) {
+        if (rawmsgs != null && rawmsgs.length > 0)
+        {
             NdefMessage msg = (NdefMessage) rawmsgs[0];
             NdefRecord[] records = msg.getRecords();
             String resultStr = new String(records[0].getPayload());
             return resultStr;
-        } else {
+        }
+        else
+        {
             final Parcelable p = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String str = (p != null) ? CardManager.load(p, getResources()) : null;
             return str;
@@ -238,7 +278,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    private void initTitle() {
+    private void initTitle()
+    {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
         headView.setTitleText("发卡");
@@ -248,15 +289,26 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
 
     @Override
-    public void initView() {
+    public void initView()
+    {
         initTitle();
         tvSex.setOnClickListener(this);
         rlDepartment.setOnClickListener(this);
+        rlTrain.setOnClickListener(this);
+        rlUserType.setOnClickListener(this);
         LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
                 R.drawable.layout_divider_vertical));
-
+        amountView.setGoods_storage(100);
+        amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener()
+        {
+            @Override
+            public void onAmountChange(View view, int amount)
+            {
+                Toast.makeText(getApplicationContext(), "Amount=>  " + amount, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -271,7 +323,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     GridImgAdapter gridImgsAdapter;
 
     @Override
-    public void initViewData() {
+    public void initViewData()
+    {
         Config.ScreenMap = Config.getScreenSize(this, this);
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
@@ -284,34 +337,41 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         gridImgsAdapter.notifyDataSetChanged();
     }
 
-    class GridImgAdapter extends BaseAdapter implements ListAdapter {
+    class GridImgAdapter extends BaseAdapter implements ListAdapter
+    {
         @Override
-        public int getCount() {
+        public int getCount()
+        {
             return img_uri.size();
         }
 
         @Override
-        public Object getItem(int position) {
+        public Object getItem(int position)
+        {
             return null;
         }
 
         @Override
-        public long getItemId(int position) {
+        public long getItemId(int position)
+        {
             return position;
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent)
+        {
             convertView = LayoutInflater.from(GiveCardActivity.this).inflate(R.layout.activity_addstory_img_item, null);
 
             ViewHolder holder;
 
-            if (convertView != null) {
+            if (convertView != null)
+            {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(GiveCardActivity.this).inflate(R.layout.activity_addstory_img_item, null);
                 convertView.setTag(holder);
             }
-            else {
+            else
+            {
                 holder = (ViewHolder) convertView.getTag();
             }
 
@@ -320,19 +380,24 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
             AbsListView.LayoutParams param = new AbsListView.LayoutParams(screen_widthOffset, screen_widthOffset);
             convertView.setLayoutParams(param);
-            if (img_uri.get(position) == null) {
+            if (img_uri.get(position) == null)
+            {
                 holder.delete_IV.setVisibility(View.GONE);
 
                 ImageLoaderUtil.getInstance().initImage(mContext, "drawable://" + R.drawable.iv_add_the_pic, holder.add_IB, "");
-                holder.add_IB.setOnClickListener(new View.OnClickListener() {
+                holder.add_IB.setOnClickListener(new View.OnClickListener()
+                {
 
                     @Override
-                    public void onClick(View arg0) {
+                    public void onClick(View arg0)
+                    {
 
-                        if (maxSize - (img_uri.size() - 1) == 0) {
+                        if (maxSize - (img_uri.size() - 1) == 0)
+                        {
                             ToastUtil.makeText(mContext, "最多添加" + maxSize + "张");
                         }
-                        else {
+                        else
+                        {
                             Intent intent = new Intent(GiveCardActivity.this, PhotoSelectorActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             intent.putExtra("limit", maxSize - (img_uri.size() - 1));
@@ -342,22 +407,28 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 });
 
             }
-            else {
+            else
+            {
                 ImageLoaderUtil.getInstance().initImage(mContext, "file://" + img_uri.get(position).getUrl(), holder.add_IB, "");
-                holder.delete_IV.setOnClickListener(new View.OnClickListener() {
+                holder.delete_IV.setOnClickListener(new View.OnClickListener()
+                {
                     private boolean is_addNull;
 
                     @Override
-                    public void onClick(View arg0) {
+                    public void onClick(View arg0)
+                    {
                         is_addNull = true;
                         String img_url = img_uri.remove(position).getUrl();
-                        for (int i = 0; i < img_uri.size(); i++) {
-                            if (img_uri.get(i) == null) {
+                        for (int i = 0; i < img_uri.size(); i++)
+                        {
+                            if (img_uri.get(i) == null)
+                            {
                                 is_addNull = false;
                                 continue;
                             }
                         }
-                        if (is_addNull) {
+                        if (is_addNull)
+                        {
                             img_uri.add(null);
                         }
 
@@ -367,9 +438,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
 
-                holder.add_IB.setOnClickListener(new View.OnClickListener() {
+                holder.add_IB.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("photos", (Serializable) single_photos);
                         bundle.putInt("position", position);
@@ -382,7 +455,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             return convertView;
         }
 
-        class ViewHolder {
+        class ViewHolder
+        {
             ImageView add_IB;
 
             ImageView delete_IV;
@@ -390,38 +464,45 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void initEvent() {
-        appSubmitBn.setOnClickListener(new View.OnClickListener() {
+    public void initEvent()
+    {
+        appSubmitBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 upLoadData();
             }
         });
-        rlReason.setOnClickListener(this);
+//        rlReason.setOnClickListener(this);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
 
                                             {
                                                 @Override
-                                                public void onTabSelected(TabLayout.Tab tab) {
-                                                    switch (tab.getPosition()) {
+                                                public void onTabSelected(TabLayout.Tab tab)
+                                                {
+                                                    switch (tab.getPosition())
+                                                    {
                                                         case 0:
-                                                            llInner.setVisibility(View.VISIBLE);
-                                                            llOuter.setVisibility(View.GONE);
-                                                            break;
-                                                        case 1:
                                                             llInner.setVisibility(View.GONE);
                                                             llOuter.setVisibility(View.VISIBLE);
+                                                            break;
+                                                        case 1:
+                                                            llInner.setVisibility(View.VISIBLE);
+                                                            llOuter.setVisibility(View.GONE);
                                                             break;
                                                     }
                                                 }
 
                                                 @Override
-                                                public void onTabUnselected(TabLayout.Tab tab) {
+                                                public void onTabUnselected(TabLayout.Tab tab)
+                                                {
 
                                                 }
 
                                                 @Override
-                                                public void onTabReselected(TabLayout.Tab tab) {
+                                                public void onTabReselected(TabLayout.Tab tab)
+                                                {
 
                                                 }
                                             }
@@ -430,49 +511,64 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void netResponse(BaseResponse event) {
+    public void netResponse(BaseResponse event)
+    {
 
     }
 
     @Override
-    public void onEventMainThread(BaseResponse event) {
-        if (event instanceof NoticeEvent) {
+    public void onEventMainThread(BaseResponse event)
+    {
+        if (event instanceof NoticeEvent)
+        {
             String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 finish();
             }
         }
-        if (event instanceof NetResponseEvent) {
+        if (event instanceof NetResponseEvent)
+        {
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             NetLoadingDialog.getInstance().dismissDialog();
-            if (tag.equals(GiveInnerCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            if (tag.equals(GiveInnerCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
                     GiveInnerCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveInnerCardResponse.class);
-                    if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode())) {
-                        DialogUtil.showDialogOneButton(mContext,"发卡成功","我知道了",NotiTag.TAG_CLOSE_ACTIVITY);
+                    if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
+                    {
+                        DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(mContext, mGiveInnerCardResponse.getResultCode(), mGiveInnerCardResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(mContext);
                 }
             }
-            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
-                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
+                    {
                         UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                                etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(),uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
+                                etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString(), uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(mContext);
                 }
             }
@@ -481,23 +577,39 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     private String[] resonArr = new String[]{"男", "女"};
+    private String[] trainArr = new String[]{"培训", "不培训"};
+
     List departList = GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getDepartmentList();
-    private String[] departmentArr = (String[])departList.toArray(new String[departList.size()]);
+
+    private String[] departmentArr = (String[]) departList.toArray(new String[departList.size()]);
+
+    List userTypeList = GsonHelper.toType(SharePref.getString(Constants.OUTER_TYPE, ""), OuterTypeResponse.class).getTypeList();
+
+    private String[] userTypeArr = (String[]) userTypeList.toArray(new String[userTypeList.size()]);
 
     private String refundReson = resonArr[0];
 
     private int whitchIndex = 0;
+
     private int departmentIndex = 0;
 
+    private int userTypeIndex = 0;
+
+    private int userTrainIndex = 0;
+
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
             case R.id.tv_sex:
                 AlertDialog Builder = new AlertDialog.Builder(mContext).setTitle("请选择")
                         .setSingleChoiceItems(
                                 resonArr, whitchIndex,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
+                                new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
                                         refundReson = resonArr[which];
                                         tvSex.setText(refundReson);
                                         whitchIndex = which;
@@ -510,8 +622,10 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 new AlertDialog.Builder(mContext).setTitle("请选择")
                         .setSingleChoiceItems(
                                 departmentArr, departmentIndex,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
+                                new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
                                         tvDepartment.setText(departmentArr[which]);
                                         departmentIndex = which;
                                         dialog.dismiss();
@@ -519,52 +633,93 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
                                 }).show();
                 break;
+            case R.id.rl_train:
+                new AlertDialog.Builder(mContext).setTitle("请选择")
+                        .setSingleChoiceItems(
+                                trainArr, userTrainIndex,
+                                new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        tvUserTrain.setText(trainArr[which]);
+                                        userTrainIndex = which;
+                                        dialog.dismiss();
+                                    }
+
+                                }).show();
+                break;
+            case R.id.rl_user_type:
+                new AlertDialog.Builder(mContext).setTitle("请选择")
+                        .setSingleChoiceItems(
+                                userTypeArr, userTypeIndex,
+                                new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        tvUserType.setText(userTypeArr[which]);
+                                        userTypeIndex = which;
+                                        dialog.dismiss();
+                                    }
+
+                                }).show();
+                break;
             case R.id.rl_reason:
             case R.id.tv_reason_detail:
-                Intent intent = new Intent(mContext, OuterGetReasonActivity.class);
-                intent.putExtra(IntentCode.GIVE_OUTER_CARD_REASON, tvReasonDetail.getText().toString());
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(mContext, OuterGetReasonActivity.class);
+//                intent.putExtra(IntentCode.GIVE_OUTER_CARD_REASON, tvReasonDetail.getText().toString());
+//                startActivityForResult(intent, 1);
                 break;
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            if (resultCode == 1) {
+        if (data != null)
+        {
+            if (resultCode == 1)
+            {
                 String result = data.getStringExtra("reason");
                 tvReasonDetail.setText(result);
-                if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString()))
+                {
                     tvReasonDetail.setVisibility(View.VISIBLE);
                     tvExplain.setText("修改");
                 }
-                else {
+                else
+                {
                     tvReasonDetail.setVisibility(View.GONE);
                     tvExplain.setText("请填写");
                 }
                 return;
             }
         }
-        switch (requestCode) {
+        switch (requestCode)
+        {
             case 0:
-                if (data != null) {
+                if (data != null)
+                {
                     List<String> paths = (List<String>) data.getExtras().getSerializable("photos");
-                    if (img_uri.size() > 0) {
+                    if (img_uri.size() > 0)
+                    {
                         img_uri.remove(img_uri.size() - 1);
                     }
 
-                    for (int i = 0; i < paths.size(); i++) {
+                    for (int i = 0; i < paths.size(); i++)
+                    {
                         img_uri.add(new UploadGoodsBean(paths.get(i), false));
                         //上传参数
                     }
-                    for (int i = 0; i < paths.size(); i++) {
+                    for (int i = 0; i < paths.size(); i++)
+                    {
                         PhotoModel photoModel = new PhotoModel();
                         photoModel.setOriginalPath(paths.get(i));
                         photoModel.setChecked(true);
                         single_photos.add(photoModel);
                     }
-                    if (img_uri.size() < 9) {
+                    if (img_uri.size() < 9)
+                    {
                         img_uri.add(null);
                     }
                     gridImgsAdapter.notifyDataSetChanged();
@@ -574,67 +729,88 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
-    int sexIndex=1;
-    private void upLoadData() {
+
+    int sexIndex = 1;
+
+    private void upLoadData()
+    {
         sexIndex = 1;
-        if (GeneralUtils.isNullOrZeroLenght(etCardNumber.getText().toString())) {
+        if (GeneralUtils.isNullOrZeroLenght(etCardNumber.getText().toString()))
+        {
             ToastUtil.makeText(mContext, "请填写卡号");
             return;
         }
-        if (GeneralUtils.isNullOrZeroLenght(etName.getText().toString())) {
+        if (GeneralUtils.isNullOrZeroLenght(etName.getText().toString()))
+        {
             ToastUtil.makeText(mContext, "请填写姓名");
             return;
         }
-        if (tvSex.getText().toString().equals("请选择")) {
+        if (tvSex.getText().toString().equals("请选择"))
+        {
             ToastUtil.makeText(mContext, "请选择性别");
             return;
         }
-        else {
-            if (tvSex.getText().toString().equals("男")) {
+        else
+        {
+            if (tvSex.getText().toString().equals("男"))
+            {
                 sexIndex = 1;
             }
-            else {
+            else
+            {
                 sexIndex = 2;
             }
         }
 
-        if (llInner.getVisibility() == View.VISIBLE) {
-            if (tvDepartment.getText().toString().equals("请选择")) {
+        if (llInner.getVisibility() == View.VISIBLE)
+        {
+            if (tvDepartment.getText().toString().equals("请选择"))
+            {
                 ToastUtil.makeText(mContext, "请选择部门");
                 return;
             }
-            if (GeneralUtils.isNullOrZeroLenght(etNumber.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etNumber.getText().toString()))
+            {
                 ToastUtil.makeText(mContext, "请填写工号");
                 return;
             }
             UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex, tvDepartment.getText().toString(), etNumber.getText().toString(), GiveInnerCardResponse.class.getName());
         }
-        else {
-            if (GeneralUtils.isNullOrZeroLenght(etPhone.getText().toString())) {
+        else
+        {
+            if (GeneralUtils.isNullOrZeroLenght(etPhone.getText().toString()))
+            {
                 ToastUtil.makeText(mContext, "请填写联系方式");
                 return;
             }
-            if (GeneralUtils.isNullOrZeroLenght(etCompany.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etCompany.getText().toString()))
+            {
                 ToastUtil.makeText(mContext, "请填写来自单位");
                 return;
             }
-            if (GeneralUtils.isNullOrZeroLenght(etId.getText().toString())) {
+            if (GeneralUtils.isNullOrZeroLenght(etId.getText().toString()))
+            {
                 ToastUtil.makeText(mContext, "请填写身份证号");
                 return;
             }
-            if (tvReasonDetail.getText().toString().length() < 30) {
+            if (tvReasonDetail.getText().toString().length() < 30)
+            {
                 ToastUtil.makeText(mContext, "请输入事由，不少于30字");
                 return;
             }
-            if(img_uri!=null&&img_uri.size()>0) {
+            if (img_uri != null && img_uri.size() > 0)
+            {
                 List<File> files = new ArrayList<>();
-                for (UploadGoodsBean item : img_uri) {
+                for (UploadGoodsBean item : img_uri)
+                {
                     files.add(new File(item.getUrl()));
                 }
                 UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-            }else{
+            }
+            else
+            {
                 UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                        etPhone.getText().toString(),etCompany.getText().toString(),etId.getText().toString(),null, GiveOutterCardResponse.class.getName());
+                        etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString(), null, GiveOutterCardResponse.class.getName());
             }
         }
     }

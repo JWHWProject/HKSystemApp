@@ -12,10 +12,8 @@ import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
-import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.SearchTrainListResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
-import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
@@ -160,7 +158,7 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 ToastUtil.makeText(mContext, tagStr);
-                UserServiceImpl.instance().startTrain(tagStr,StartTrainResponse.class.getName());
+                UserServiceImpl.instance().startTrain(tagStr,"",StartTrainResponse.class.getName());
             }
         }
         else if (event instanceof NetResponseEvent)

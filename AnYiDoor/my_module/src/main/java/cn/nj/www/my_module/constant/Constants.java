@@ -24,6 +24,7 @@ public class Constants
      * 版本名称
      */
     public static final int VERSION_NAME = 1001;
+    public static final String OUTER_TYPE = "OUTER_TYPE";
 
 
     /**

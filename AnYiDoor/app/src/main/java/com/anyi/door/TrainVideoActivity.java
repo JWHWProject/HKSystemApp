@@ -85,7 +85,7 @@ public class TrainVideoActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bn_finish:
-                UserServiceImpl.instance().finishTrain(trainId,FinishTrainResponse.class.getName());
+                UserServiceImpl.instance().finishTrain(trainId,null,FinishTrainResponse.class.getName());
                 break;
         }
     }

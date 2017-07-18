@@ -18,6 +18,7 @@ import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.OuterTypeResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
@@ -117,7 +118,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initViewData()
     {
+        NetLoadingDialog.getInstance().loading(mContext);
         UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
+//        UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
     }
 
     @Override
@@ -214,6 +217,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                     ToastUtil.showError(this);
                 }
             }
+            else if (tag.equals(OuterTypeResponse.class.getName()))
+            {
+                OuterTypeResponse mOuterTypeResponse = GsonHelper.toType(result, OuterTypeResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mOuterTypeResponse.getResultCode()))
+                    {
+                        SharePref.saveString(Constants.OUTER_TYPE,result);
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mOuterTypeResponse.getResultCode(), mOuterTypeResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
         }
 
     }
@@ -288,7 +310,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
             //发卡
             case R.id.ll_fk:
-                startActivity(new Intent(mContext, GiveCardActivity.class));
+              if (GeneralUtils.isNotNullOrZeroLenght(SharePref.getString(Constants.OUTER_TYPE,""))){
+                  startActivity(new Intent(mContext, GiveCardActivity.class));
+              }else {
+                  NetLoadingDialog.getInstance().loading(mContext);
+                  UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
+              }
                 break;
             //测试
             case R.id.ll_test:
