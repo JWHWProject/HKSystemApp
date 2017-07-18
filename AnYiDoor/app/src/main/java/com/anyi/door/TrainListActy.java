@@ -6,13 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
-import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
+import cn.nj.www.my_module.bean.index.TrainBean;
 import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -32,6 +44,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
 
     public String tagStr="";
     private ExpandableListView listView;
+    private List<TrainBean> trainBeanList= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,8 +71,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         initTitle();
         listView = (ExpandableListView) findViewById(R.id.list);
         listView.setGroupIndicator(null);
-        final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
-        listView.setAdapter(adapter);
+
         //只展开一个
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
         {
@@ -136,23 +148,45 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             }
         }
         else if (event instanceof NetResponseEvent)
-        {
             NetLoadingDialog.getInstance().dismissDialog();
-            String tag = ((NetResponseEvent) event).getTag();
-            String result = ((NetResponseEvent) event).getResult();
-            if (tag.equals(LoginResponse.class.getName())) {
-                TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode())) {
-                    } else {
-//                        ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
+        String tag = ((NetResponseEvent) event).getTag();
+        String result = ((NetResponseEvent) event).getResult();
+        if (tag.equals(TrainListResponse.class.getName()))
+        {
+            TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
+            if (GeneralUtils.isNotNullOrZeroLenght(result))
+            {
+                if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                {
+                    try
+                    {
+                        JSONObject jsonObject = new JSONObject(result);
+                        Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String,  List<TrainBean.TrainBeanDetail>>>() {}.getType());
+                        Iterator entries = map.entrySet().iterator();
+                        while (entries.hasNext())
+                        {
+                            Map.Entry entry = (Map.Entry) entries.next();
+                            String key = (String) entry.getKey();
+                            List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
+                            trainBeanList.add(new TrainBean(key,valueList));
+                        }
+                        final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext,map);
+                        listView.setAdapter(adapter);
+                    } catch (JSONException e)
+                    {
+                        e.printStackTrace();
                     }
-                } else {
-                    ToastUtil.showError(this);
+                }
+                else
+                {
+                    ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
                 }
             }
+            else
+            {
+                ToastUtil.showError(this);
+            }
         }
-
     }
 
 

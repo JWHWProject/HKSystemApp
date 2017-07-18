@@ -1,6 +1,10 @@
 package com.anyi.door;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -8,7 +12,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -19,6 +25,7 @@ import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.OuterTypeResponse;
+import cn.nj.www.my_module.bean.index.UpdateResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
@@ -90,6 +97,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 
     private ConvenientBanner mBanner;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -97,14 +105,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setLastUpdateTime();
         bannerFirstInit();
         initAll();
+//        ForceUpdateDialog mForceUpdateDialog = new ForceUpdateDialog(MainActivity.this);
+//        mForceUpdateDialog
+//                .setDownloadUrl("http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk")
+////                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
+////                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
+////                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
+////                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
+//                .setFileName("这是QQ.apk")
+//                .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
+    }
+
+    private void setLastUpdateTime()
+    {
+        if (GeneralUtils.isNullOrZeroLenght(SharePref.getString(Constants.LAST_UPDATE_TIME, "")))
+        {
+            SharePref.saveString(Constants.LAST_UPDATE_TIME, new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        }
     }
 
     @Override
     public void initView()
     {
-        tvTitle.setText(GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getUser().getCompanyName());
+        if (GeneralUtils.isNotNullOrZeroLenght(Global.getLoginData()))
+        {
+            tvTitle.setText(GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getUser().getCompanyName());
+        }
         topViewRightTv.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -120,7 +149,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     {
         NetLoadingDialog.getInstance().loading(mContext);
         UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
-//        UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
+        UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
+        String lngAndLat = getLngAndLat(MainActivity.this);
+        UserServiceImpl.instance().init(lngAndLat.split(",")[0], lngAndLat.split(",")[1], UpdateResponse.class.getName());
     }
 
     @Override
@@ -179,7 +210,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             String tag = ((NoticeEvent) event).getTag();
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-                startActivity(new Intent(mContext,LoginActy.class));
+                startActivity(new Intent(mContext, LoginActy.class));
                 finish();
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
@@ -224,11 +255,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mOuterTypeResponse.getResultCode()))
                     {
-                        SharePref.saveString(Constants.OUTER_TYPE,result);
+                        SharePref.saveString(Constants.OUTER_TYPE, result);
                     }
                     else
                     {
                         ErrorCode.doCode(this, mOuterTypeResponse.getResultCode(), mOuterTypeResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
+            else if (tag.equals(UpdateResponse.class.getName()))
+            {
+                UpdateResponse mUpdateResponse = GsonHelper.toType(result, UpdateResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mUpdateResponse.getResultCode()))
+                    {
+
+
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mUpdateResponse.getResultCode(), mUpdateResponse.getDesc());
                     }
                 }
                 else
@@ -310,12 +361,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
             //发卡
             case R.id.ll_fk:
-              if (GeneralUtils.isNotNullOrZeroLenght(SharePref.getString(Constants.OUTER_TYPE,""))){
-                  startActivity(new Intent(mContext, GiveCardActivity.class));
-              }else {
-                  NetLoadingDialog.getInstance().loading(mContext);
-                  UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
-              }
+                if (GeneralUtils.isNotNullOrZeroLenght(SharePref.getString(Constants.OUTER_TYPE, "")))
+                {
+                    startActivity(new Intent(mContext, GiveCardActivity.class));
+                }
+                else
+                {
+                    NetLoadingDialog.getInstance().loading(mContext);
+                    UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
+                }
                 break;
             //测试
             case R.id.ll_test:
@@ -327,4 +381,89 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
+
+    /**
+     * 获取经纬度
+     *
+     * @param context
+     * @return
+     */
+    private String getLngAndLat(Context context)
+    {
+        double latitude = 0.0;
+        double longitude = 0.0;
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {  //从gps获取经纬度
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null)
+            {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else
+            {
+                return getLngAndLatWithNetwork();
+            }
+        }
+        else
+        {    //从网络获取经纬度
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null)
+            {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+        }
+        return longitude + "," + latitude;
+    }
+
+    //从网络获取经纬度
+    public String getLngAndLatWithNetwork()
+    {
+        double latitude = 0.0;
+        double longitude = 0.0;
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null)
+        {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        return longitude + "," + latitude;
+    }
+
+
+    LocationListener locationListener = new LocationListener()
+    {
+
+        // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
+
+        }
+
+        // Provider被enable时触发此函数，比如GPS被打开
+        @Override
+        public void onProviderEnabled(String provider)
+        {
+
+        }
+
+        // Provider被disable时触发此函数，比如GPS被关闭
+        @Override
+        public void onProviderDisabled(String provider)
+        {
+
+        }
+
+        //当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
+        @Override
+        public void onLocationChanged(Location location)
+        {
+        }
+    };
 }

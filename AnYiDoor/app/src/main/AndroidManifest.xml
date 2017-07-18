@@ -2,9 +2,16 @@
 <manifest package="com.anyi.door"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
     <!-- 调用相机权限 -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -20,6 +27,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name="com.qiangxi.checkupdatelibrary.service.DownloadService"/>
+
         <activity android:name="com.zzti.fengyongge.imagepicker.PhotoSelectorActivity"/>
         <activity android:name="com.zzti.fengyongge.imagepicker.PhotoPreviewActivity"/>
         <activity
@@ -31,11 +40,7 @@
             android:name=".RegistSetPasswordActy"
             android:launchMode="singleTask"/>
         <activity android:name=".EmptyActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".TestListActivity">
 
@@ -68,6 +73,16 @@
         <activity
             android:name=".TrainListActy"
             android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TrainListCopyActy"
+            android:launchMode="singleTask">
+
         </activity>
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
@@ -75,6 +90,15 @@
         <activity android:name=".TrainPicActivity"/>
         <activity android:name=".TrainVideoActivity"/>
         <activity android:name="cn.nj.www.my_module.main.base.CommonWebViewActivity"/>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.anyi.door"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/checkupdatelibrary_uri_grant"/>
+        </provider>
     </application>
 
 </manifest>

@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.URLUtil;
+import cn.nj.www.my_module.tools.SharePref;
 
 /**
  * 用户相关的接口实现类
@@ -38,16 +40,15 @@ public class UserServiceImpl
     /**
      * 初始化
      *
-     * @param lastUpdateTime
      * @param tag
      */
-    public void init(String lastUpdateTime, String tag)
+    public void init( String gpsLong,String gpsLati,String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
-        param.put("lastUpdateTime", lastUpdateTime);
-        param.put("versionCode", "1");
-        param.put("gpsLong", "");
-        param.put("gpsLati", "");
+        param.put("lastUpdateTime", SharePref.getString(Constants.LAST_UPDATE_TIME,""));
+        param.put("versionCode", Constants.VERSION_NAME);
+        param.put("gpsLong", gpsLong);
+        param.put("gpsLati", gpsLati);
         new NetWork()
                 .startPost(URLUtil.INIT, param, tag);
     }

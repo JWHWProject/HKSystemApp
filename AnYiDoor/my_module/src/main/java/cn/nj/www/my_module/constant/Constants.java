@@ -23,7 +23,7 @@ public class Constants
     /**
      * 版本名称
      */
-    public static final int VERSION_NAME = 1001;
+    public static final String VERSION_NAME = "1";
     public static final String OUTER_TYPE = "OUTER_TYPE";
 
 
@@ -88,6 +88,7 @@ public class Constants
      * Banner翻页时间
      */
     public static final int BANNER_TURN_TIME = 5000;
+    public static final String LAST_UPDATE_TIME = "LAST_UPDATE_TIME";
     /**
      * 消息提示音
      */

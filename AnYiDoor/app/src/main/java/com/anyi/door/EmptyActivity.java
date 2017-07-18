@@ -8,11 +8,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
+import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.main.base.BaseActivity;
-import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.SharePref;
 
 public class EmptyActivity extends BaseActivity
 {
@@ -59,10 +64,14 @@ public class EmptyActivity extends BaseActivity
 
 
         });
+        if (GeneralUtils.isNullOrZeroLenght(SharePref.getString(Constants.LAST_UPDATE_TIME,""))){
+            SharePref.saveString(Constants.LAST_UPDATE_TIME, new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        }
     }
     private void startTrain()
     {
-        UserServiceImpl.instance().finishTrain("1",null,"");
+//        UserServiceImpl.instance().testDetail("1","");
+//        UserServiceImpl.instance().finishTrain("1",null,"");
 //        UserServiceImpl.instance().startTrain("1","2","");
     }
     @Override

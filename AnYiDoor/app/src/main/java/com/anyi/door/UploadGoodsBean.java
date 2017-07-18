@@ -33,6 +33,12 @@ public class UploadGoodsBean implements Serializable {
         this.isNet = isNet;
     }
 
-
-
+    @Override
+    public String toString()
+    {
+        return "UploadGoodsBean{" +
+                "url='" + url + '\'' +
+                ", isNet=" + isNet +
+                '}';
+    }
 }

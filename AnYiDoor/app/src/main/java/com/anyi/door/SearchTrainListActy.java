@@ -90,8 +90,8 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-        final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
-        listView.setAdapter(adapter);
+//        final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext);
+//        listView.setAdapter(adapter);
         //只展开一个
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
         {

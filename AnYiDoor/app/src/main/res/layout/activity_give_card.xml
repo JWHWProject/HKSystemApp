@@ -133,7 +133,7 @@
                     android:drawableRight="@mipmap/arrow_down"
                     android:gravity="center_vertical|right"
                     android:paddingRight="@dimen/pxtodp20"
-                    android:text="请选择"
+                    android:text="男"
                     android:textColor="@color/txt_nol_col"
                     android:textSize="@dimen/pxtosp30"/>
             </RelativeLayout>
@@ -225,7 +225,6 @@
                 >
 
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -237,7 +236,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="联系方式"
+                        android:text="联系\n方式"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -265,7 +264,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="来自单位"
+                        android:text="来自\n单位"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -292,7 +291,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="身份证号"
+                        android:text="身份\n证号"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -308,6 +307,97 @@
                     android:layout_height="@dimen/pxtodp1"
                     android:background="@drawable/line_view"
                     android:paddingLeft="@dimen/pxtodp20"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pxtodp80"
+                    android:background="@color/white_color"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/pxtodp20">
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="有效期"
+                        android:textColor="@color/title_black"
+                        android:textSize="@dimen/pxtodp30"/>
+
+                    <cn.nj.www.my_module.view.AmountView
+                        android:id="@+id/amount_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_toLeftOf="@+id/tv_day"
+                        app:btnTextSize="12sp"
+                        app:btnWidth="36dp"
+                        android:layout_centerVertical="true"
+                        app:tvWidth="50dp">
+
+                    </cn.nj.www.my_module.view.AmountView>
+
+                    <TextView
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20px"
+                        android:paddingLeft="@dimen/pxtodp10"
+                        android:text="天"
+                        android:textColor="@color/title_black"
+                        android:textSize="@dimen/pxtodp30"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pxtodp1"
+                    android:background="@drawable/line_view"
+                    android:paddingLeft="@dimen/pxtodp20"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_train"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pxtodp80"
+                    android:background="@color/white_color"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/pxtodp20">
+
+                    <TextView
+                        android:id="@+id/tv_train"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="是否\n培训"
+                        android:textColor="@color/title_black"
+                        android:textSize="@dimen/pxtodp30"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_user_train"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tv_train"
+                        android:drawablePadding="@dimen/pxtodp12"
+                        android:drawableRight="@mipmap/arrow_down"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="@dimen/pxtodp20"
+                        android:text="需要培训"
+                        android:textColor="@color/txt_nol_col"
+                        android:textSize="@dimen/pxtosp30"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pxtodp1"
+                    android:background="@drawable/line_view"
+                    android:paddingLeft="@dimen/pxtodp20"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_user_type"
                     android:layout_width="match_parent"
@@ -321,7 +411,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="外来类型"
+                        android:text="外来\n类型"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -348,84 +438,6 @@
                     android:background="@drawable/line_view"
                     android:paddingLeft="@dimen/pxtodp20"/>
 
-
-                <RelativeLayout
-                    android:id="@+id/rl_train"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/pxtodp80"
-                    android:background="@color/white_color"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/pxtodp20">
-
-                    <TextView
-                        android:id="@+id/tv_train"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="是否培训"
-                        android:textColor="@color/title_black"
-                        android:textSize="@dimen/pxtodp30"/>
-
-
-                    <TextView
-                        android:id="@+id/tv_user_train"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/tv_train"
-                        android:drawablePadding="@dimen/pxtodp12"
-                        android:drawableRight="@mipmap/arrow_down"
-                        android:gravity="center_vertical|right"
-                        android:paddingRight="@dimen/pxtodp20"
-                        android:text="请选择"
-                        android:textColor="@color/txt_nol_col"
-                        android:textSize="@dimen/pxtosp30"/>
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/pxtodp1"
-                    android:background="@drawable/line_view"
-                    android:paddingLeft="@dimen/pxtodp20"/>
-                <RelativeLayout
-                    android:id="@+id/rl_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/pxtodp80"
-                    android:background="@color/white_color"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/pxtodp20">
-
-                    <TextView
-                        android:id="@+id/tv_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_centerVertical="true"
-                        android:text="卡片有效期(天)"
-                        android:textColor="@color/title_black"
-                        android:textSize="@dimen/pxtodp30"/>
-
-                    <cn.nj.www.my_module.view.AmountView
-                        android:id="@+id/amount_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="20px"
-                        app:btnTextSize="12sp"
-                        app:btnWidth="36dp"
-                        app:tvWidth="50dp">
-
-                    </cn.nj.www.my_module.view.AmountView>
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/pxtodp1"
-                    android:background="@drawable/line_view"
-                    android:paddingLeft="@dimen/pxtodp20"/>
                 <RelativeLayout
                     android:id="@+id/rl_reason"
                     android:layout_width="match_parent"
@@ -439,31 +451,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/pxtodp80"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="@dimen/pxtodp26"
+                        android:layout_marginTop="@dimen/pxtodp20"
                         android:text="事由"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
                     <EditText
-                        android:layout_toRightOf="@+id/tv_reason"
                         android:id="@+id/tv_reason_detail"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_centerVertical="true"
-                        android:padding="@dimen/pxtodp20"
-                        android:gravity="top|left"
+                        android:layout_toRightOf="@+id/tv_reason"
                         android:background="@color/white"
+                        android:gravity="top|left"
+                        android:padding="@dimen/pxtodp20"
                         android:paddingTop="@dimen/pxtodp30"
                         android:textColor="@color/order_nol_col"
                         android:textSize="@dimen/pxtodp30"
                         />
+
                     <TextView
                         android:id="@+id/tv_explain"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_reason"
                         android:drawablePadding="@dimen/pxtodp12"
                         android:drawableRight="@mipmap/listright_arrow"
@@ -471,7 +483,8 @@
                         android:paddingRight="@dimen/pxtodp20"
                         android:text="请填写"
                         android:textColor="@color/txt_nol_col"
-                        android:textSize="@dimen/pxtosp30"/>
+                        android:textSize="@dimen/pxtosp30"
+                        android:visibility="gone"/>
                 </RelativeLayout>
 
                 <View
@@ -479,8 +492,6 @@
                     android:layout_height="@dimen/pxtodp1"
                     android:background="@drawable/line_view"
                     android:paddingLeft="@dimen/pxtodp20"/>
-
-
 
 
                 <TextView

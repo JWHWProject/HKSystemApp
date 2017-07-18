@@ -577,7 +577,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     private String[] resonArr = new String[]{"男", "女"};
-    private String[] trainArr = new String[]{"培训", "不培训"};
+    private String[] trainArr = new String[]{"需要培训", "不培训"};
 
     List departList = GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getDepartmentList();
 
