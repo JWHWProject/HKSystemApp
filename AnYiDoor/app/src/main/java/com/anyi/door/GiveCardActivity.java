@@ -139,12 +139,16 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.tv_reason_detail)
     TextView tvReasonDetail;
 
+    /**
+     * 图片最多上传两张，身份证正反面
+     */
     private int maxSize = 2;
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private IntentFilter[] mFilters;
     private String[][] mTechLists;
     private boolean isFirst = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -533,9 +537,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 tvReasonDetail.setText(result);
                 if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString())) {
                     tvReasonDetail.setVisibility(View.VISIBLE);
+                    tvExplain.setText("修改");
                 }
                 else {
                     tvReasonDetail.setVisibility(View.GONE);
+                    tvExplain.setText("请填写");
                 }
                 return;
             }
