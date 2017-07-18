@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,10 @@ import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
+import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.constant.URLUtil;
@@ -71,6 +74,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     @Bind(R.id.activity_main)
     LinearLayout activityMain;
 
+    @Bind(R.id.top_view_right_tv)
+    TextView topViewRightTv;
+
+    @Bind(R.id.tv_title)
+    TextView tvTitle;
+
     private ArrayList<Integer> localImages = new ArrayList<Integer>();
 
     /**
@@ -94,7 +103,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initView()
     {
-
+        tvTitle.setText(GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getUser().getCompanyName());
+        topViewRightTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                DialogUtil.exitAccountDialog(mContext);
+            }
+        });
     }
 
     @Override
@@ -144,9 +161,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             BannerResponse mBannerResponse = GsonHelper.toType(result, BannerResponse.class);
             initBanner(mBannerResponse.getBannerList());
             //显示头部三个数据
-            bnCardNumber.setText(mBannerResponse.getCardCount()+"");
-            bnTrainNumber.setText(mBannerResponse.getTrainingCount()+"");
-            bnTestNumber.setText(mBannerResponse.getExamCount()+"");
+            bnCardNumber.setText(mBannerResponse.getCardCount() + "");
+            bnTrainNumber.setText(mBannerResponse.getTrainingCount() + "");
+            bnTestNumber.setText(mBannerResponse.getExamCount() + "");
         }
     }
 
@@ -159,6 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             String tag = ((NoticeEvent) event).getTag();
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
+                startActivity(new Intent(mContext,LoginActy.class));
                 finish();
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
@@ -181,9 +199,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                         initBanner(mBannerResponse.getBannerList());
                         SharePref.saveString(BANNER_RESULT, result);
                         //显示头部三个数据
-                        bnCardNumber.setText(mBannerResponse.getCardCount()+"");
-                        bnTrainNumber.setText(mBannerResponse.getTrainingCount()+"");
-                        bnTestNumber.setText(mBannerResponse.getExamCount()+"");
+                        bnCardNumber.setText(mBannerResponse.getCardCount() + "");
+                        bnTrainNumber.setText(mBannerResponse.getTrainingCount() + "");
+                        bnTestNumber.setText(mBannerResponse.getExamCount() + "");
+
                     }
                     else
                     {

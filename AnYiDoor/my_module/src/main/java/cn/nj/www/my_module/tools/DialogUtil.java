@@ -11,6 +11,7 @@ import android.widget.TextView;
 import cn.nj.www.my_module.R;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.constant.Global;
+import cn.nj.www.my_module.constant.NotiTag;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -123,6 +124,7 @@ public class DialogUtil
 
                 Global.loginOut(context);
                 dialog.dismiss();
+                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_CLOSE_ACTIVITY));
             }
         });
     }

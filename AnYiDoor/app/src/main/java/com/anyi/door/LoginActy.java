@@ -51,8 +51,8 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
         headView.setTitleText("登录");
-        headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
+        headView.setHiddenLeft();
     }
 
     @Override

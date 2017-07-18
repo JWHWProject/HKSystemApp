@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import cn.nj.www.my_module.constant.Global;
+import cn.nj.www.my_module.tools.GeneralUtils;
+
 public class WelcomeAndJudgeActivity extends AppCompatActivity
 {
 
@@ -14,7 +17,11 @@ public class WelcomeAndJudgeActivity extends AppCompatActivity
         //设置只能在特定机型上运行
         if (android.os.Build.MODEL.equals("D08ADE19"))
         {
-            startActivity(new Intent(this, LoginActy.class));
+            if (GeneralUtils.isNotNullOrZeroLenght(Global.getLoginData())){
+                startActivity(new Intent(this, MainActivity.class));
+            }else {
+                startActivity(new Intent(this, LoginActy.class));
+            }
         }
         else
         {

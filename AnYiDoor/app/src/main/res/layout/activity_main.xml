@@ -9,13 +9,34 @@
     android:orientation="vertical"
     >
 
-    <TextView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="center"
-        android:text="@string/company_name"
-        android:textColor="@color/register_black_text"
-        android:textSize="17sp"/>
+        android:layout_height="45dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="@dimen/pxtodp120"
+            android:layout_marginRight="@dimen/pxtodp120"
+            android:gravity="center"
+            android:text="@string/company_name"
+            android:textColor="@color/register_black_text"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/top_view_right_tv"
+            android:layout_width="@dimen/pxtodp120"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:paddingRight="@dimen/pxtodp20"
+            android:text="退出"
+            android:textColor="@color/register_black_text"
+            android:textSize="16sp"/>
+    </RelativeLayout>
 
     <cn.nj.www.my_module.view.banner.ConvenientBanner
         android:id="@+id/index_banner"
