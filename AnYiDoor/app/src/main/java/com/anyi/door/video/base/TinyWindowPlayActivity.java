@@ -7,7 +7,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.anyi.door.R;
 import com.anyi.door.utils.TakePicMethod;
@@ -17,6 +16,9 @@ import com.xiao.nicevideoplayer.TxVideoPlayerController;
 
 import java.io.File;
 import java.util.Random;
+
+import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.tools.DialogUtil;
 
 
 public class TinyWindowPlayActivity extends AppCompatActivity {
@@ -34,19 +36,23 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         initTitle();
         init();
+
     }
 
     private void initTitle() {
         findViewById(R.id.top_view_close_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
+                        "您确定要中途离开培训？","取消","确定");
             }
         });
     }
+
     boolean flag=true;
     int time=1;
     int maxtime=1;
+    int randomTime=-1;
     private int picCount=1;
     private void init() {
         bnFinish = (Button) findViewById(R.id.app_finish_bn);
@@ -61,6 +67,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
 //        mNiceVideoPlayer.getCurrentPosition();
 
         mNiceVideoPlayer.setController(controller);
+
+
         //初始化surface
         initSurface();
         takePicMethod=new TakePicMethod(TinyWindowPlayActivity.this,mySurfaceView,myHolder);
@@ -70,18 +78,14 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                 if(time>maxtime) {
                     picCount=3;
                     TakePicture();
+                    finish();
                 }else{
-                    Toast.makeText(TinyWindowPlayActivity.this,"您现在还无法完成培训,还没有达到培训时间!",Toast.LENGTH_SHORT).show();
+                    DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "您现在还无法完成培训,还没有达到培训时间!", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                 }
             }
         });
         picCount=1;
         TakePicture();
-        long halftime=mNiceVideoPlayer.getDuration()/2;
-        maxtime=(int)(halftime/1000f);
-        Random random = new Random();
-        final int randomTime=random.nextInt(maxtime);
-        time=1;
         flag=true;
         new Thread(new Runnable() {
             @Override
@@ -92,11 +96,22 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if(time==randomTime){
-                        picCount=2;
-                        TakePicture();
+                    if(randomTime==-1) {
+                        if (mNiceVideoPlayer.getDuration()!=0) {
+                            long halftime = mNiceVideoPlayer.getDuration() / 2;
+                            maxtime = (int) (halftime / 1000f);
+                            Random random = new Random();
+                            if (maxtime == 0) maxtime = 17;
+                            randomTime = random.nextInt(maxtime);
+                            time = 1;
+                        }
+                    }else {
+                        if (time == randomTime) {
+                            picCount = 2;
+                            TakePicture();
+                        }
+                        time++;
                     }
-                    time++;
                 }
             }
         }).start();

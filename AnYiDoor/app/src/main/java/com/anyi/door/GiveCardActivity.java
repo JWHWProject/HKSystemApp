@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anyi.door.utils.Config;
 import com.anyi.door.utils.DbTOPxUtils;
@@ -76,6 +75,8 @@ import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.AmountView;
 
 import static com.anyi.door.R.id.et_card_number;
+import static com.anyi.door.R.id.tv_user_train;
+import static com.anyi.door.R.id.tv_user_type;
 
 
 /**
@@ -97,7 +98,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.et_name)
     EditText etName;
 
-    @Bind(R.id.tv_user_type)
+    @Bind(tv_user_type)
     TextView tvUserType;
 
     @Bind(R.id.tv_department_left)
@@ -148,7 +149,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.amount_view)
     AmountView amountView;
 
-    @Bind(R.id.tv_user_train)
+    @Bind(tv_user_train)
     TextView tvUserTrain;
 
     @Bind(R.id.rl_train)
@@ -287,7 +288,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         headView.setHiddenRight();
     }
 
-
+    private int amountDay=1;
     @Override
     public void initView()
     {
@@ -306,7 +307,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onAmountChange(View view, int amount)
             {
-                Toast.makeText(getApplicationContext(), "Amount=>  " + amount, Toast.LENGTH_SHORT).show();
+                amountDay=amount;
+//                Toast.makeText(getApplicationContext(), "Amount=>  " + amount, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -560,7 +562,9 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                                etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString(), uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
+                                etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
+                                ,userTypeArr[userTypeIndex],tvReasonDetail.getText().toString(),(userTrainIndex+1)+"",amountDay+"",
+                                uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
                     }
                     else
                     {
@@ -798,19 +802,30 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请输入事由，不少于30字");
                 return;
             }
-            if (img_uri != null && img_uri.size() > 0)
+            if (tvUserTrain.getText().toString().equals("请选择"))
             {
-                List<File> files = new ArrayList<>();
-                for (UploadGoodsBean item : img_uri)
-                {
-                    files.add(new File(item.getUrl()));
+                ToastUtil.makeText(mContext, "请选择是否培训");
+                return;
+            }
+            if (tvUserType.getText().toString().equals("请选择"))
+            {
+                ToastUtil.makeText(mContext, "请选择外来事由");
+                return;
+            }
+            List<File> files = new ArrayList<>();
+            if (img_uri != null && img_uri.size() > 0) {
+                for (UploadGoodsBean item : img_uri) {
+                    if (item != null && item.getUrl() != null) {
+                        files.add(new File(item.getUrl()));
+                    }
                 }
+            }
+            if(files.size()>=2){
                 UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
             }
             else
             {
-                UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                        etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString(), null, GiveOutterCardResponse.class.getName());
+                ToastUtil.makeText(mContext, "必须提供身份证正反面照片");
             }
         }
     }

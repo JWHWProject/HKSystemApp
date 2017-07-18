@@ -1,5 +1,6 @@
 package cn.nj.www.my_module.tools;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -89,6 +90,41 @@ public class DialogUtil
         });
     }
 
+    public static void showCloseTwoBnttonDialog(final Context context, String title, String left, String right)
+    {
+        final Dialog dialog = new Dialog(context, R.style.main_dialog);
+        dialog.setContentView(R.layout.person_save_barcode_dialog);
+        dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView tvDialogName = (TextView) dialog.findViewById(R.id.dialogName_tv);
+        Button leftBn = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        Button rightBn = (Button) dialog.findViewById(R.id.transfer_cancel_bn);
+
+        tvDialogName.setText(title);
+        leftBn.setText(left);
+        rightBn.setText(right);
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setWindowAnimations(R.style.main_dialog);
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View arg0)
+            {
+                dialog.dismiss();
+            }
+        });
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                ((Activity)context).finish();
+                dialog.dismiss();
+            }
+        });
+    }
     public static void exitAccountDialog(final Context context)
     {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);

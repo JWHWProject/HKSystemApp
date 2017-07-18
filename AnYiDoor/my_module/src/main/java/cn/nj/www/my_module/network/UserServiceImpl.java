@@ -97,7 +97,9 @@ public class UserServiceImpl
                 .startPost(URLUtil.GIVE_CARD, param, tag);
     }
 
-    public void giveCard(String cardNo, String name, int gender, String phone, String fromCompany, String idCard, List<String> urls, String tag)
+    public void giveCard(String cardNo, String name, int gender, String phone, String fromCompany, String idCard
+            ,String outsidersType,String reason,String needTraining,String validTime
+            , List<String> urls, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("cardNo", cardNo);
@@ -106,6 +108,18 @@ public class UserServiceImpl
         param.put("phone", phone);
         param.put("fromCompany", fromCompany);
         param.put("idCard", idCard);
+        if(!outsidersType.equals("")){
+            param.put("outsidersType",outsidersType);
+        }
+        if(!reason.equals("")){
+            param.put("reason",reason);
+        }
+        if(!needTraining.equals("")){
+            param.put("needTraining",needTraining);
+        }
+        if(!validTime.equals("")){
+            param.put("validTime",validTime);
+        }
         if (urls != null && urls.size() > 0)
         {
             param.put("picUrlList", GsonHelper.toJson(urls));
