@@ -207,10 +207,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (tag.equals(UserListResponse.class.getName())) {
                 UserListResponse mUserListResponse = GsonHelper.toType(result, UserListResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mUserListResponse.getResultCode())) {
-                        SharePref.saveString(Constants.USER_LIST, result);
-                        CMLog.e("hq", SharePref.getString(Constants.USER_LIST, ""));
-                    }
+//                    if (Constants.SUCESS_CODE.equals(mUserListResponse.getResultCode())) {
+//                        SharePref.saveString(Constants.USER_LIST, result);
+//                        CMLog.e("hq", SharePref.getString(Constants.USER_LIST, ""));
+//                    }
                 }
 
             }
