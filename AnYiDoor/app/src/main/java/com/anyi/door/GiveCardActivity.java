@@ -531,15 +531,34 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         }
         if (event instanceof NetResponseEvent)
         {
-            NetLoadingDialog.getInstance().dismissDialog();
+
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             NetLoadingDialog.getInstance().dismissDialog();
             if (tag.equals(GiveInnerCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
-            {
+            {  NetLoadingDialog.getInstance().dismissDialog();
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
                     GiveInnerCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveInnerCardResponse.class);
+                    if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
+                    {
+                        DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(mContext, mGiveInnerCardResponse.getResultCode(), mGiveInnerCardResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(mContext);
+                }
+            }
+            if (tag.equals(GiveOutterCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {  NetLoadingDialog.getInstance().dismissDialog();
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    GiveOutterCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveOutterCardResponse.class);
                     if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
                     {
                         DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
@@ -568,12 +587,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                 uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
                     }
                     else
-                    {
+                    {  NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 }
                 else
-                {
+                {  NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
             }
