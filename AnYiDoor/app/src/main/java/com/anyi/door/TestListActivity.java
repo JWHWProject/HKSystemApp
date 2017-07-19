@@ -1,23 +1,31 @@
 package com.anyi.door;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anyi.door.test_utils.JudgeAdapter;
 import com.anyi.door.test_utils.MultiltyAdapter;
 import com.anyi.door.test_utils.SingleListAdapter;
+import com.anyi.door.utils.TakePicMethod;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +36,7 @@ import cn.nj.www.my_module.bean.index.ExamBean;
 import cn.nj.www.my_module.bean.index.ExamResponse;
 import cn.nj.www.my_module.bean.index.FinishTestResponse;
 import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
+import cn.nj.www.my_module.bean.index.UploadFileResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.IntentCode;
@@ -38,6 +47,8 @@ import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.FileSystemManager;
+import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -97,11 +108,138 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
     }
+    boolean flag = true;
 
+    int time = 1;
+
+    int maxtime = 1;
+
+    int randomTime = -1;
+
+    private int picCount = 1;
+    private TakePicMethod takePicMethod;
     @Override
     public void initView()
     {
+        //初始化surface
+        initSurface();
+        takePicMethod = new TakePicMethod(TestListActivity.this, mySurfaceView, myHolder);
+        picCount = 1;
+        TakePicture();
+        flag = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (flag) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (randomTime == -1) {
+                        if (answerList.size()>0) {
+//                            long halftime = mNiceVideoPlayer.getDuration() / 2;
+//                            maxtime = (int) (halftime / 1000f);
+                            maxtime= answerList.size()*4;
+                            Random random = new Random();
+                            if (maxtime == 0) {
+                                maxtime = 17;
+                            }
+                            randomTime = random.nextInt(maxtime);
+                            time = 1;
+                        }
+                    } else {
+                        if (time == randomTime) {
+                            picCount = 2;
+                            TakePicture();
+                        }
+                        time++;
+                    }
+                }
+            }
+        }).start();
+    }
+    private SurfaceView mySurfaceView;
 
+    private SurfaceHolder myHolder;
+
+    // 初始化surface
+    @SuppressWarnings("deprecation")
+    private void initSurface() {
+        // 初始化surfaceview
+        if (mySurfaceView == null && myHolder == null) {
+            mySurfaceView = (SurfaceView) findViewById(R.id.camera_surfaceview);
+            // 初始化surfaceholder
+            myHolder = mySurfaceView.getHolder();
+        }
+
+    }
+
+    private boolean isTakeingPhoto = false;
+
+    CountDownTimer countDownTimer;
+
+    private void TakePicture() {
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)return;
+        if (!isTakeingPhoto) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(TestListActivity.this, "拍照中,请您对准摄像头注视5秒",Toast.LENGTH_SHORT).show();
+                }
+            });
+            isTakeingPhoto = true;
+            if (countDownTimer == null) {
+                countDownTimer = new CountDownTimer(10000, 3000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        countDownTimer.cancel();
+                        isTakeingPhoto = false;
+                        try {
+//                            if (picCount == 1) {
+//                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            } else if (picCount == 2) {
+//                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            } else {
+//                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            }
+                            if (picCount == 3) {
+                                List<File> files = null;
+                                try {
+                                    files = new ArrayList<>();
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 1 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 2 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 3 + ".jpg"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if(files.size()>=0) {
+                                    UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+                                }else{
+                                    UserServiceImpl.instance().finishTest(examID, answerList, null,
+                                            FinishTestResponse.class.getName());
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                };
+            }
+            if (countDownTimer != null) {
+                countDownTimer.start();
+            }
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        flag=false;
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
     }
 
     @Override
@@ -163,10 +301,13 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
                 //获取到所有数据，提交
-                if (answerList.size() > 0)
-                {
-                    UserServiceImpl.instance().finishTest(examID, answerList, null,
-                            FinishTestResponse.class.getName());
+                if (time > maxtime) {
+                    picCount = 3;
+                    TakePicture();
+                } else {
+                    DialogUtil.showDialogOneButton(
+                            TestListActivity.this, "您现在还无法完成考核,还没有达到考核时间!", "我知道了"
+                            , "");
                 }
             }
         });
@@ -196,8 +337,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-                DialogUtil.showCloseTwoBnttonDialog(mContext,
-                        "您确定要中途取消考核？", "取消", "确定");
+//                DialogUtil.showCloseTwoBnttonDialog(mContext,
+//                        "您确定要中途取消考核？", "取消", "确定");
+                finish();
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -273,6 +415,22 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 }
                 else
                 {
+                    ToastUtil.showError(mContext);
+                }
+            }
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                        NetLoadingDialog.getInstance().loading(mContext);
+                        UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
+                                FinishTestResponse.class.getName());
+                    } else {
+                        NetLoadingDialog.getInstance().dismissDialog();
+                        ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                    }
+                } else {
+                    NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
             }

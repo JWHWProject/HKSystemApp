@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anyi.door.R;
+import com.anyi.door.TestListActivity;
 import com.anyi.door.utils.TakePicMethod;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
 import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
@@ -156,7 +158,9 @@ public class TinyWindowPlayActivity extends BaseActivity {
                     picCount = 3;
                     TakePicture();
                 } else {
-                    DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "您现在还无法完成培训,还没有达到培训时间!", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                    DialogUtil.showDialogOneButton(
+                            TinyWindowPlayActivity.this, "您现在还无法完成培训,还没有达到培训时间!", "我知道了"
+                            , "");
                 }
             }
         });
@@ -220,6 +224,8 @@ public class TinyWindowPlayActivity extends BaseActivity {
         if (NiceVideoPlayerManager.instance().onBackPressd()) {
             return;
         }
+        DialogUtil.showCloseTwoBnttonDialog(mContext,
+                "您确定要中途取消考核？", "取消", "确定");
         super.onBackPressed();
     }
 
@@ -249,7 +255,7 @@ public class TinyWindowPlayActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtil.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒");
+                    Toast.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒",Toast.LENGTH_SHORT).show();
                 }
             });
             isTakeingPhoto = true;
