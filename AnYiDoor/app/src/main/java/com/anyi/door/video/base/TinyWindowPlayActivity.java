@@ -139,7 +139,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                     TakePicture();
                 } else {
                     DialogUtil.showDialogOneButton(
-                            TinyWindowPlayActivity.this, "您现在还无法完成培训,还没有达到培训时间!", "我知道了"
+                            TinyWindowPlayActivity.this, "您现在还无法完成培训~", "我知道了"
                             , "");
                 }
             }
@@ -296,7 +296,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                                                                         FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                                                                                         if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
                                                                                             peiXunComplete = true;
-                                                                                            DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                                                                                            DialogUtil.showCloseDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                                                                                         } else {
                                                                                             ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
                                                                                         }
@@ -335,7 +335,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                                                 FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                                                                 if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
                                                                     peiXunComplete = true;
-                                                                    DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                                                                    DialogUtil.showCloseDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+
                                                                 } else {
                                                                     ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
                                                                 }

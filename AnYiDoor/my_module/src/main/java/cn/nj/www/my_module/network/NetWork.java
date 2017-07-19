@@ -267,7 +267,6 @@ public class NetWork {
                     }
                 } else if (!Thread.interrupted()) {//线程未被中断
                     EventBus.getDefault().post(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isNetWork));
-                    Log.e("sub","netCallBack");
                     if(netCallBack!=null){
                         netCallBack.showCallback(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isNetWork));
                     }

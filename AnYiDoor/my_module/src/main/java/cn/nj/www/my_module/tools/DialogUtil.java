@@ -53,7 +53,30 @@ public class DialogUtil
             }
         });
     }
+    public static void showCloseDialogOneButton(final Context context, String title, String sumbit, final String tag)
+    {
+        final Dialog dialog = new Dialog(context, R.style.main_dialog);
+        dialog.setContentView(R.layout.one_button_dialog);
+        dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView tvContent = (TextView) dialog.findViewById(R.id.dialogName_tv);
+        Button btSubmit = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        tvContent.setText(title);
+        btSubmit.setText(sumbit);
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        btSubmit.setOnClickListener(new View.OnClickListener()
+        {
 
+            @Override
+            public void onClick(View v)
+            {
+                ((Activity)context).finish();
+                dialog.dismiss();
+                EventBus.getDefault().post(new NoticeEvent(tag));
+            }
+        });
+    }
     public static void startTrainDialog(final Context context, final String tag)
     {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);

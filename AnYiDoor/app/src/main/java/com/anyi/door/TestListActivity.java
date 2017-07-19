@@ -212,9 +212,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 List<File> files = null;
                                 try {
                                     files = new ArrayList<>();
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 1 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 2 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TinyWindowPlayActivity" + 3 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 1 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 2 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 3 + ".jpg"));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -306,7 +306,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     TakePicture();
                 } else {
                     DialogUtil.showDialogOneButton(
-                            TestListActivity.this, "您现在还无法完成考核,还没有达到考核时间!", "我知道了"
+                            TestListActivity.this, "您现在还无法完成考核~", "我知道了"
                             , "");
                 }
             }
@@ -369,7 +369,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                             examBeanList.add(new ExamBean(key, valueList));
                             if (key.equals("单选题"))
                             {
-tv2.setVisibility(View.VISIBLE);
+                                tv2.setVisibility(View.VISIBLE);
                                 singleAdapter = new SingleListAdapter(mContext, valueList, examID);
                                 listView2.setAdapter(singleAdapter);
                             }
