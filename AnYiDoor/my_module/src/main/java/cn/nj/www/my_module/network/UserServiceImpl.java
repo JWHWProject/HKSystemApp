@@ -2,8 +2,6 @@ package cn.nj.www.my_module.network;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,7 +190,7 @@ public class UserServiceImpl
         param.put("recordID", recordID);
         if (picUrlList != null)
         {
-            param.put("picUrlList", new Gson().toJson(picUrlList));
+            param.put("picUrlList", picUrlList);
         }
         new NetWork()
                 .startPost2(URLUtil.FINISH_TRAIN, param, tag);
