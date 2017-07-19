@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import cn.nj.www.my_module.R;
@@ -49,6 +50,43 @@ public class DialogUtil
             {
                 dialog.dismiss();
                 EventBus.getDefault().post(new NoticeEvent(tag));
+            }
+        });
+    }
+
+    public static void startTrainDialog(final Context context, final String tag)
+    {
+        final Dialog dialog = new Dialog(context, R.style.main_dialog);
+        dialog.setContentView(R.layout.start_train_dialog);
+        dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
+        final EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
+        final EditText etName = (EditText) dialog.findViewById(R.id.et_name);
+        Button bnCancel = (Button) dialog.findViewById(R.id.transfer_cancel_bn);
+        Button bnOk = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        bnCancel.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        bnOk.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString()) &&GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())){
+                    EventBus.getDefault().post(new NoticeEvent(tag,etCard.getText().toString(),etName.getText().toString()));
+                    dialog.dismiss();
+                }else {
+                    ToastUtil.makeText(context,"请填写相关信息");
+                }
             }
         });
     }

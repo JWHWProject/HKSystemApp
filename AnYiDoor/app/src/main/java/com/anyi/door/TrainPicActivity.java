@@ -37,7 +37,6 @@ import cn.nj.www.my_module.tools.ToastUtil;
 public class TrainPicActivity extends BaseActivity implements View.OnClickListener
 {
 
-
     @Bind(R.id.bn_finish)
     Button bnFinish;
 
@@ -49,7 +48,6 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     private String trainId;
 
     private CommonAdapter<TrainContentResponse.ImageBean> adapter;
-
 
 
     @Override

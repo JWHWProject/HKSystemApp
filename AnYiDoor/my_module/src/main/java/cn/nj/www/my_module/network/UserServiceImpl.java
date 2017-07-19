@@ -58,6 +58,12 @@ public class UserServiceImpl
         new NetWork()
                 .startPost(URLUtil.BANNER, param, tag);
     }
+    public void getUserList(String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        new NetWork()
+                .startPost(URLUtil.USER_LIST, param, tag);
+    }
 
     public void getOuterType(String tag)
     {
@@ -174,6 +180,15 @@ public class UserServiceImpl
                 .startPost(URLUtil.TRAIN_CONTENT, param, tag);
     }
 
+    public void startTrain(String trainingID, String cardNo,String userID, String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("trainingID", trainingID);
+        param.put("cardNo", cardNo);
+        param.put("userID",userID);
+        new NetWork()
+                .startPost(URLUtil.START_TRAIN, param, tag);
+    }
     public void startTrain(String trainingID, String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();

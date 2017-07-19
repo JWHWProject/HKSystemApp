@@ -57,6 +57,7 @@ public class Constants
      * 本地key
      */
     public static String localKey = "";
+    public static String USER_LIST = "USER_LIST";
 
     public static String LOGIN_NAME = "LOGIN_NAME";
     public static String LOGIN_PASSWORD = "LOGIN_PASSWORD";
