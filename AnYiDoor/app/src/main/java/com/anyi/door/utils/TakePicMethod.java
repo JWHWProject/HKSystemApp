@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.nj.www.my_module.tools.FileSystemManager;
+
 
 /**
  * Created by Administrator on 2017/7/17.
@@ -25,25 +27,28 @@ import java.util.Date;
 
 public class TakePicMethod {
     //文件存储的路径
-    public static String POTOPATH = Environment.getExternalStorageDirectory() + "/silent";
+    public static String POTOPATH="";
     private Context context;
     private SurfaceView mySurfaceView;
     private SurfaceHolder myHolder;
     private Camera myCamera;
     public String path;
     private Bitmap mPhotoImg;
+    private String picName="";
 
     public TakePicMethod(Context context, SurfaceView mySurfaceView, SurfaceHolder myHolder) {
         this.context = context;
         this.mySurfaceView = mySurfaceView;
         this.myHolder = myHolder;
+        POTOPATH = FileSystemManager.getSlientFilePath(context);
     }
 
     /**
      * 开始拍照
      */
-    public void startTakePhoto() {
+    public void startTakePhoto(String photoName) {
         //这里得开线程进行拍照，因为Activity还未显示完全的时候是无法进行拍照的，SurfacaView必须先显示
+        picName=photoName;
         new Thread() {
             @Override
             public void run() {
@@ -77,7 +82,7 @@ public class TakePicMethod {
 
         try {
             // 因为开启摄像头需要时间，这里让线程睡两秒
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -103,7 +108,7 @@ public class TakePicMethod {
 //            File pictureFile = new File(getDir(), "IMG_" + timeStamp + ".jpg");
             File file = new File(POTOPATH);
             file.mkdirs(); // 创建文件夹保存照片
-            String filename = file.getPath() + File.separator + timeStamp + ".jpg";
+            String filename = file.getPath() + File.separator + picName + ".jpg";
 
             // 将得到的照片进行270°旋转，使其竖直
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);

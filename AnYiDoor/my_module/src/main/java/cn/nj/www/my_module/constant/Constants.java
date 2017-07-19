@@ -30,7 +30,7 @@ public class Constants
     /**
      * sharedPreferences中的用户名和文件存储名
      */
-    public static final String BASE_PROJECT = "nannong";
+    public static final String BASE_PROJECT = "anyidoor";
     /**
      * 发送图片的界面
      */
@@ -39,7 +39,7 @@ public class Constants
     /**
      * 包名
      */
-    public static String packageName = "com.zhongchao.mall";
+    public static String packageName = "com.anyi.door";
     /**
      * 我的帖子 是否可编辑
      */
