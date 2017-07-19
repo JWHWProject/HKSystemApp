@@ -81,7 +81,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainVideoResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         //隐藏标题栏,有效
-//        getSupportActionBar().hide();
+        getSupportActionBar().hide();
+        
         initTitle();
         init();
 
@@ -285,7 +286,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         }
     }
 
-    public void onEventMainThread(BaseResponse event) {
+    public void onMainEventBus(BaseResponse event) {
         if (event instanceof NoticeEvent) {
             String tag = ((NoticeEvent) event).getTag();
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
