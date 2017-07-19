@@ -12,11 +12,14 @@ public class IntentCode
      */
     public static String COMMON_WEB_VIEW_TITLE = "common_web_view_title";
     public static String REGISTER_PHONE = "REGISTER_PHONE";
+    public static String EXAM_ID = "EXAM_ID";
 
     /**
      * 通用WebView链接
      */
     public static String COMMON_WEB_VIEW_URL = "common_web_view_url";
+
+    public static String TEST_INTENT = "TEST_INTENT";
 
     public static String COMMON_WEB_VIEW_URL_INSTRUCTION = "common_web_view_instruction";
 

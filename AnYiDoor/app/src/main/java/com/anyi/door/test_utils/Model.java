@@ -17,6 +17,8 @@ public class Model
     public static final int ANSWER_ONE_SELECTED = 0; // first answer selected
 
     public static final int ANSWER_TWO_SELECTED = 1; // second answer selected
+    public static final int ANSWER_THREE_SELECTED = 2; // 3 answer selected
+    public static final int ANSWER_FOUR_SELECTED = 3; // 4 answer selected
 
 
     public Model(String question)

@@ -2,19 +2,40 @@ package com.anyi.door;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.anyi.door.test_utils.MultiltyAdapter;
 import com.anyi.door.test_utils.SingleListAdapter;
-import com.anyi.door.test_utils.Model;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
+import cn.nj.www.my_module.bean.NetResponseEvent;
+import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.ExamBean;
+import cn.nj.www.my_module.bean.index.ExamResponse;
+import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.IntentCode;
+import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
-import cn.nj.www.my_module.tools.CMLog;
+import cn.nj.www.my_module.main.base.BaseApplication;
+import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.NetLoadingDialog;
+import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.MyListView;
-
-import static com.anyi.door.R.id.ListView02;
 
 /**
  * test
@@ -22,40 +43,51 @@ import static com.anyi.door.R.id.ListView02;
 public class TestListActivity extends BaseActivity implements View.OnClickListener
 {
 
-    /**
-     * Called when the activity is first created.
-     */
-    private MyListView listView,listView1;
+    @Bind(R.id.tv1)
+    TextView tv1;
 
-    private ArrayList<Model> dataList;
+    @Bind(R.id.ListView01)
+    MyListView listView1;
+
+    @Bind(R.id.tv2)
+    TextView tv2;
+
+    @Bind(R.id.ListView02)
+    MyListView listView2;
+
+    @Bind(R.id.tv3)
+    TextView tv3;
+
+    @Bind(R.id.ListView03)
+    MyListView listView3;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_sheet);
-        dataList = new ArrayList<Model>();
-        setData();
-        listView = (MyListView) findViewById(R.id.ListView01);
-        listView1 = (MyListView) findViewById(ListView02);
+        ButterKnife.bind(this);
+        initAll();
+
         final MultiltyAdapter adap = new MultiltyAdapter(this);
         listView1.setAdapter(adap);
-        final SingleListAdapter cadapter = new SingleListAdapter(mContext, dataList);
-        listView.setAdapter(cadapter);
-        findViewById(R.id.getBn).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                String answer = "";
-                for (int i = 0; i < cadapter.getCount(); i++)
-                {
-                    answer += cadapter.getItem(i).getCurrent() + "  ";
-                }
-                adap.getcheckMap();
-                CMLog.e("hq", "data: " + answer);
-            }
-        });
+
+
+
+//        findViewById(R.id.getBn).setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                String answer = "";
+//                for (int i = 0; i < cadapter.getCount(); i++)
+//                {
+//                    answer += cadapter.getItem(i).getCurrent() + "  ";
+//                }
+//                adap.getcheckMap();
+//            }
+//        });
 
     }
 
@@ -74,7 +106,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initEvent()
     {
-
+        NetLoadingDialog.getInstance().loading(mContext);
+        UserServiceImpl.instance().testDetail(getIntent().getStringExtra(IntentCode.EXAM_ID), ExamResponse.class.getName());
     }
 
     @Override
@@ -83,48 +116,72 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    private void setData()
-    {
 
-        Model m = new Model("Ik word op de hoogte gehouden van de ontwikkelingen binnen onze organisatie.");
-
-        dataList.add(m);
-
-        Model m1 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m1);
-        Model m2 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m2);
-        Model m3 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m3);
-        Model m4 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m4);
-        Model m5 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m5);
-        Model m6 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m6);
-        Model m7 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m7);
-        Model m8 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m8);
-        Model m9 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m9);
-        Model m10 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m10);
-        Model m11 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m11);
-        Model m12 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m12);
-        Model m13 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m13);
-        Model m14 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m14);
-        Model m15 = new Model("Ik sta achter de huidige koers van onze organisatie.");
-        dataList.add(m15);
-    }
 
     @Override
     public void onClick(View view)
     {
+
+    }
+
+    private List<ExamBean> examBeanList = new ArrayList<>();
+
+    @Override
+    public void onEventMainThread(BaseResponse event) throws JSONException
+    {
+        if (event instanceof NoticeEvent)
+        {
+            String tag = ((NoticeEvent) event).getTag();
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                finish();
+            }
+        }
+        else if (event instanceof NetResponseEvent)
+        {
+            NetLoadingDialog.getInstance().dismissDialog();
+            String tag = ((NetResponseEvent) event).getTag();
+            String result = ((NetResponseEvent) event).getResult();
+            if (tag.equals(ExamResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                NetLoadingDialog.getInstance().dismissDialog();
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    ExamResponse mExamResponse = GsonHelper.toType(result, ExamResponse.class);
+                    if (Constants.SUCESS_CODE.equals(mExamResponse.getResultCode()))
+                    {
+                        examBeanList.clear();
+                        JSONObject jsonObject = new JSONObject(result);
+                        Map<String, List<ExamBean.ExamDetailBean>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<ExamBean.ExamDetailBean>>>()
+                        {
+                        }.getType());
+                        Iterator entries = map.entrySet().iterator();
+                        while (entries.hasNext())
+                        {
+                            Map.Entry entry = (Map.Entry) entries.next();
+                            String key = (String) entry.getKey();
+                            List<ExamBean.ExamDetailBean> valueList = (List<ExamBean.ExamDetailBean>) entry.getValue();
+                            examBeanList.add(new ExamBean(key, valueList));
+                            if (key.equals("单选题")){
+
+                                final SingleListAdapter cadapter = new SingleListAdapter(mContext, valueList);
+                                listView2.setAdapter(cadapter);
+                            }
+                        }
+                        //获取到3个list
+
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(mContext, mExamResponse.getResultCode(), mExamResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(mContext);
+                }
+            }
+        }
 
     }
 }

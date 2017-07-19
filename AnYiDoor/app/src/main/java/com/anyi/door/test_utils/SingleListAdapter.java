@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.anyi.door.R;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import cn.nj.www.my_module.bean.index.ExamBean;
 
 /**
  * 单选
@@ -22,16 +24,16 @@ public class SingleListAdapter extends BaseAdapter
 
     LayoutInflater inflater;
 
-    public ArrayList<Model> getList()
+    public List<ExamBean.ExamDetailBean> getList()
     {
         return list;
     }
 
-    ArrayList<Model> list;
+    List<ExamBean.ExamDetailBean> list;
 
     private SparseBooleanArray mSelectedPositions = new SparseBooleanArray();
 
-    public SingleListAdapter(Context context, ArrayList<Model> data)
+    public SingleListAdapter(Context context, List<ExamBean.ExamDetailBean> data)
     {
         inflater = LayoutInflater.from(context);
         this.list = data;
@@ -44,7 +46,7 @@ public class SingleListAdapter extends BaseAdapter
     }
 
     @Override
-    public Model getItem(int position)
+    public ExamBean.ExamDetailBean getItem(int position)
     {
         return list.get(position);
     }
@@ -68,25 +70,27 @@ public class SingleListAdapter extends BaseAdapter
             v.setTag(holder);
             holder.group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
             {
-
                 public void onCheckedChanged(RadioGroup group,
                                              int checkedId)
                 {
                     Integer pos = (Integer) group.getTag();
-                    Model element = list.get(pos);
+                    ExamBean.ExamDetailBean element = list.get(pos);
                     switch (checkedId)
-                    { // set the Model to hold the
-                        // answer the user picked
+                    {
                         case R.id.answer0:
                             element.current = Model.ANSWER_ONE_SELECTED;
                             break;
                         case R.id.answer1:
                             element.current = Model.ANSWER_TWO_SELECTED;
                             break;
+                        case R.id.answer2:
+                            element.current = Model.ANSWER_THREE_SELECTED;
+                            break;
+                        case R.id.answer3:
+                            element.current = Model.ANSWER_FOUR_SELECTED;
+                            break;
                         default:
-                            element.current = Model.NONE; // Something was
-                            // wrong set to
-                            // the default
+                            element.current = Model.NONE;
                     }
 
                 }
@@ -98,7 +102,7 @@ public class SingleListAdapter extends BaseAdapter
         }
         holder.group.setTag(new Integer(position)); // I passed the current position as a tag
 
-        holder.t.setText(list.get(position).question); // Set the question body
+        holder.t.setText(list.get(position).getQuestion()); // Set the question body
 
         if (list.get(position).current != Model.NONE)
         {
@@ -107,11 +111,7 @@ public class SingleListAdapter extends BaseAdapter
         }
         else
         {
-            holder.group.clearCheck(); // This is required because although the
-            // Model could have the current
-            // position to NONE you could be dealing
-            // with a previous row where
-            // the user already picked an answer.
+            holder.group.clearCheck();
 
         }
         return v;

@@ -20,12 +20,14 @@ import java.util.Map;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.StartTestResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainBean;
 import cn.nj.www.my_module.bean.index.TrainContentResponse;
 import cn.nj.www.my_module.bean.index.TrainListResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -51,11 +53,16 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
 
     private String chooseID = "";
 
+    private String fromTest = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_list);
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT))){
+            fromTest = getIntent().getStringExtra(IntentCode.TEST_INTENT);
+        }
         initAll();
     }
 
@@ -66,7 +73,11 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         HeadView headView = new HeadView((ViewGroup) view);
         headView.setTitleText("培训");
         headView.setLeftImage(R.mipmap.app_title_back);
-        headView.setRightText("搜索");
+        if (fromTest.equals("1")){
+            headView.setHiddenRight();
+        }else {
+            headView.setRightText("搜索");
+        }
     }
 
 
@@ -104,9 +115,12 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
-                DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
-                //TODO:
                 chooseID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
+                if (fromTest.equals("")){
+                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+                }else if (fromTest.equals("1")){
+                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+                }
                 return false;
             }
         });
@@ -149,7 +163,11 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             {
                 //调用开始培训的接口
                 NetLoadingDialog.getInstance().loading(mContext);
-                UserServiceImpl.instance().startTrain(chooseID, "", StartTrainResponse.class.getName());
+                if (fromTest.equals("")){
+                    UserServiceImpl.instance().startTrain(chooseID, "", StartTrainResponse.class.getName());
+                }else if (fromTest.equals("1")){
+                    UserServiceImpl.instance().startOnlineTest(chooseID,"",  StartTestResponse.class.getName());
+                }
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -158,6 +176,27 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         }
         String tag = ((NetResponseEvent) event).getTag();
         String result = ((NetResponseEvent) event).getResult();
+        if (tag.equals(StartTestResponse.class.getName()))
+        {
+            StartTestResponse mStartTestResponse = GsonHelper.toType(result, StartTestResponse.class);
+            if (GeneralUtils.isNotNullOrZeroLenght(result))
+            {
+                if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode()))
+                {
+                    Intent testIntent = new Intent(mContext,TestListActivity.class);
+                    testIntent.putExtra(IntentCode.EXAM_ID,mStartTestResponse.getExamID());
+                    startActivity(testIntent);
+                }
+                else
+                {
+                    ErrorCode.doCode(this, mStartTestResponse.getResultCode(), mStartTestResponse.getDesc());
+                }
+            }
+            else
+            {
+                ToastUtil.showError(this);
+            }
+        }
         if (tag.equals(StartTrainResponse.class.getName()))
         {
             StartTrainResponse mStartTrainResponse = GsonHelper.toType(result, StartTrainResponse.class);

@@ -561,6 +561,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
+                        NetLoadingDialog.getInstance().loading(mContext);
                         UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                                 etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                                 ,userTypeArr[userTypeIndex],tvReasonDetail.getText().toString(),(userTrainIndex+1)+"",amountDay+"",

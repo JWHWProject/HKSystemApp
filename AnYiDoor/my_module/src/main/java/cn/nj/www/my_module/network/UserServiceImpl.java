@@ -101,7 +101,7 @@ public class UserServiceImpl
             ,String outsidersType,String reason,String needTraining,String validTime
             , List<String> urls, String tag)
     {
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, Object> param = new HashMap<String, Object>();
         param.put("cardNo", cardNo);
         param.put("name", name);
         param.put("gender", gender + "");
@@ -122,10 +122,10 @@ public class UserServiceImpl
         }
         if (urls != null && urls.size() > 0)
         {
-            param.put("picUrlList", GsonHelper.toJson(urls));
+            param.put("picUrlList",urls);
         }
         new NetWork()
-                .startPost(URLUtil.GIVE_OUT_CARD, param, tag);
+                .startPost2(URLUtil.GIVE_OUT_CARD, param, tag);
     }
 
     /**
@@ -200,10 +200,12 @@ public class UserServiceImpl
                 .startPost(URLUtil.TEST_DETAIL, param, tag);
     }
 
-    public void startOnlineTest(String examID, String tag)
+    public void startOnlineTest(String trainingID,String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
-        param.put("examID", examID);
+        param.put("trainingID", trainingID);
+        param.put("cardNo", cardNo);
+        param.put("userID", Global.getUserId());
         new NetWork()
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
     }

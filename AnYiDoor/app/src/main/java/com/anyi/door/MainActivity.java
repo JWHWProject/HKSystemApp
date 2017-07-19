@@ -108,15 +108,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         setLastUpdateTime();
         bannerFirstInit();
         initAll();
-//        ForceUpdateDialog mForceUpdateDialog = new ForceUpdateDialog(MainActivity.this);
-//        mForceUpdateDialog
-//                .setDownloadUrl("http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk")
-////                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
-////                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
-////                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
-////                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
-//                .setFileName("这是QQ.apk")
-//                .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
+
     }
 
     private void setLastUpdateTime()
@@ -274,7 +266,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mUpdateResponse.getResultCode()))
                     {
+                        if (mUpdateResponse.getAppVersionInfo().getVersionCode()>Constants.VERSION_CODE){
+//                            ForceUpdateDialog mForceUpdateDialog = new ForceUpdateDialog(MainActivity.this);
+//                            mForceUpdateDialog
+//                                    .setDownloadUrl(mUpdateResponse.getAppVersionInfo().getRequestUrl())
+//                                    .setTitle(tvTitle.getText().toString() + "有更新啦")
+//                                    .setReleaseTime(mUpdateResponse.getAppVersionInfo().getCreateTime())
+//                                    .setVersionName(mUpdateResponse.getAppVersionInfo().getVersionCode() + "")
+//                                    .setUpdateDesc(mUpdateResponse.getAppVersionInfo().getUpdateDescription())
+//                                    .setFileName("anyi.apk")
+//                                    .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
 
+                        }
 
                     }
                     else
@@ -373,8 +376,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
             //测试
             case R.id.ll_test:
-                DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
-
+                   Intent testIntent = new  Intent(mContext, TrainListActy.class);
+                testIntent.putExtra(IntentCode.TEST_INTENT,"1");
+                startActivity(testIntent);
                 break;
             case R.id.ll_train:
                 startActivity(new Intent(mContext, TrainListActy.class));
