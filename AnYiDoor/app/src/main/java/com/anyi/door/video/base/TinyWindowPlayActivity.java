@@ -21,7 +21,7 @@ import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.nj.www.my_module.bean.index.TrainContentResponse;
+import cn.nj.www.my_module.bean.index.TrainVideoResponse;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.network.GsonHelper;
@@ -51,7 +51,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity
 
     private boolean peiXunComplete = false;
 
-    private TrainContentResponse mTrainContentResponse;
+    private TrainVideoResponse mTrainContentResponse;
 
     private String trainId;
 
@@ -62,7 +62,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity
         setContentView(R.layout.activity_tiny_window_play);
         ButterKnife.bind(this);
         //获取数据
-        mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
+        mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainVideoResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         //隐藏标题栏,有效
         getSupportActionBar().hide();

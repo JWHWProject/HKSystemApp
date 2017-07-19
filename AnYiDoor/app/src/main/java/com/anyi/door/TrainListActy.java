@@ -26,6 +26,7 @@ import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainBean;
 import cn.nj.www.my_module.bean.index.TrainContentResponse;
 import cn.nj.www.my_module.bean.index.TrainListResponse;
+import cn.nj.www.my_module.bean.index.TrainVideoResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.IntentCode;
@@ -35,7 +36,6 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
-import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -222,7 +222,15 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                     {
                         //因为视频页面没有集成EventBus，就在该页面获取到数据后再传过去
                         NetLoadingDialog.getInstance().loading(mContext);
-                        UserServiceImpl.instance().trainContent(chooseID, TrainContentResponse.class.getName());
+                        if (fileType.equals("1"))
+                        {
+                            UserServiceImpl.instance().trainContent(chooseID, TrainContentResponse.class.getName());
+                        }
+                        else
+                        {
+                            UserServiceImpl.instance().trainContent(chooseID, TrainVideoResponse.class.getName());
+                        }
+
                     }
                     else
                     {
@@ -241,17 +249,31 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
                     {
-                        Intent intent;
-                        if (fileType.equals("1"))
-                        {
-                            intent = new Intent(mContext, TrainPicActivity.class);
-                            CMLog.e("hq","图片");
-                        }else {
-                            intent = new Intent(mContext, TinyWindowPlayActivity.class);
-                            CMLog.e("hq","视频");
-                        }
-                        intent.putExtra(IntentCode.CHOOSE_ID,result);
-                        intent.putExtra(IntentCode.TRAIN_ID,chooseID);
+                        Intent intent = new Intent(mContext, TrainPicActivity.class);
+                        intent.putExtra(IntentCode.CHOOSE_ID, result);
+                        intent.putExtra(IntentCode.TRAIN_ID, chooseID);
+                        startActivity(new Intent(intent));
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
+            if (tag.equals(TrainVideoResponse.class.getName()))
+            {
+                TrainVideoResponse mTrainContentResponse = GsonHelper.toType(result, TrainVideoResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
+                    {
+                        Intent intent = new Intent(mContext, TinyWindowPlayActivity.class);
+                        intent.putExtra(IntentCode.CHOOSE_ID, result);
+                        intent.putExtra(IntentCode.TRAIN_ID, chooseID);
                         startActivity(new Intent(intent));
                     }
                     else
