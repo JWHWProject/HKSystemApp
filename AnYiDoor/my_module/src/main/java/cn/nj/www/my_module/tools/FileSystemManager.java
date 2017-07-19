@@ -236,6 +236,11 @@ public class FileSystemManager
         cacheFilePath = FileUtil.getSDPath(context) + File.separator + Constants.BASE_PROJECT + File.separator;
         return cacheFilePath;
     }
+    public static String getSlientFilePath(Context context)
+    {
+        cacheFilePath = FileUtil.getSDPath(context) + File.separator + Constants.BASE_PROJECT + File.separator+ "slient";
+        return cacheFilePath;
+    }
 
     /**
      * 创建文件夹
@@ -250,6 +255,7 @@ public class FileSystemManager
         FileUtil.createNewFile(mCacheFilePath + File.separator + "head");
         FileUtil.createNewFile(mCacheFilePath + File.separator + "img");
         FileUtil.createNewFile(mCacheFilePath + File.separator + "temp");
+        FileUtil.createNewFile(mCacheFilePath + File.separator + "slient");
     }
     /**
      * 删除指定目录下文件及目录
