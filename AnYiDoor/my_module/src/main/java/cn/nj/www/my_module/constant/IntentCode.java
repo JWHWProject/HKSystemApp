@@ -20,6 +20,7 @@ public class IntentCode
     public static String COMMON_WEB_VIEW_URL = "common_web_view_url";
 
     public static String TEST_INTENT = "TEST_INTENT";
+    public static String CHOOSE_ID = "CHOOSE_ID";
 
     public static String COMMON_WEB_VIEW_URL_INSTRUCTION = "common_web_view_instruction";
 

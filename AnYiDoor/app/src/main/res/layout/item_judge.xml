@@ -2,45 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical" >
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/pxtodp20">
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/pxtodp40"
+        android:paddingTop="@dimen/pxtodp30"
+        android:textColor="@color/register_black_text"
+        android:textSize="@dimen/pxtodp30"/>
 
     <RadioGroup
         android:id="@+id/group_me"
         android:layout_width="fill_parent"
+        android:paddingBottom="@dimen/pxtodp24"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/answer0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Ans0" />
+            android:text="对"
+            android:textColor="@color/register_black_text"
+            android:textSize="@dimen/pxtodp30"/>
 
         <RadioButton
             android:id="@+id/answer1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Ans1" />
-        <RadioButton
-            android:id="@+id/answer2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="Ans0" />
-
-        <RadioButton
-            android:id="@+id/answer3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="Ans1" />
+            android:text="错"
+            android:textColor="@color/register_black_text"
+            android:textSize="@dimen/pxtodp30"/>
 
 
     </RadioGroup>

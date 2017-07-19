@@ -55,12 +55,15 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
 
     private String fromTest = "";
 
+    private String fileType = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_list);
-        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT))){
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT)))
+        {
             fromTest = getIntent().getStringExtra(IntentCode.TEST_INTENT);
         }
         initAll();
@@ -73,9 +76,14 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         HeadView headView = new HeadView((ViewGroup) view);
         headView.setTitleText("培训");
         headView.setLeftImage(R.mipmap.app_title_back);
-        if (fromTest.equals("1")){
+        if (fromTest.equals("1"))
+        {
             headView.setHiddenRight();
-        }else {
+            headView.setTitleText("考核列表");
+        }
+        else
+        {
+            headView.setTitleText("培训");
             headView.setRightText("搜索");
         }
     }
@@ -116,9 +124,13 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
             {
                 chooseID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
-                if (fromTest.equals("")){
+                fileType = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getFileType();
+                if (fromTest.equals(""))
+                {
                     DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
-                }else if (fromTest.equals("1")){
+                }
+                else if (fromTest.equals("1"))
+                {
                     DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
                 }
                 return false;
@@ -163,123 +175,118 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             {
                 //调用开始培训的接口
                 NetLoadingDialog.getInstance().loading(mContext);
-                if (fromTest.equals("")){
+                if (fromTest.equals(""))
+                {
                     UserServiceImpl.instance().startTrain(chooseID, "", StartTrainResponse.class.getName());
-                }else if (fromTest.equals("1")){
-                    UserServiceImpl.instance().startOnlineTest(chooseID,"",  StartTestResponse.class.getName());
+                }
+                else if (fromTest.equals("1"))
+                {
+                    UserServiceImpl.instance().startOnlineTest(chooseID, "", StartTestResponse.class.getName());
                 }
             }
         }
         else if (event instanceof NetResponseEvent)
         {
             NetLoadingDialog.getInstance().dismissDialog();
-        }
-        String tag = ((NetResponseEvent) event).getTag();
-        String result = ((NetResponseEvent) event).getResult();
-        if (tag.equals(StartTestResponse.class.getName()))
-        {
-            StartTestResponse mStartTestResponse = GsonHelper.toType(result, StartTestResponse.class);
-            if (GeneralUtils.isNotNullOrZeroLenght(result))
+            String tag = ((NetResponseEvent) event).getTag();
+            String result = ((NetResponseEvent) event).getResult();
+            if (tag.equals(StartTestResponse.class.getName()))
             {
-                if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode()))
+                StartTestResponse mStartTestResponse = GsonHelper.toType(result, StartTestResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
-                    Intent testIntent = new Intent(mContext,TestListActivity.class);
-                    testIntent.putExtra(IntentCode.EXAM_ID,mStartTestResponse.getExamID());
-                    startActivity(testIntent);
-                }
-                else
-                {
-                    ErrorCode.doCode(this, mStartTestResponse.getResultCode(), mStartTestResponse.getDesc());
-                }
-            }
-            else
-            {
-                ToastUtil.showError(this);
-            }
-        }
-        if (tag.equals(StartTrainResponse.class.getName()))
-        {
-            StartTrainResponse mStartTrainResponse = GsonHelper.toType(result, StartTrainResponse.class);
-            if (GeneralUtils.isNotNullOrZeroLenght(result))
-            {
-                if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode()))
-                {
-                    UserServiceImpl.instance().trainContent(chooseID, TrainContentResponse.class.getName());
-                }
-                else
-                {
-                    ErrorCode.doCode(this, mStartTrainResponse.getResultCode(), mStartTrainResponse.getDesc());
-                }
-            }
-            else
-            {
-                ToastUtil.showError(this);
-            }
-        }
-        if (tag.equals(TrainContentResponse.class.getName()))
-        {
-            TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
-            if (GeneralUtils.isNotNullOrZeroLenght(result))
-            {
-                if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
-                {
-
-                }
-                else
-                {
-                    ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
-                }
-            }
-            else
-            {
-                ToastUtil.showError(this);
-            }
-        }
-        if (tag.equals(TrainListResponse.class.getName()))
-        {
-            TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
-            if (GeneralUtils.isNotNullOrZeroLenght(result))
-            {
-                if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
-                {
-                    trainBeanList.clear();
-                    try
+                    if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode()))
                     {
-                        JSONObject jsonObject = new JSONObject(result);
-                        Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
-                        {
-                        }.getType());
-                        Iterator entries = map.entrySet().iterator();
-                        while (entries.hasNext())
-                        {
-                            Map.Entry entry = (Map.Entry) entries.next();
-                            String key = (String) entry.getKey();
-                            List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
-                            trainBeanList.add(new TrainBean(key, valueList));
-                        }
-                        final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
-                        listView.setAdapter(adapter);
-                    } catch (JSONException e)
+                        Intent testIntent = new Intent(mContext, TestListActivity.class);
+                        testIntent.putExtra(IntentCode.EXAM_ID, mStartTestResponse.getExamID());
+                        startActivity(testIntent);
+                    }
+                    else
                     {
-                        e.printStackTrace();
-                    } finally
-                    {
-                        if (trainBeanList.size() == 0)
-                        {
-                            ToastUtil.makeText(mContext, "无相关记录");
-                        }
+                        ErrorCode.doCode(this, mStartTestResponse.getResultCode(), mStartTestResponse.getDesc());
                     }
                 }
                 else
                 {
-                    ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
+                    ToastUtil.showError(this);
                 }
             }
-            else
+            if (tag.equals(StartTrainResponse.class.getName()))
             {
-                ToastUtil.showError(this);
+                StartTrainResponse mStartTrainResponse = GsonHelper.toType(result, StartTrainResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode()))
+                    {
+
+                        Intent intent;
+                        if (fileType.equals("1"))
+                        {
+                            intent = new Intent(mContext, TrainPicActivity.class);
+                        }else {
+                            intent = new Intent(mContext, TrainVideoActivity.class);
+                        }
+                        intent.putExtra(IntentCode.CHOOSE_ID,chooseID);
+                        startActivity(new Intent(intent));
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mStartTrainResponse.getResultCode(), mStartTrainResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
+
+            if (tag.equals(TrainListResponse.class.getName()))
+            {
+                TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                    {
+                        trainBeanList.clear();
+                        try
+                        {
+                            JSONObject jsonObject = new JSONObject(result);
+                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                            {
+                            }.getType());
+                            Iterator entries = map.entrySet().iterator();
+                            while (entries.hasNext())
+                            {
+                                Map.Entry entry = (Map.Entry) entries.next();
+                                String key = (String) entry.getKey();
+                                List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
+                                trainBeanList.add(new TrainBean(key, valueList));
+                            }
+                            final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
+                            listView.setAdapter(adapter);
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        } finally
+                        {
+                            if (trainBeanList.size() == 0)
+                            {
+                                ToastUtil.makeText(mContext, "无相关记录");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
             }
         }
+
     }
 
 

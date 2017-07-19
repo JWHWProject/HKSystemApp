@@ -19,11 +19,16 @@ import cn.nj.www.my_module.bean.index.ExamBean;
 import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
 import cn.nj.www.my_module.tools.CMLog;
 
+import static com.anyi.door.R.id.answer0;
+import static com.anyi.door.R.id.answer1;
+
 /**
  * 单选
  */
-public class SingleListAdapter extends BaseAdapter
+public class JudgeAdapter extends BaseAdapter
 {
+
+    private  String time;
 
     LayoutInflater inflater;
 
@@ -32,19 +37,6 @@ public class SingleListAdapter extends BaseAdapter
         return list;
     }
 
-    private SparseBooleanArray mSelectedPositions = new SparseBooleanArray();
-
-    private String time;
-    private String examID;
-    public SingleListAdapter(Context context, List<ExamBean.ExamDetailBean> data,String examID)
-    {
-        inflater = LayoutInflater.from(context);
-        this.list = data;
-        this.examID = examID;
-        if (list.size()>0){
-            time = list.get(0).getCreateTime();
-        }
-    }
     List<ExamBean.ExamDetailBean> list;
 
     public boolean isFinishAll()
@@ -69,10 +61,25 @@ public class SingleListAdapter extends BaseAdapter
             answer.setUserAnswer(getItem(i).current+"");
             answer.setCreateTimeStr(time);
             answerList.add(answer);
-            CMLog.e("hq","单选："+answer.toString());
+            CMLog.e("hq","判断："+answer.toString());
         }
         return answerList;
     }
+
+    private SparseBooleanArray mSelectedPositions = new SparseBooleanArray();
+
+    private String examID;
+
+    public JudgeAdapter(Context context, List<ExamBean.ExamDetailBean> data, String examID)
+    {
+        inflater = LayoutInflater.from(context);
+        this.list = data;
+        this.examID = examID;
+        if (list.size()>0){
+            time = list.get(0).getCreateTime();
+        }
+    }
+
     @Override
     public int getCount()
     {
@@ -99,7 +106,7 @@ public class SingleListAdapter extends BaseAdapter
 
         if (v == null)
         {
-            v = inflater.inflate(R.layout.item_single_choose, parent, false);
+            v = inflater.inflate(R.layout.item_judge, parent, false);
             holder = new ViewHolder(v);
             v.setTag(holder);
             holder.group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -111,20 +118,11 @@ public class SingleListAdapter extends BaseAdapter
                     ExamBean.ExamDetailBean element = list.get(pos);
                     switch (checkedId)
                     {
-                        case R.id.answer0:
+                        case answer0:
                             element.current = Model.ANSWER_ONE_SELECTED;
                             break;
-                        case R.id.answer1:
+                        case answer1:
                             element.current = Model.ANSWER_TWO_SELECTED;
-                            break;
-                        case R.id.answer2:
-                            element.current = Model.ANSWER_THREE_SELECTED;
-                            break;
-                        case R.id.answer3:
-                            element.current = Model.ANSWER_FOUR_SELECTED;
-                            break;
-                        case R.id.answer4:
-                            element.current = Model.ANSWER_FOUR_SELECTED;
                             break;
                         default:
                             element.current = Model.NONE;
@@ -139,35 +137,7 @@ public class SingleListAdapter extends BaseAdapter
         }
         holder.group.setTag(new Integer(position)); // I passed the current position as a tag
 
-        holder.t.setText((position+1)+"."+list.get(position).getQuestion()); // Set the question body
-        holder.answer2.setVisibility(View.GONE);
-        holder.answer3.setVisibility(View.GONE);
-        holder.answer4.setVisibility(View.GONE);
-        for (int i = 0; i < list.get(position).getOptionList().size(); i++)
-        {
-            holder.group.getChildAt(i).setVisibility(View.VISIBLE);
-            if (i == 0)
-            {
-                holder.answer0.setText(list.get(position).getOptionList().get(i));
-            }
-            else if (i == 1)
-            {
-                holder.answer1.setText(list.get(position).getOptionList().get(i));
-            }
-            else if (i == 2)
-            {
-                holder.answer2.setText(list.get(position).getOptionList().get(i));
-            }
-            else if (i == 3)
-            {
-                holder.answer3.setText(list.get(position).getOptionList().get(i));
-            }
-            else if (i == 4)
-            {
-                holder.answer4.setText(list.get(position).getOptionList().get(i));
-            }
-        }
-
+        holder.t.setText((position + 1) + "." + list.get(position).getQuestion()); // Set the question body
         if (list.get(position).current != Model.NONE)
         {
             RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current);
@@ -187,25 +157,10 @@ public class SingleListAdapter extends BaseAdapter
 
         RadioGroup group;
 
-        RadioButton answer0;
-
-        RadioButton answer1;
-
-        RadioButton answer2;
-
-        RadioButton answer3;
-
-        RadioButton answer4;
-
         ViewHolder(View v)
         {
             t = (TextView) v.findViewById(R.id.textView1);
             group = (RadioGroup) v.findViewById(R.id.group_me);
-            answer0 = (RadioButton) v.findViewById(R.id.answer0);
-            answer1 = (RadioButton) v.findViewById(R.id.answer1);
-            answer2 = (RadioButton) v.findViewById(R.id.answer2);
-            answer3 = (RadioButton) v.findViewById(R.id.answer3);
-            answer4 = (RadioButton) v.findViewById(R.id.answer4);
         }
 
     }

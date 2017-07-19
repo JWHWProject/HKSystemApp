@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="@dimen/pxtodp10"
+                android:paddingLeft="@dimen/pxtodp20"
                 android:paddingRight="@dimen/pxtodp10"
     >
 
@@ -12,20 +12,23 @@
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/pxtodp12"
-        android:paddingTop="@dimen/pxtodp12"
-        android:text="ddd"   android:textColor="@color/register_black_text"
-        android:textSize="@dimen/pxtodp36"
+        android:paddingBottom="@dimen/pxtodp26"
+        android:paddingTop="@dimen/pxtodp26"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textColor="@color/register_black_text"
+        android:textSize="@dimen/pxtodp30"
         />
 
     <ImageView
         android:id="@+id/icon_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+
     <View
         android:layout_width="match_parent"
-        android:background="@color/line"
-        android:layout_height="@dimen/pxtodp1"/>
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
 </RelativeLayout>

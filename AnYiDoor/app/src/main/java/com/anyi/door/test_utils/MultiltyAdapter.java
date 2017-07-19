@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.anyi.door.R;
 
@@ -14,36 +15,97 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.nj.www.my_module.bean.index.ExamBean;
+import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
 import cn.nj.www.my_module.tools.CMLog;
+import cn.nj.www.my_module.tools.GeneralUtils;
 
 /**
- * 单选
+ * 多选
  */
 public class MultiltyAdapter extends BaseAdapter
 {
-    private List<String> list;
+    private List<ExamBean.ExamDetailBean> list;
 
     private Context mContext;
 
+    private String time;
 
     private Map<Integer, Map<Integer, Boolean>> checkMap;
+
+    public boolean isFinishAll()
+    {
+        if (checkMap.size() == list.size())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public List<OnlineTrainingAnswer> getAnswerList()
+    {
+        List<OnlineTrainingAnswer> answerList = new ArrayList<>();
+        for (int i = 0; i < checkMap.size(); i++)
+        {
+
+            String currentAnswer = "";
+            if (GeneralUtils.isNotNull(checkMap.get(i).get(1)) && checkMap.get(i).get(1))
+            {
+                currentAnswer += "1|";
+            }
+            if (GeneralUtils.isNotNull(checkMap.get(i).get(2)) &&checkMap.get(i).get(2))
+            {
+                currentAnswer += "2|";
+            }
+            if (GeneralUtils.isNotNull(checkMap.get(i).get(3)) &&checkMap.get(i).get(3))
+            {
+                currentAnswer += "3|";
+            }
+            if (GeneralUtils.isNotNull(checkMap.get(i).get(4)) &&checkMap.get(i).get(4))
+            {
+                currentAnswer += "4|";
+            }
+            if (GeneralUtils.isNotNull(checkMap.get(i).get(5)) &&checkMap.get(i).get(5))
+            {
+                currentAnswer += "5|";
+            }
+            if (currentAnswer.endsWith("|"))
+            {
+                currentAnswer = currentAnswer.substring(0, currentAnswer.length() - 1);
+            }
+            OnlineTrainingAnswer answer = getItem(i).getOnlineTrainingAnswer();
+            answer.setExamID(examID);
+            answer.setUserAnswer(currentAnswer);
+            answer.setCreateTimeStr(time);
+            answerList.add(answer);
+            CMLog.e("hq","多选："+answer.toString());
+        }
+        return answerList;
+    }
 
     public Map<Integer, Map<Integer, Boolean>> getcheckMap()
     {
         for (int i = 0; i < checkMap.size(); i++)
         {
-            CMLog.e("http",i+" "+checkMap.get(i).get(1)+ " "+checkMap.get(i).get(2)+ " "+checkMap.get(i).get(3)+ " "+checkMap.get(i).get(4));
+            CMLog.e("http", i + " " + checkMap.get(i).get(1) + " " + checkMap.get(i).get(2) + " " + checkMap.get(i).get(3) + " " + checkMap.get(i).get(4));
+
         }
         return checkMap;
     }
 
-    public MultiltyAdapter(Context context)
+    String examID;
+
+    public MultiltyAdapter(Context context, List<ExamBean.ExamDetailBean> valueList, String examID)
     {
         this.mContext = context;
-        list = new ArrayList<String>();
-        for (int i = 0; i < 30; i++)
+        this.list = valueList;
+        this.examID = examID;
+        if (list.size() > 0)
         {
-            list.add("" + i + i + i + i);
+            time = list.get(0).getCreateTime();
         }
         checkMap = new HashMap<Integer, Map<Integer, Boolean>>();
     }
@@ -55,7 +117,7 @@ public class MultiltyAdapter extends BaseAdapter
     }
 
     @Override
-    public Object getItem(int position)
+    public ExamBean.ExamDetailBean getItem(int position)
     {
         return list.get(position);
     }
@@ -80,10 +142,12 @@ public class MultiltyAdapter extends BaseAdapter
         {
             holder = new ViewHolder();
             view = View.inflate(mContext, R.layout.item_choose, null);
+            holder.textView1 = (TextView) view.findViewById(R.id.textView1);
             holder.cb1 = (CheckBox) view.findViewById(R.id.cb1);
             holder.cb2 = (CheckBox) view.findViewById(R.id.cb2);
             holder.cb3 = (CheckBox) view.findViewById(R.id.cb3);
             holder.cb4 = (CheckBox) view.findViewById(R.id.cb4);
+            holder.cb5 = (CheckBox) view.findViewById(R.id.cb5);
             view.setTag(holder);
         }
         //给每个checkbox设置这个checkbox属于的item的position,以便在点击事件中获取所属的item 的索引值
@@ -91,6 +155,41 @@ public class MultiltyAdapter extends BaseAdapter
         holder.cb2.setTag(position);
         holder.cb3.setTag(position);
         holder.cb4.setTag(position);
+        holder.textView1.setTag(position);
+
+        holder.textView1.setText((position + 1) + getItem(position).getQuestion());
+        holder.cb4.setVisibility(View.GONE);
+        holder.cb5.setVisibility(View.GONE);
+        List<String> currentOption = getItem(position).getOptionList();
+        for (int i = 0; i < currentOption.size(); i++)
+        {
+
+            if (i == 0)
+            {
+                holder.cb1.setText(currentOption.get(i));
+            }
+            else if (i == 1)
+            {
+                holder.cb2.setText(currentOption.get(i));
+            }
+            else if (i == 2)
+            {
+                holder.cb3.setText(currentOption.get(i));
+
+            }
+            else if (i == 3)
+            {
+                holder.cb4.setText(currentOption.get(i));
+                holder.cb4.setVisibility(View.VISIBLE);
+            }
+            else if (i == 4)
+            {
+                holder.cb5.setText(currentOption.get(i));
+                holder.cb5.setVisibility(View.VISIBLE);
+            }
+
+
+        }
         //用于存放每个item中checkbox的状态
         final Map<Integer, Boolean> mapList = new HashMap<Integer, Boolean>();
 
@@ -141,6 +240,17 @@ public class MultiltyAdapter extends BaseAdapter
                 checkMap.put(i, mapList);
             }
         });
+        holder.cb5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                int i = (Integer) buttonView.getTag();
+                mapList.put(5, isChecked);
+                checkMap.put(i, mapList);
+            }
+        });
         Map<Integer, Boolean> map3 = checkMap.get(position);
         if (map3 != null)
         {
@@ -176,6 +286,14 @@ public class MultiltyAdapter extends BaseAdapter
             {
                 holder.cb4.setChecked(false);
             }
+            if (map3.get(5) != null)
+            {
+                holder.cb5.setChecked(map3.get(5));
+            }
+            else
+            {
+                holder.cb5.setChecked(false);
+            }
         }
         else
         {
@@ -183,6 +301,7 @@ public class MultiltyAdapter extends BaseAdapter
             holder.cb2.setChecked(false);
             holder.cb3.setChecked(false);
             holder.cb4.setChecked(false);
+            holder.cb5.setChecked(false);
         }
         return view;
     }
@@ -190,6 +309,8 @@ public class MultiltyAdapter extends BaseAdapter
 
     class ViewHolder
     {
+        TextView textView1;
+
         CheckBox cb1;
 
         CheckBox cb2;
@@ -197,5 +318,7 @@ public class MultiltyAdapter extends BaseAdapter
         CheckBox cb3;
 
         CheckBox cb4;
+
+        CheckBox cb5;
     }
 }

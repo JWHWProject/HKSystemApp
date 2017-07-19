@@ -66,6 +66,19 @@ public class TrainBean
 
         private String userID;
 
+        public String getFileType()
+        {
+            return fileType;
+        }
+
+        public void setFileType(String fileType)
+        {
+            this.fileType = fileType;
+        }
+
+        //1-圖片；2-視頻
+        private String fileType;
+
         private String passScore;
 
         private String createTime;

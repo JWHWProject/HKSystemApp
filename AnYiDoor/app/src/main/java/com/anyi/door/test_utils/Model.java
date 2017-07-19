@@ -14,11 +14,12 @@ public class Model
 
     public static final int NONE = 1000; // No answer selected
 
-    public static final int ANSWER_ONE_SELECTED = 0; // first answer selected
+    public static final int ANSWER_ONE_SELECTED = 1; // first answer selected
 
-    public static final int ANSWER_TWO_SELECTED = 1; // second answer selected
-    public static final int ANSWER_THREE_SELECTED = 2; // 3 answer selected
-    public static final int ANSWER_FOUR_SELECTED = 3; // 4 answer selected
+    public static final int ANSWER_TWO_SELECTED = 2; // second answer selected
+    public static final int ANSWER_THREE_SELECTED = 3; // 3 answer selected
+    public static final int ANSWER_FOUR_SELECTED = 4; // 4 answer selected
+    public static final int ANSWER_FIVE_SELECTED = 5; // 5 answer selected
 
 
     public Model(String question)

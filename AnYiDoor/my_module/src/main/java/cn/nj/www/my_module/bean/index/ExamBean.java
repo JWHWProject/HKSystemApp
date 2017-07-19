@@ -40,7 +40,12 @@ public class ExamBean
 
     public static class ExamDetailBean
     {
-        public int current;
+        public OnlineTrainingAnswer getOnlineTrainingAnswer()
+        {
+            return new OnlineTrainingAnswer(id);
+        }
+
+        public int current = 1000;
 
         private String id;
 
@@ -60,15 +65,7 @@ public class ExamBean
 
         private String createTime;
 
-        public int getCurrent()
-        {
-            return current;
-        }
-
-        public void setCurrent(int current)
-        {
-            this.current = current;
-        }
+        private List<String> optionList;
 
         public String getId()
         {
@@ -158,6 +155,16 @@ public class ExamBean
         public void setCreateTime(String createTime)
         {
             this.createTime = createTime;
+        }
+
+        public List<String> getOptionList()
+        {
+            return optionList;
+        }
+
+        public void setOptionList(List<String> optionList)
+        {
+            this.optionList = optionList;
         }
     }
 }

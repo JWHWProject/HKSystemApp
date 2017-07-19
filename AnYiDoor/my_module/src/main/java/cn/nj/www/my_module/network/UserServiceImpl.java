@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.URLUtil;
@@ -42,10 +43,10 @@ public class UserServiceImpl
      *
      * @param tag
      */
-    public void init( String gpsLong,String gpsLati,String tag)
+    public void init(String gpsLong, String gpsLati, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
-        param.put("lastUpdateTime", SharePref.getString(Constants.LAST_UPDATE_TIME,""));
+        param.put("lastUpdateTime", SharePref.getString(Constants.LAST_UPDATE_TIME, ""));
         param.put("versionCode", Constants.VERSION_NAME);
         param.put("gpsLong", gpsLong);
         param.put("gpsLati", gpsLati);
@@ -98,7 +99,7 @@ public class UserServiceImpl
     }
 
     public void giveCard(String cardNo, String name, int gender, String phone, String fromCompany, String idCard
-            ,String outsidersType,String reason,String needTraining,String validTime
+            , String outsidersType, String reason, String needTraining, String validTime
             , List<String> urls, String tag)
     {
         Map<String, Object> param = new HashMap<String, Object>();
@@ -108,21 +109,25 @@ public class UserServiceImpl
         param.put("phone", phone);
         param.put("fromCompany", fromCompany);
         param.put("idCard", idCard);
-        if(!outsidersType.equals("")){
-            param.put("outsidersType",outsidersType);
+        if (!outsidersType.equals(""))
+        {
+            param.put("outsidersType", outsidersType);
         }
-        if(!reason.equals("")){
-            param.put("reason",reason);
+        if (!reason.equals(""))
+        {
+            param.put("reason", reason);
         }
-        if(!needTraining.equals("")){
-            param.put("needTraining",needTraining);
+        if (!needTraining.equals(""))
+        {
+            param.put("needTraining", needTraining);
         }
-        if(!validTime.equals("")){
-            param.put("validTime",validTime);
+        if (!validTime.equals(""))
+        {
+            param.put("validTime", validTime);
         }
         if (urls != null && urls.size() > 0)
         {
-            param.put("picUrlList",urls);
+            param.put("picUrlList", urls);
         }
         new NetWork()
                 .startPost2(URLUtil.GIVE_OUT_CARD, param, tag);
@@ -185,7 +190,8 @@ public class UserServiceImpl
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
-        if (picUrlList!=null){
+        if (picUrlList != null)
+        {
             param.put("picUrlList", new Gson().toJson(picUrlList));
         }
         new NetWork()
@@ -200,7 +206,7 @@ public class UserServiceImpl
                 .startPost(URLUtil.TEST_DETAIL, param, tag);
     }
 
-    public void startOnlineTest(String trainingID,String cardNo, String tag)
+    public void startOnlineTest(String trainingID, String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
@@ -210,14 +216,14 @@ public class UserServiceImpl
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
     }
 
-    public void finishTest(String examID, String answerList, String picUrlList, String tag)
+    public void finishTest(String examID, List<OnlineTrainingAnswer> answerList, List<String> picUrlList, String tag)
     {
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, Object> param = new HashMap<String, Object>();
         param.put("examID", examID);
         param.put("answerList", answerList);
         param.put("picUrlList", picUrlList);
         new NetWork()
-                .startPost(URLUtil.FINISH_TEST, param, tag);
+                .startPost2(URLUtil.FINISH_TEST, param, tag);
     }
 
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/pxtodp20"
+        android:paddingTop="@dimen/pxtodp30"
+        android:paddingBottom="@dimen/pxtodp40"
+        android:textColor="@color/register_black_text"
+        android:textSize="@dimen/pxtodp30"/>
+
+    <RadioGroup
+        android:id="@+id/group_me"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/pxtodp24"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/answer0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ans0"
+            android:visibility="gone"/>
+
+        <RadioButton
+            android:id="@+id/answer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ans1"
+            android:visibility="gone"/>
+
+        <RadioButton
+            android:id="@+id/answer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ans1"
+            android:visibility="gone"/>
+
+        <RadioButton
+            android:id="@+id/answer3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ans1"
+            android:visibility="gone"/>
+
+        <RadioButton
+            android:id="@+id/answer4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ans1"
+            android:visibility="gone"/>
+
+
+    </RadioGroup>
+
+</LinearLayout>

@@ -4,12 +4,17 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/app_add_friend_dialog_bg"
+              android:background="@color/white"
               android:orientation="vertical">
 
     <include
         android:id="@+id/common_back"
         layout="@layout/layout_top"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@drawable/line_view"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,16 +26,16 @@
             android:orientation="vertical">
 
 
-            <Button
-                android:id="@+id/getBn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <TextView
                 android:id="@+id/tv1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="单选"/>
+                android:layout_height="@dimen/pxtodp90"
+                android:background="#f8f8f8"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/pxtodp20"
+                android:text="判断题"
+                android:textColor="@color/register_black_text"
+                android:textSize="@dimen/pxtodp30"/>
 
             <cn.nj.www.my_module.view.MyListView
                 android:id="@+id/ListView01"
@@ -42,9 +47,13 @@
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/a9b"
-                android:text="多选"/>
+                android:layout_height="@dimen/pxtodp90"
+                android:background="#f8f8f8"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/pxtodp20"
+                android:text="单选题"
+                android:textColor="@color/register_black_text"
+                android:textSize="@dimen/pxtodp30"/>
 
             <cn.nj.www.my_module.view.MyListView
                 android:id="@+id/ListView02"
@@ -54,9 +63,13 @@
             <TextView
                 android:id="@+id/tv3"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/a9b"
-                android:text="多选"/>
+                android:layout_height="@dimen/pxtodp90"
+                android:background="#f8f8f8"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/pxtodp20"
+                android:text="多选题"
+                android:textColor="@color/register_black_text"
+                android:textSize="@dimen/pxtodp30"/>
 
             <cn.nj.www.my_module.view.MyListView
                 android:id="@+id/ListView03"
@@ -64,6 +77,28 @@
                 android:layout_height="wrap_content">
 
             </cn.nj.www.my_module.view.MyListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f8f8f8"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/getBn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pxtodp90"
+                    android:layout_marginBottom="@dimen/pxtodp80"
+                    android:layout_marginLeft="@dimen/pxtodp30"
+                    android:layout_marginRight="@dimen/pxtodp30"
+                    android:layout_marginTop="@dimen/pxtodp60"
+                    android:background="@drawable/common_pink_bn"
+                    android:text="提交"
+                    android:textColor="@color/white_color"
+                    android:textSize="@dimen/pxtosp34"/>
+            </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
