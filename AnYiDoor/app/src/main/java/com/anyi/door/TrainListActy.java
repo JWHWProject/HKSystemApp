@@ -35,6 +35,7 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -244,10 +245,13 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                         if (fileType.equals("1"))
                         {
                             intent = new Intent(mContext, TrainPicActivity.class);
+                            CMLog.e("hq","图片");
                         }else {
                             intent = new Intent(mContext, TinyWindowPlayActivity.class);
+                            CMLog.e("hq","视频");
                         }
                         intent.putExtra(IntentCode.CHOOSE_ID,result);
+                        intent.putExtra(IntentCode.TRAIN_ID,chooseID);
                         startActivity(new Intent(intent));
                     }
                     else

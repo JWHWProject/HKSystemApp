@@ -186,16 +186,16 @@ public class UserServiceImpl
                 .startPost(URLUtil.START_TRAIN, param, tag);
     }
 
-    public void finishTrain(String trainingID, List<String> picUrlList, String tag)
+    public void finishTrain(String recordID, List<String> picUrlList, String tag)
     {
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("trainingID", trainingID);
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("recordID", recordID);
         if (picUrlList != null)
         {
             param.put("picUrlList", new Gson().toJson(picUrlList));
         }
         new NetWork()
-                .startPost(URLUtil.FINISH_TRAIN, param, tag);
+                .startPost2(URLUtil.FINISH_TRAIN, param, tag);
     }
 
     public void testDetail(String examID, String tag)

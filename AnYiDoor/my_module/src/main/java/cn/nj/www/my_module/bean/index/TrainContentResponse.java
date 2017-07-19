@@ -1,17 +1,21 @@
 package cn.nj.www.my_module.bean.index;
 
 
+import java.util.List;
+
 import cn.nj.www.my_module.bean.BaseResponse;
 
 public class TrainContentResponse extends BaseResponse
 {
 
 
+
     private TrainingBean training;
+
 
     private String videoUrl;
 
-    private String picUrlList;
+    private List<String> picUrlList;
 
     public TrainingBean getTraining()
     {
@@ -33,12 +37,12 @@ public class TrainContentResponse extends BaseResponse
         this.videoUrl = videoUrl;
     }
 
-    public String getPicUrlList()
+    public List<String> getPicUrlList()
     {
         return picUrlList;
     }
 
-    public void setPicUrlList(String picUrlList)
+    public void setPicUrlList(List<String> picUrlList)
     {
         this.picUrlList = picUrlList;
     }

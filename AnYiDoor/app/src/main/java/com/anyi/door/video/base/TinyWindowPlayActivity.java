@@ -31,31 +31,39 @@ import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.ToastUtil;
 
 
-public class TinyWindowPlayActivity extends AppCompatActivity {
+public class TinyWindowPlayActivity extends AppCompatActivity
+{
 
     @Bind(R.id.iv_img1)
     ImageView ivImg1;
+
     @Bind(R.id.iv_img2)
     ImageView ivImg2;
+
     @Bind(R.id.iv_img3)
     ImageView ivImg3;
+
     private NiceVideoPlayer mNiceVideoPlayer;
 
     private Button bnFinish;
+
     private TakePicMethod takePicMethod;
+
     private boolean peiXunComplete = false;
 
     private TrainContentResponse mTrainContentResponse;
 
+    private String trainId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiny_window_play);
         ButterKnife.bind(this);
         //获取数据
-         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
-
+        mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
+        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         //隐藏标题栏,有效
         getSupportActionBar().hide();
         initTitle();
@@ -63,27 +71,38 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
 
     }
 
-    private void initTitle() {
-        if(!peiXunComplete) {
-            findViewById(R.id.top_view_close_iv).setOnClickListener(new View.OnClickListener() {
+    private void initTitle()
+    {
+        if (!peiXunComplete)
+        {
+            findViewById(R.id.top_view_close_iv).setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                             "您确定要中途离开培训？", "取消", "确定");
                 }
             });
-        }else{
+        }
+        else
+        {
             finish();
         }
     }
 
     boolean flag = true;
+
     int time = 1;
+
     int maxtime = 1;
+
     int randomTime = -1;
+
     private int picCount = 1;
 
-    private void init() {
+    private void init()
+    {
         bnFinish = (Button) findViewById(R.id.app_finish_bn);
         mNiceVideoPlayer = (NiceVideoPlayer) findViewById(R.id.nice_video_player);
         mNiceVideoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
@@ -101,14 +120,19 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         //初始化surface
         initSurface();
         takePicMethod = new TakePicMethod(TinyWindowPlayActivity.this, mySurfaceView, myHolder);
-        bnFinish.setOnClickListener(new View.OnClickListener() {
+        bnFinish.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                if (time > maxtime) {
+            public void onClick(View view)
+            {
+                if (time > maxtime)
+                {
                     picCount = 3;
                     TakePicture();
-                    peiXunComplete=true;
-                } else {
+                    peiXunComplete = true;
+                }
+                else
+                {
                     DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "您现在还无法完成培训,还没有达到培训时间!", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                 }
             }
@@ -116,26 +140,39 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         picCount = 1;
         TakePicture();
         flag = true;
-        new Thread(new Runnable() {
+        new Thread(new Runnable()
+        {
             @Override
-            public void run() {
-                while (flag) {
-                    try {
+            public void run()
+            {
+                while (flag)
+                {
+                    try
+                    {
                         Thread.sleep(1000);
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
                         e.printStackTrace();
                     }
-                    if (randomTime == -1) {
-                        if (mNiceVideoPlayer.getDuration() != 0) {
+                    if (randomTime == -1)
+                    {
+                        if (mNiceVideoPlayer.getDuration() != 0)
+                        {
                             long halftime = mNiceVideoPlayer.getDuration() / 2;
                             maxtime = (int) (halftime / 1000f);
                             Random random = new Random();
-                            if (maxtime == 0) maxtime = 17;
+                            if (maxtime == 0)
+                            {
+                                maxtime = 17;
+                            }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
                         }
-                    } else {
-                        if (time == randomTime) {
+                    }
+                    else
+                    {
+                        if (time == randomTime)
+                        {
                             picCount = 2;
                             TakePicture();
                         }
@@ -149,39 +186,47 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         flag = false;
         FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this));
     }
 
     @Override
-    public void onBackPressed() {
-        if (NiceVideoPlayerManager.instance().onBackPressd()) {
+    public void onBackPressed()
+    {
+        if (NiceVideoPlayerManager.instance().onBackPressd())
+        {
             return;
         }
         super.onBackPressed();
     }
 
     private SurfaceView mySurfaceView;
+
     private SurfaceHolder myHolder;
 
     // 初始化surface
     @SuppressWarnings("deprecation")
-    private void initSurface() {
+    private void initSurface()
+    {
         // 初始化surfaceview
-        if (mySurfaceView == null && myHolder == null) {
+        if (mySurfaceView == null && myHolder == null)
+        {
             mySurfaceView = (SurfaceView) findViewById(R.id.camera_surfaceview);
             // 初始化surfaceholder
             myHolder = mySurfaceView.getHolder();
@@ -190,41 +235,59 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     }
 
     private boolean isTakeingPhoto = false;
+
     CountDownTimer countDownTimer;
-    private void TakePicture() {
-        if (!isTakeingPhoto) {
-            runOnUiThread(new Runnable() {
+
+    private void TakePicture()
+    {
+        if (!isTakeingPhoto)
+        {
+            runOnUiThread(new Runnable()
+            {
                 @Override
-                public void run() {
-                    ToastUtil.makeText(TinyWindowPlayActivity.this,"拍照中,请您对准摄像头注视5秒");
+                public void run()
+                {
+                    ToastUtil.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒");
                 }
             });
             isTakeingPhoto = true;
-            if(countDownTimer==null) {
-                countDownTimer = new CountDownTimer(10000, 3000) {
+            if (countDownTimer == null)
+            {
+                countDownTimer = new CountDownTimer(10000, 3000)
+                {
                     @Override
-                    public void onTick(long millisUntilFinished) {
-                        takePicMethod.startTakePhoto("TinyWindowPlayActivity"+picCount);
+                    public void onTick(long millisUntilFinished)
+                    {
+                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
                     }
 
                     @Override
-                    public void onFinish() {
+                    public void onFinish()
+                    {
                         countDownTimer.cancel();
                         isTakeingPhoto = false;
-                        try {
-                            if (picCount == 1) {
-                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this)+ File.separator+"TinyWindowPlayActivity"+picCount+".jpg"));
-                            } else if (picCount == 2) {
-                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this)+ File.separator+"TinyWindowPlayActivity"+picCount+".jpg"));
-                            } else {
-                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this)+ File.separator+"TinyWindowPlayActivity"+picCount+".jpg"));
+                        try
+                        {
+                            if (picCount == 1)
+                            {
+                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
                             }
-                        } catch (Exception e) {
+                            else if (picCount == 2)
+                            {
+                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+                            }
+                            else
+                            {
+                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+                            }
+                        } catch (Exception e)
+                        {
                         }
                     }
                 };
             }
-            if(countDownTimer!=null) {
+            if (countDownTimer != null)
+            {
                 countDownTimer.start();
             }
         }
