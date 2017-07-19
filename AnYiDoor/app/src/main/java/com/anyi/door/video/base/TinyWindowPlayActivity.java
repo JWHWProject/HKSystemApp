@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anyi.door.R;
-import com.anyi.door.TestListActivity;
 import com.anyi.door.utils.TakePicMethod;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
 import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
@@ -36,7 +36,6 @@ import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
-import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
@@ -48,7 +47,7 @@ import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
 
 
-public class TinyWindowPlayActivity extends BaseActivity {
+public class TinyWindowPlayActivity extends AppCompatActivity {
 
     @Bind(R.id.iv_img1)
     ImageView ivImg1;
@@ -85,26 +84,6 @@ public class TinyWindowPlayActivity extends BaseActivity {
 //        getSupportActionBar().hide();
         initTitle();
         init();
-
-    }
-
-    @Override
-    public void initView() {
-
-    }
-
-    @Override
-    public void initViewData() {
-
-    }
-
-    @Override
-    public void initEvent() {
-
-    }
-
-    @Override
-    public void netResponse(BaseResponse event) {
 
     }
 
@@ -224,7 +203,7 @@ public class TinyWindowPlayActivity extends BaseActivity {
         if (NiceVideoPlayerManager.instance().onBackPressd()) {
             return;
         }
-        DialogUtil.showCloseTwoBnttonDialog(mContext,
+        DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                 "您确定要中途取消考核？", "取消", "确定");
         super.onBackPressed();
     }
@@ -306,7 +285,6 @@ public class TinyWindowPlayActivity extends BaseActivity {
         }
     }
 
-    @Override
     public void onEventMainThread(BaseResponse event) {
         if (event instanceof NoticeEvent) {
             String tag = ((NoticeEvent) event).getTag();
@@ -325,28 +303,28 @@ public class TinyWindowPlayActivity extends BaseActivity {
                     FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                     if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
                         peiXunComplete = true;
-                        DialogUtil.showDialogOneButton(mContext, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                        DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                     } else {
-                        ErrorCode.doCode(mContext, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
+                        ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
                     }
                 } else {
-                    ToastUtil.showError(mContext);
+                    ToastUtil.showError(TinyWindowPlayActivity.this);
                 }
             }
             if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
-                        NetLoadingDialog.getInstance().loading(mContext);
+                        NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId,
                                 uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
                     } else {
                         NetLoadingDialog.getInstance().dismissDialog();
-                        ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                        ErrorCode.doCode(TinyWindowPlayActivity.this, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 } else {
                     NetLoadingDialog.getInstance().dismissDialog();
-                    ToastUtil.showError(mContext);
+                    ToastUtil.showError(TinyWindowPlayActivity.this);
                 }
             }
 
