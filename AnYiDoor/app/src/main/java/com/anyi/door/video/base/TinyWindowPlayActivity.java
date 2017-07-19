@@ -28,7 +28,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
-import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.FinishTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainVideoResponse;
 import cn.nj.www.my_module.bean.index.UploadFileResponse;
@@ -36,8 +35,8 @@ import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
-import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.NetWorkResponse;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
@@ -75,14 +74,15 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);//remove title bar  即隐藏标题栏
+//        //隐藏标题栏,有效
+//        getSupportActionBar().hide();
         setContentView(R.layout.activity_tiny_window_play);
         ButterKnife.bind(this);
         //获取数据
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainVideoResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
-        //隐藏标题栏,有效
-        getSupportActionBar().hide();
-        
+
         initTitle();
         init();
 
@@ -184,6 +184,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
@@ -230,12 +231,12 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
 
     private void TakePicture() {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) return;
         if (!isTakeingPhoto) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒", Toast.LENGTH_SHORT).show();
                 }
             });
             isTakeingPhoto = true;
@@ -268,11 +269,83 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                if(files.size()>=0) {
-                                    UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-                                }else{
+                                if (files.size() >= 0) {
+                                    UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName(), new NetWorkResponse.NetCallBack() {
+                                        @Override
+                                        public void showCallback(BaseResponse event) {
+                                            if (event instanceof NetResponseEvent) {
+                                                String tag = ((NetResponseEvent) event).getTag();
+                                                String result = ((NetResponseEvent) event).getResult();
+                                                NetLoadingDialog.getInstance().dismissDialog();
+                                                if (tag.equals(UploadFileResponse.class.getName())) {
+                                                    if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                                                        UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
+                                                        if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                                                            UserServiceImpl.instance().finishTrain(trainId,
+                                                                    uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName(), new NetWorkResponse.NetCallBack() {
+
+                                                                        @Override
+                                                                        public void showCallback(BaseResponse event) {
+                                                                            if (event instanceof NetResponseEvent) {
+                                                                                String tag = ((NetResponseEvent) event).getTag();
+                                                                                String result = ((NetResponseEvent) event).getResult();
+                                                                                NetLoadingDialog.getInstance().dismissDialog();
+                                                                                if (tag.equals(FinishTrainResponse.class.getName())) {
+                                                                                    NetLoadingDialog.getInstance().dismissDialog();
+                                                                                    if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                                                                                        FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                                                                                        if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
+                                                                                            peiXunComplete = true;
+                                                                                            DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                                                                                        } else {
+                                                                                            ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
+                                                                                        }
+                                                                                    } else {
+                                                                                        ToastUtil.showError(TinyWindowPlayActivity.this);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    });
+                                                        } else {
+                                                            NetLoadingDialog.getInstance().dismissDialog();
+                                                            ErrorCode.doCode(TinyWindowPlayActivity.this, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                                                        }
+                                                    } else {
+                                                        NetLoadingDialog.getInstance().dismissDialog();
+                                                        ToastUtil.showError(TinyWindowPlayActivity.this);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                } else {
                                     UserServiceImpl.instance().finishTrain(trainId,
-                                            null, FinishTrainResponse.class.getName());
+                                            null, FinishTrainResponse.class.getName(), new NetWorkResponse.NetCallBack() {
+
+                                                @Override
+                                                public void showCallback(BaseResponse event) {
+                                                    if (event instanceof NetResponseEvent) {
+                                                        String tag = ((NetResponseEvent) event).getTag();
+                                                        String result = ((NetResponseEvent) event).getResult();
+                                                        NetLoadingDialog.getInstance().dismissDialog();
+                                                        if (tag.equals(FinishTrainResponse.class.getName())) {
+                                                            NetLoadingDialog.getInstance().dismissDialog();
+                                                            if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                                                                FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                                                                if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
+                                                                    peiXunComplete = true;
+                                                                    DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                                                                } else {
+                                                                    ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
+                                                                }
+                                                            } else {
+                                                                ToastUtil.showError(TinyWindowPlayActivity.this);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
                                 }
                             }
                         } catch (Exception e) {
@@ -286,49 +359,53 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         }
     }
 
-    public void onMainEventBus(BaseResponse event) {
-        if (event instanceof NoticeEvent) {
-            String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                finish();
-            }
-        }
-        if (event instanceof NetResponseEvent) {
-
-            String tag = ((NetResponseEvent) event).getTag();
-            String result = ((NetResponseEvent) event).getResult();
-            NetLoadingDialog.getInstance().dismissDialog();
-            if (tag.equals(FinishTrainResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                NetLoadingDialog.getInstance().dismissDialog();
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
-                    if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
-                        peiXunComplete = true;
-                        DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
-                    } else {
-                        ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
-                    }
-                } else {
-                    ToastUtil.showError(TinyWindowPlayActivity.this);
-                }
-            }
-            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
-                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
-                        NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
-                        UserServiceImpl.instance().finishTrain(trainId,
-                                uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
-                    } else {
-                        NetLoadingDialog.getInstance().dismissDialog();
-                        ErrorCode.doCode(TinyWindowPlayActivity.this, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
-                    }
-                } else {
-                    NetLoadingDialog.getInstance().dismissDialog();
-                    ToastUtil.showError(TinyWindowPlayActivity.this);
-                }
-            }
-
-        }
-    }
+//    public void onEventMainThread(BaseResponse event) {
+//        if (event instanceof NoticeEvent) {
+//            String tag = ((NoticeEvent) event).getTag();
+//            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+//                finish();
+//            }
+//        }
+//        if (event instanceof NetResponseEvent) {
+//
+//            String tag = ((NetResponseEvent) event).getTag();
+//            String result = ((NetResponseEvent) event).getResult();
+//            NetLoadingDialog.getInstance().dismissDialog();
+//            if (tag.equals(FinishTrainResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+//                NetLoadingDialog.getInstance().dismissDialog();
+//                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+//                    FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+//                    if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
+//                        peiXunComplete = true;
+//                        DialogUtil.showDialogOneButton(TinyWindowPlayActivity.this, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+//                    } else {
+//                        ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
+//                    }
+//                } else {
+//                    ToastUtil.showError(TinyWindowPlayActivity.this);
+//                }
+//            }
+//            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+//                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+//                    UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
+//                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+////                        NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
+//                        Log.e("sub", "finishTrain");
+//                        UserServiceImpl.instance().finishTrain(trainId,
+//                                uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
+//                    } else {
+//                        NetLoadingDialog.getInstance().dismissDialog();
+//                        ErrorCode.doCode(TinyWindowPlayActivity.this, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+//                    }
+//                } else {
+//                    NetLoadingDialog.getInstance().dismissDialog();
+//                    ToastUtil.showError(TinyWindowPlayActivity.this);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void onEvent(BaseResponse event) {
+//
+//    }
 }

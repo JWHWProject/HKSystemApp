@@ -148,7 +148,14 @@ public class UserServiceImpl
 //        fileparams.put("file", files);
         new NetWork().startPost(URLUtil.UPLOAD_PIC, param, fileparams, tag);
     }
-
+    public void uploadPic(List<File> files, String tag, NetWorkResponse.NetCallBack callBack)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        Map<String, List<File>> fileparams = new HashMap<String, List<File>>();
+        fileparams.put("file", files);
+//        fileparams.put("file", files);
+        new NetWork().startPost(URLUtil.UPLOAD_PIC, param, fileparams, tag,callBack);
+    }
     public void returnCard(String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
@@ -210,7 +217,17 @@ public class UserServiceImpl
         new NetWork()
                 .startPost2(URLUtil.FINISH_TRAIN, param, tag);
     }
-
+    public void finishTrain(String recordID, List<String> picUrlList, String tag, NetWorkResponse.NetCallBack callBack)
+    {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("recordID", recordID);
+        if (picUrlList != null)
+        {
+            param.put("picUrlList", picUrlList);
+        }
+        new NetWork()
+                .startPost2(URLUtil.FINISH_TRAIN, param, tag,callBack);
+    }
     public void testDetail(String examID, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();

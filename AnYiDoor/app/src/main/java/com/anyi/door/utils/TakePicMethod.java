@@ -90,12 +90,12 @@ public class TakePicMethod {
         // 自动对焦
         try {
             myCamera.autoFocus(myAutoFocus);
+            // 对焦后拍照
+            myCamera.takePicture(null, null, myPicCallback);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // 对焦后拍照
-        myCamera.takePicture(null, null, myPicCallback);
     }
 
     // 拍照成功回调函数

@@ -2,6 +2,7 @@ package cn.nj.www.my_module.network;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -132,7 +133,34 @@ public class NetWork {
         mPendingTasks.offer(task);
         task.mFuture = mExecutor.submit(task);
     }
-
+    /**
+     * <网络层交互 纯文本> <功能详细描述>
+     */
+    public void startPost(final String url, final Map<String, String> map, String tag, NetWorkResponse.NetCallBack callBack) {
+        HttpTask task = new HttpTask(tag, url, map, null,callBack);
+        mRequestHandle = task;
+        mPendingTasks.offer(task);
+        task.mFuture = mExecutor.submit(task);
+    }
+    /**
+     * <网络层交互 纯文本> <功能详细描述>
+     */
+    public void startPost2(final String url, final Map<String, Object> map, String tag, NetWorkResponse.NetCallBack callBack) {
+        HttpTask task = new HttpTask(tag, url, map,callBack);
+        mRequestHandle = task;
+        mPendingTasks.offer(task);
+        task.mFuture = mExecutor.submit(task);
+    }
+    /**
+     * <网络层交互 文件上传> <功能详细描述>
+     */
+    public void startPost(final String url, final Map<String, String> map,
+                          final Map<String, List<File>> fileParameters, String tag, NetWorkResponse.NetCallBack callBack) {
+        HttpTask task = new HttpTask(tag, url, map, fileParameters,callBack);
+        mRequestHandle = task;
+        mPendingTasks.offer(task);
+        task.mFuture = mExecutor.submit(task);
+    }
     /**
      * <网络层交互 崩溃日志文件上传-永远在后台>
      * <功能详细描述>
@@ -161,6 +189,7 @@ public class NetWork {
 
         private Map<String, List<File>> mfileParameters;
         private Map<String, Object> objectParamMap;
+        NetWorkResponse.NetCallBack netCallBack;
 
         private HttpTask(String tag, String uri, Map<String, String> paramMap, Map<String, List<File>> fileParameters) {
             this.tag = tag;
@@ -172,6 +201,19 @@ public class NetWork {
             this.tag = tag;
             mUri = uri;
             objectParamMap = objectMap;
+        }
+        private HttpTask(String tag, String uri, Map<String, String> paramMap, Map<String, List<File>> fileParameters, NetWorkResponse.NetCallBack callBack) {
+            this.tag = tag;
+            mUri = uri;
+            mParamMap = paramMap;
+            mfileParameters = fileParameters;
+            netCallBack=callBack;
+        }
+        private HttpTask(String tag, String uri, Map<String, Object> objectMap, NetWorkResponse.NetCallBack callBack) {
+            this.tag = tag;
+            mUri = uri;
+            objectParamMap = objectMap;
+            netCallBack=callBack;
         }
         private void cancel() {
             if (null != mFuture) {
@@ -195,6 +237,9 @@ public class NetWork {
                         CMLog.e("hq",mUri + ":" + GsonHelper.toJson(mParamMap));
                         if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                             EventBus.getDefault().post(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isCache));
+                            if(netCallBack!=null){
+                                netCallBack.showCallback(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isCache));
+                            }
                         }
                     }
                 }
@@ -217,8 +262,15 @@ public class NetWork {
                 //出现过  IOException Connection to http://221.226.118.110:18080 refused, 调试发现根本没有通知到社区页面，所以一直显示加载页
                 if (result == null || result.equals("")) {
                     EventBus.getDefault().post(new NetResponseEvent("", tag, NetResponseEvent.Cache.isNetWork));
+                    if(netCallBack!=null){
+                        netCallBack.showCallback(new NetResponseEvent("", tag, NetResponseEvent.Cache.isNetWork));
+                    }
                 } else if (!Thread.interrupted()) {//线程未被中断
                     EventBus.getDefault().post(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isNetWork));
+                    Log.e("sub","netCallBack");
+                    if(netCallBack!=null){
+                        netCallBack.showCallback(new NetResponseEvent(result, tag, NetResponseEvent.Cache.isNetWork));
+                    }
                 }
             }
         }
