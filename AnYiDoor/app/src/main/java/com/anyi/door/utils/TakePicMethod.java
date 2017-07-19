@@ -88,7 +88,11 @@ public class TakePicMethod {
         }
 
         // 自动对焦
-        myCamera.autoFocus(myAutoFocus);
+        try {
+            myCamera.autoFocus(myAutoFocus);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 对焦后拍照
         myCamera.takePicture(null, null, myPicCallback);
