@@ -12,14 +12,20 @@
         layout="@layout/layout_top"/>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/pxtodp1"
         android:layout_below="@+id/common_back"
         android:background="@color/line"/>
 
     <ListView
+        android:id="@+id/myListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+        android:dividerHeight="@dimen/pxtodp20"
+        android:divider="@color/transparent"
+        android:layout_above="@+id/bn_finish"
+        android:layout_below="@+id/line"></ListView>
 
     <Button
         android:id="@+id/bn_finish"

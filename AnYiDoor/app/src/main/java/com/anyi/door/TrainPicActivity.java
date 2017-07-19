@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.nj.www.my_module.adapter.CommonAdapter;
+import cn.nj.www.my_module.adapter.ViewHolder;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
@@ -23,6 +27,7 @@ import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
 
@@ -36,9 +41,15 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.bn_finish)
     Button bnFinish;
 
+    @Bind(R.id.myListView)
+    ListView myListView;
+
     private TrainContentResponse mTrainContentResponse;
 
     private String trainId;
+
+    private CommonAdapter<TrainContentResponse.ImageBean> adapter;
+
 
 
     @Override
@@ -58,7 +69,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
-        headView.setTitleText("");
+        headView.setTitleText(mTrainContentResponse.getTraining().getTrainingName());
         headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
     }
@@ -69,7 +80,17 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     {
         initTitle();
 
+        myListView.setAdapter(adapter = new CommonAdapter<TrainContentResponse.ImageBean>(mContext, mTrainContentResponse.getImageBeans(), R.layout.item_pic)
+        {
+            @Override
+            public void convert(ViewHolder helper, TrainContentResponse.ImageBean item)
+            {
+                ImageView iv = helper.getView(R.id.ivImg);
+                ImageLoaderUtil.getInstance().initImage(mContext,item.getUrl(),iv,"");
+            }
+        });
     }
+
 
     @Override
     public void initViewData()

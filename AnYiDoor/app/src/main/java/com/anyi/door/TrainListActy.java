@@ -171,7 +171,9 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             }
             if (NotiTag.TAG_DO_RIGHT.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-                startActivity(new Intent(mContext, SearchTrainListActy.class));
+                Intent testIntent = new  Intent(mContext, SearchTrainListActy.class);
+                testIntent.putExtra(IntentCode.TEST_INTENT,"1");
+                startActivity(testIntent);
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {

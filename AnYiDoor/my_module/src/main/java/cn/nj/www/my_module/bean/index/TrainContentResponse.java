@@ -1,6 +1,7 @@
 package cn.nj.www.my_module.bean.index;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.nj.www.my_module.bean.BaseResponse;
@@ -8,8 +9,35 @@ import cn.nj.www.my_module.bean.BaseResponse;
 public class TrainContentResponse extends BaseResponse
 {
 
+    public static class ImageBean
+    {
+        public ImageBean(String url)
+        {
+            this.url = url;
+        }
 
+        public String getUrl()
+        {
+            return url;
+        }
 
+        public void setUrl(String url)
+        {
+            this.url = url;
+        }
+
+        String url;
+    }
+
+    public  List<ImageBean> getImageBeans(){
+        List<ImageBean> list= new ArrayList<>();
+        for (int i = 0; i < picUrlList.size();i++){
+            if (picUrlList.get(i).toString().length()>0){
+                list.add(new ImageBean(picUrlList.get(i)));
+            }
+        }
+        return list;
+    }
     private TrainingBean training;
 
 
