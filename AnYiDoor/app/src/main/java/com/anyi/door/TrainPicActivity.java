@@ -9,8 +9,6 @@ import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.FinishTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainContentResponse;
-import cn.nj.www.my_module.constant.Constants;
-import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
@@ -18,9 +16,7 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
-import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
-import cn.nj.www.my_module.tools.ToastUtil;
 
 /**
  * 完成培训视频
@@ -30,12 +26,16 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 
     private String trainId;
 
+    private String result;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acty_train_pic);
+        result = getIntent().getStringExtra(IntentCode.CHOOSE_ID);
+        TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
         initAll();
     }
 
@@ -60,7 +60,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initViewData()
     {
-        UserServiceImpl.instance().trainContent(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class.getName());
+
     }
 
     @Override
@@ -91,25 +91,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-            if (tag.equals(TrainContentResponse.class.getName()))
-            {
-                TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result))
-                {
-                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
-                    {
 
-                    }
-                    else
-                    {
-                        ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
-                    }
-                }
-                else
-                {
-                    ToastUtil.showError(this);
-                }
-            }
         }
 
     }

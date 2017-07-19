@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.anyi.door.video.base.TinyWindowPlayActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -218,16 +219,9 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode()))
                     {
-
-                        Intent intent;
-                        if (fileType.equals("1"))
-                        {
-                            intent = new Intent(mContext, TrainPicActivity.class);
-                        }else {
-                            intent = new Intent(mContext, TrainVideoActivity.class);
-                        }
-                        intent.putExtra(IntentCode.CHOOSE_ID,chooseID);
-                        startActivity(new Intent(intent));
+                        //因为视频页面没有集成EventBus，就在该页面获取到数据后再传过去
+                        NetLoadingDialog.getInstance().loading(mContext);
+                        UserServiceImpl.instance().trainContent(chooseID, TrainContentResponse.class.getName());
                     }
                     else
                     {
@@ -239,7 +233,33 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                     ToastUtil.showError(this);
                 }
             }
-
+            if (tag.equals(TrainContentResponse.class.getName()))
+            {
+                TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
+                    {
+                        Intent intent;
+                        if (fileType.equals("1"))
+                        {
+                            intent = new Intent(mContext, TrainPicActivity.class);
+                        }else {
+                            intent = new Intent(mContext, TinyWindowPlayActivity.class);
+                        }
+                        intent.putExtra(IntentCode.CHOOSE_ID,result);
+                        startActivity(new Intent(intent));
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
             if (tag.equals(TrainListResponse.class.getName()))
             {
                 TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
