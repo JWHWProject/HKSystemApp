@@ -1,5 +1,6 @@
 package com.anyi.door;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -7,8 +8,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.DisplayUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
@@ -299,7 +303,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                                     .setUpdateDesc(mUpdateResponse.getAppVersionInfo().getUpdateDescription())
                                     .setFileName("anyi.apk")
                                     .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
-
+                            setDialogWindowAttr(mForceUpdateDialog);
                         }
 
                     }
@@ -317,6 +321,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    public void setDialogWindowAttr(Dialog dlg)
+    {
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = DisplayUtil.getWidth(mContext) * 3 / 5;//宽高可设置具体大小
+
+        dlg.getWindow().setAttributes(lp);
+    }
 
     /**
      * Banner展示网络数据

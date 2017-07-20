@@ -236,7 +236,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="联系\n方式"
+                        android:text="联系方式"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -264,7 +264,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="来自\n单位"
+                        android:text="来自单位"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -291,7 +291,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/pxtodp30"
                         android:gravity="center_vertical"
-                        android:text="身份\n证号"
+                        android:text="身份证号"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -371,7 +371,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="是否\n培训"
+                        android:text="是否培训"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 
@@ -411,7 +411,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="外来\n类型"
+                        android:text="外来类型"
                         android:textColor="@color/title_black"
                         android:textSize="@dimen/pxtodp30"/>
 

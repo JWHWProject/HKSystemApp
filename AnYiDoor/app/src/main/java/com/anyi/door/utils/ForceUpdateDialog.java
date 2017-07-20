@@ -1,13 +1,16 @@
 package com.anyi.door.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -15,12 +18,14 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anyi.door.R;
 import com.qiangxi.checkupdatelibrary.callback.DownloadCallback;
 import com.qiangxi.checkupdatelibrary.http.HttpRequest;
 import com.qiangxi.checkupdatelibrary.utils.ApplicationUtil;
@@ -29,23 +34,11 @@ import com.qiangxi.checkupdatelibrary.views.NumberProgressBar;
 
 import java.io.File;
 
+import static com.qiangxi.checkupdatelibrary.dialog.UpdateDialog.UPDATE_DIALOG_PERMISSION_REQUEST_CODE;
+
 /**
  * Created by qing on 2017/7/19.
  */
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.view.Window;
-import android.view.WindowManager;
-
-import com.qiangxi.checkupdatelibrary.R;
-
-
-import cn.nj.www.my_module.bean.NoticeEvent;
-import cn.nj.www.my_module.constant.NotiTag;
-import de.greenrobot.event.EventBus;
-
-import static com.qiangxi.checkupdatelibrary.dialog.UpdateDialog.UPDATE_DIALOG_PERMISSION_REQUEST_CODE;
 
 /**
  * Created by qiang_xi on 2016/10/6 14:34.
@@ -137,12 +130,16 @@ public class ForceUpdateDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);// android:windowNoTitle
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);// android:backgroundDimEnabled默认是true的
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));// android:windowBackground
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.width = 200;
+//                params.height = 200 ;
+        this.getWindow().setAttributes(params);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = LayoutInflater.from(context).inflate(R.layout.checkupdatelibrary_force_update_dialog_layout, null);
+        view = LayoutInflater.from(context).inflate(R.layout.checkupdatelibrary_force_update_dialog_layouta, null);
         setContentView(view);
         initView();
         initData();
@@ -225,6 +222,7 @@ public class ForceUpdateDialog extends Dialog {
             }
         });
         forceUpdate.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 int permissionStatus = ContextCompat.checkSelfPermission(context, Manifest.permission_group.STORAGE);
