@@ -221,7 +221,7 @@ public class DialogUtil
 
                 Global.loginOut(context);
                 dialog.dismiss();
-                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_CLOSE_ACTIVITY));
+                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_CLOSE_ACTIVITY_FROM_DIALOG));
             }
         });
     }

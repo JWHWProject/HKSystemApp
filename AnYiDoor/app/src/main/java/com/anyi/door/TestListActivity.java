@@ -337,8 +337,11 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-//                DialogUtil.showCloseTwoBnttonDialog(mContext,
-//                        "您确定要中途取消考核？", "取消", "确定");
+                DialogUtil.showCloseTwoBnttonDialog(mContext,
+                        "您确定要中途取消考核？", "取消", "确定");
+            }
+            if (NotiTag.TAG_CLOSE_ACTIVITY_FROM_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 finish();
             }
         }

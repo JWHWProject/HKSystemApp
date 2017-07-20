@@ -19,6 +19,7 @@ public class NotiTag
      * 关闭当前界面
      */
     public static final String TAG_CLOSE_ACTIVITY = "close_activity";
+    public static final String TAG_CLOSE_ACTIVITY_FROM_DIALOG = "TAG_CLOSE_ACTIVITY_FROM_DIALOG";
     public static final String TAG_COMFIRM_CLOSE = "TAG_COMFIRM_CLOSE";
     public static final String TAG_BACK_ACTIVITY = "TAG_BACK_ACTIVITY";
 
