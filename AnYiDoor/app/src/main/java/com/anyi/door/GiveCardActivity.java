@@ -216,6 +216,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 String result = processIntent(getIntent());
                 String str = Util.hex2Decimal(result);
                 etCardNumber.setText(str + "");
+                etName.requestFocus();
             }
             isFirst = false;
         }
@@ -231,6 +232,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             String result = processIntent(intent);
             String str = Util.hex2Decimal(result);
             etCardNumber.setText(str + "");
+            etName.requestFocus();
         }
     }
 
@@ -487,10 +489,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                                         case 0:
                                                             llInner.setVisibility(View.GONE);
                                                             llOuter.setVisibility(View.VISIBLE);
+                                                            etName.setHint("请输入外来人员姓名");
                                                             break;
                                                         case 1:
                                                             llInner.setVisibility(View.VISIBLE);
                                                             llOuter.setVisibility(View.GONE);
+                                                            etName.setHint("请输入企业人员姓名");
                                                             break;
                                                     }
                                                 }

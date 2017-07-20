@@ -70,7 +70,7 @@
                 <EditText
                     android:id="@+id/et_card_number"
                     style="@style/register_input_user_infos_et"
-                    android:hint="请输入卡号"/>
+                    android:hint="请自动读取卡号或者输入卡号"/>
             </LinearLayout>
 
             <View
@@ -93,7 +93,7 @@
                 <EditText
                     android:id="@+id/et_name"
                     style="@style/register_input_user_infos_et"
-                    android:hint="请输入姓名"/>
+                    android:hint="请输入外来人员姓名"/>
             </LinearLayout>
 
 
