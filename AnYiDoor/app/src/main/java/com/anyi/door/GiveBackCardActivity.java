@@ -34,6 +34,7 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -201,6 +202,7 @@ public class GiveBackCardActivity extends BaseActivity  {
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     ReturnCardResponse mReturnCardResponse = GsonHelper.toType(result, ReturnCardResponse.class);
                     if (Constants.SUCESS_CODE.equals(mReturnCardResponse.getResultCode())) {
+                        DialogUtil.showDialogOneButton(mContext,"还卡成功","确定",NotiTag.TAG_CLOSE_ACTIVITY);
                     }
                     else {
                         ErrorCode.doCode(mContext, mReturnCardResponse.getResultCode(), mReturnCardResponse.getDesc());
