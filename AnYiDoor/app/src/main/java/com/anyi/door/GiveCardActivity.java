@@ -690,6 +690,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                     {
                                         tvUserTrain.setText(trainArr[which]);
                                         userTrainIndex = which;
+                                        if (trainArr[which].equals("不培训")){
+                                            findViewById(R.id.rl_date).setVisibility(View.GONE);
+                                        }else {
+                                            findViewById(R.id.rl_date).setVisibility(View.VISIBLE);
+                                        }
                                         dialog.dismiss();
                                     }
 

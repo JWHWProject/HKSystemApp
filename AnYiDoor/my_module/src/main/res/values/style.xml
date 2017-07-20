@@ -176,6 +176,14 @@
         <item name="android:textSize">@dimen/pxtosp30</item>
         <item name="android:textColor">@color/title_black</item>
     </style>
+    <style name="giveCardStyle">
+        <item name="android:layout_width">@dimen/pxtodp140</item>
+        <item name="android:layout_marginRight">@dimen/pxtodp30</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/pxtosp30</item>
+        <item name="android:textColor">@color/title_black</item>
+        <item name="android:gravity">center</item>
+    </style>
 
     <style name="account_manage_head_rl">
         <item name="android:layout_width">match_parent</item>

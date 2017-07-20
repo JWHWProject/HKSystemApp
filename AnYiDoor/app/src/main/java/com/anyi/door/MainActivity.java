@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyi.door.utils.ForceUpdateDialog;
+import com.anyi.door.video.base.TinyWindowPlayActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

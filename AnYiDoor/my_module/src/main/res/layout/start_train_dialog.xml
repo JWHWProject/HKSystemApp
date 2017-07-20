@@ -121,7 +121,7 @@
             android:background="@drawable/money_nocolor_dialogbg"
             android:gravity="center"
             android:text="确认"
-            android:textColor="@color/money_dialog_blue_text"
+            android:textColor="@color/line"
             android:textSize="@dimen/pxtosp36"/>
 
     </LinearLayout>

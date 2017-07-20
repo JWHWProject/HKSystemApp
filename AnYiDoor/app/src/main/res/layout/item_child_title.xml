@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:paddingLeft="@dimen/pxtodp26"
+        android:paddingLeft="@dimen/pxtodp40"
         android:layout_toRightOf="@+id/view1"
         android:textSize="@dimen/pxtosp30"
         />
