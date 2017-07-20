@@ -7,4 +7,19 @@ public class GiveOutterCardResponse extends BaseResponse
 {
 
 
+    /**
+     * trainingID :
+     */
+
+    private String trainingID;
+
+    public String getTrainingID()
+    {
+        return trainingID;
+    }
+
+    public void setTrainingID(String trainingID)
+    {
+        this.trainingID = trainingID;
+    }
 }

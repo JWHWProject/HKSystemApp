@@ -64,4 +64,5 @@
     <string name="name_szlib_nanshan">深圳图书馆（南山）</string>
     <string name="name_lib_readercard">读者证</string>
     <string name="name_lib_booktag">书籍标签</string>
+    <string name="finish_train">完成培训</string>
 </resources>

@@ -196,15 +196,7 @@ public class UserServiceImpl
         new NetWork()
                 .startPost(URLUtil.START_TRAIN, param, tag);
     }
-    public void startTrain(String trainingID, String cardNo, String tag)
-    {
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("trainingID", trainingID);
-        param.put("cardNo", cardNo);
-        param.put("userID", Global.getUserId());
-        new NetWork()
-                .startPost(URLUtil.START_TRAIN, param, tag);
-    }
+
 
     public void finishTrain(String recordID, List<String> picUrlList, String tag)
     {
@@ -275,6 +267,5 @@ public class UserServiceImpl
         new NetWork()
                 .startPost(URLUtil.uploaderFile, param, fileparams, tag);
     }
-
 
 }

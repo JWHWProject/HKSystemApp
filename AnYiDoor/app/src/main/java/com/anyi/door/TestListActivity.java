@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.ListView02)
     MyListView listView2;
 
+    @Bind(R.id.getBn)
+    Button bnFinish;
+
     @Bind(R.id.tv3)
     TextView tv3;
 
@@ -86,6 +90,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
 
     private String examID;
+
+    private TestListActivity.MyTime myTime;
 
 
     @Override
@@ -108,6 +114,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
     }
+
     boolean flag = true;
 
     int time = 1;
@@ -117,7 +124,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     int randomTime = -1;
 
     private int picCount = 1;
+
     private TakePicMethod takePicMethod;
+
     @Override
     public void initView()
     {
@@ -126,30 +135,42 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         takePicMethod = new TakePicMethod(TestListActivity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
+
         flag = true;
-        new Thread(new Runnable() {
+        new Thread(new Runnable()
+        {
             @Override
-            public void run() {
-                while (flag) {
-                    try {
+            public void run()
+            {
+                while (flag)
+                {
+                    try
+                    {
                         Thread.sleep(1000);
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
                         e.printStackTrace();
                     }
-                    if (randomTime == -1) {
-                        if (answerList.size()>0) {
+                    if (randomTime == -1)
+                    {
+                        if (answerList.size() > 0)
+                        {
 //                            long halftime = mNiceVideoPlayer.getDuration() / 2;
 //                            maxtime = (int) (halftime / 1000f);
-                            maxtime= answerList.size()*4;
+                            maxtime = answerList.size() * 4;
                             Random random = new Random();
-                            if (maxtime == 0) {
+                            if (maxtime == 0)
+                            {
                                 maxtime = 17;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
                         }
-                    } else {
-                        if (time == randomTime) {
+                    }
+                    else
+                    {
+                        if (time == randomTime)
+                        {
                             picCount = 2;
                             TakePicture();
                         }
@@ -159,15 +180,18 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             }
         }).start();
     }
+
     private SurfaceView mySurfaceView;
 
     private SurfaceHolder myHolder;
 
     // 初始化surface
     @SuppressWarnings("deprecation")
-    private void initSurface() {
+    private void initSurface()
+    {
         // 初始化surfaceview
-        if (mySurfaceView == null && myHolder == null) {
+        if (mySurfaceView == null && myHolder == null)
+        {
             mySurfaceView = (SurfaceView) findViewById(R.id.camera_surfaceview);
             // 初始化surfaceholder
             myHolder = mySurfaceView.getHolder();
@@ -179,28 +203,40 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     CountDownTimer countDownTimer;
 
-    private void TakePicture() {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)return;
-        if (!isTakeingPhoto) {
-            runOnUiThread(new Runnable() {
+    private void TakePicture()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            return;
+        }
+        if (!isTakeingPhoto)
+        {
+            runOnUiThread(new Runnable()
+            {
                 @Override
-                public void run() {
-                    Toast.makeText(TestListActivity.this, "拍照中,请您对准摄像头注视5秒",Toast.LENGTH_SHORT).show();
+                public void run()
+                {
+                    Toast.makeText(TestListActivity.this, "拍照中,请您对准摄像头注视5秒", Toast.LENGTH_SHORT).show();
                 }
             });
             isTakeingPhoto = true;
-            if (countDownTimer == null) {
-                countDownTimer = new CountDownTimer(10000, 3000) {
+            if (countDownTimer == null)
+            {
+                countDownTimer = new CountDownTimer(10000, 3000)
+                {
                     @Override
-                    public void onTick(long millisUntilFinished) {
+                    public void onTick(long millisUntilFinished)
+                    {
                         takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
                     }
 
                     @Override
-                    public void onFinish() {
+                    public void onFinish()
+                    {
                         countDownTimer.cancel();
                         isTakeingPhoto = false;
-                        try {
+                        try
+                        {
 //                            if (picCount == 1) {
 //                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
 //                            } else if (picCount == 2) {
@@ -208,41 +244,44 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //                            } else {
 //                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
 //                            }
-                            if (picCount == 3) {
+                            if (picCount == 3)
+                            {
                                 List<File> files = null;
-                                try {
+                                try
+                                {
                                     files = new ArrayList<>();
                                     files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 1 + ".jpg"));
                                     files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 2 + ".jpg"));
                                     files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 3 + ".jpg"));
-                                } catch (Exception e) {
+                                } catch (Exception e)
+                                {
                                     e.printStackTrace();
                                 }
-                                if(files.size()>=0) {
+                                if (files.size() >= 0)
+                                {
                                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-                                }else{
+                                }
+                                else
+                                {
                                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
                                     UserServiceImpl.instance().finishTest(examID, answerList, null,
                                             FinishTestResponse.class.getName());
                                 }
                             }
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                         }
                     }
                 };
             }
-            if (countDownTimer != null) {
+            if (countDownTimer != null)
+            {
                 countDownTimer.start();
             }
         }
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        flag=false;
-        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
-    }
+
 
     @Override
     public void initViewData()
@@ -258,7 +297,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     public void initEvent()
     {
 
-        findViewById(R.id.getBn).setOnClickListener(new View.OnClickListener()
+        bnFinish.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -303,16 +342,22 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
                 //获取到所有数据，提交
-                if (time > maxtime) {
+                if (time > maxtime)
+                {
                     picCount = 3;
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
                         UserServiceImpl.instance().finishTest(examID, answerList, null,
                                 FinishTestResponse.class.getName());
-                    }else {
+                    }
+                    else
+                    {
                         TakePicture();
                     }
-                } else {
+                }
+                else
+                {
                     DialogUtil.showDialogOneButton(
                             TestListActivity.this, "您现在还无法完成考核~", "我知道了"
                             , "");
@@ -349,6 +394,10 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                         "您确定要中途取消考核？", "取消", "确定");
             }
             if (NotiTag.TAG_CLOSE_ACTIVITY_FROM_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                finish();
+            }
+            if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 finish();
             }
@@ -396,8 +445,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 multiltyAdapter = new MultiltyAdapter(mContext, valueList, examID);
                                 listView3.setAdapter(multiltyAdapter);
                             }
-                        }
 
+                        }
+                        startTime(Double.parseDouble(examBeanList.size() * 4 + ""));
                     }
                     else
                     {
@@ -417,7 +467,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     FinishTestResponse mFinishTestResponse = GsonHelper.toType(result, FinishTestResponse.class);
                     if (Constants.SUCESS_CODE.equals(mFinishTestResponse.getResultCode()))
                     {
-                        DialogUtil.showDialogOneButton(mContext, "已完成考核", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                        DialogUtil.showDialogOneButton(mContext, "已完成考核", "我知道了", NotiTag.TAG_CLOSE);
                     }
                     else
                     {
@@ -429,18 +479,25 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     ToastUtil.showError(mContext);
                 }
             }
-            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
-                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
+                    {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
                         UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
-                    } else {
+                    }
+                    else
+                    {
                         NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
-                } else {
+                }
+                else
+                {
                     NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
@@ -455,4 +512,57 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         DialogUtil.showCloseTwoBnttonDialog(mContext,
                 "您确定要中途取消考核？", "取消", "确定");
     }
+
+
+    /**
+     * 倒计时
+     */
+    private class MyTime extends CountDownTimer
+    {
+        public MyTime(long millisInFuture, long countDownInterval)
+        {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish()
+        {
+            bnFinish.setEnabled(true);
+            bnFinish.setText(getResources().getString(R.string.finish_train));
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished)
+        {
+            bnFinish.setEnabled(false);
+            bnFinish.setText("提交(" + GeneralUtils.splitToSecondTime((millisUntilFinished / 1000) + "") + ")");
+        }
+    }
+
+    private void startTime(Double time)
+    {
+        cancelTime();
+        bnFinish.setEnabled(false);
+        myTime = new MyTime(time.longValue() * 1000, Constants.Countdown_end);
+        myTime.start();
+    }
+
+    private void cancelTime()
+    {
+        if (myTime != null)
+        {
+            myTime.cancel();
+            myTime = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        flag = false;
+        cancelTime();
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
+    }
+
 }

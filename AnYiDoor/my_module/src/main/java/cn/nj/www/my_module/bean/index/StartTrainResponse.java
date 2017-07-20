@@ -7,4 +7,19 @@ public class StartTrainResponse extends BaseResponse
 {
 
 
+    /**
+     * recordID : 154
+     */
+
+    private String recordID;
+
+    public String getRecordID()
+    {
+        return recordID;
+    }
+
+    public void setRecordID(String recordID)
+    {
+        this.recordID = recordID;
+    }
 }

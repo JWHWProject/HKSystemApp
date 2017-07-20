@@ -56,6 +56,7 @@
         android:layout_marginTop="@dimen/pxtodp54"
         android:background="@drawable/common_pink_bn"
         android:text="完成培训"
+        android:enabled="false"
         android:textColor="@color/white_color"
         android:textSize="@dimen/pxtosp34"/>
 

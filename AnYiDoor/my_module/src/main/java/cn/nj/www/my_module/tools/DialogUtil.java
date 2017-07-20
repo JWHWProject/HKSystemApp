@@ -77,7 +77,13 @@ public class DialogUtil
             }
         });
     }
-    public static void startTrainDialog(final Context context, final String tag)
+    public static void startTestDialog(final Context context, final String tag){
+        startTrainOrExamDialog(context,tag,"确定开始考核");
+    }
+    public static void startTrainDialog(final Context context, final String tag){
+        startTrainOrExamDialog(context,tag,"确定开始培训");
+    }
+    public static void startTrainOrExamDialog(final Context context, final String tag,String title)
     {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.start_train_dialog);
@@ -85,8 +91,10 @@ public class DialogUtil
         dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
         final EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
         final EditText etName = (EditText) dialog.findViewById(R.id.et_name);
+        final TextView tvName = (TextView) dialog.findViewById(R.id.dialogName_tv);
         Button bnCancel = (Button) dialog.findViewById(R.id.transfer_cancel_bn);
         Button bnOk = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        tvName.setText(title);
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         bnCancel.setOnClickListener(new View.OnClickListener()

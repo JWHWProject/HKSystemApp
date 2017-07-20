@@ -1,6 +1,8 @@
 package cn.nj.www.my_module.bean.index;
 
 
+import java.util.List;
+
 import cn.nj.www.my_module.bean.BaseResponse;
 
 public class TrainVideoResponse extends BaseResponse
@@ -30,12 +32,12 @@ public class TrainVideoResponse extends BaseResponse
     /**
      * training : {"id":"3","companyID":"1640","companyName":"杨舜软件测试有限公司","trainingName":"使用培训测试","companyList":"","nickName":"系统管理员","type":1,"outsidersType":"","userID":"1","fileType":2,"videoUrl":"/file/20/screenContent/ad8230d2-39e8-4926-ad6e-e98a109ff4f1.mp4","passScore":"","status":"","delFlag":"","createTime":"2017-07-18"}
      * videoUrl : http://www.12365aq.cn/f/file/20/screenContent/ad8230d2-39e8-4926-ad6e-e98a109ff4f1.mp4
-     * picUrlList :
+     * picUrlList : []
      */
 
     private String videoUrl;
 
-    private String picUrlList;
+    private List<?> picUrlList;
 
     public TrainingBean getTraining()
     {
@@ -57,12 +59,12 @@ public class TrainVideoResponse extends BaseResponse
         this.videoUrl = videoUrl;
     }
 
-    public String getPicUrlList()
+    public List<?> getPicUrlList()
     {
         return picUrlList;
     }
 
-    public void setPicUrlList(String picUrlList)
+    public void setPicUrlList(List<?> picUrlList)
     {
         this.picUrlList = picUrlList;
     }

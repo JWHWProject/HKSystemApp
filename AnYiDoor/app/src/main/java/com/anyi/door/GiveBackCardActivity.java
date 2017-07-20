@@ -174,6 +174,7 @@ public class GiveBackCardActivity extends BaseActivity  {
             @Override
             public void onClick(View v) {
                 if (GeneralUtils.isNotNullOrZeroLenght(appLoginNameEt.getText().toString())){
+                    NetLoadingDialog.getInstance().loading(mContext);
                     UserServiceImpl.instance().returnCard(appLoginNameEt.getText().toString(), ReturnCardResponse.class.getName());
                 }
             }
