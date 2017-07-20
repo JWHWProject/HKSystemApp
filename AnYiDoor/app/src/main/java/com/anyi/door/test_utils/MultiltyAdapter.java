@@ -54,27 +54,23 @@ public class MultiltyAdapter extends BaseAdapter
             String currentAnswer = "";
             if (GeneralUtils.isNotNull(checkMap.get(i).get(1)) && checkMap.get(i).get(1))
             {
-                currentAnswer += "1|";
+                currentAnswer += "1";
             }
             if (GeneralUtils.isNotNull(checkMap.get(i).get(2)) &&checkMap.get(i).get(2))
             {
-                currentAnswer += "2|";
+                currentAnswer += "2";
             }
             if (GeneralUtils.isNotNull(checkMap.get(i).get(3)) &&checkMap.get(i).get(3))
             {
-                currentAnswer += "3|";
+                currentAnswer += "3";
             }
             if (GeneralUtils.isNotNull(checkMap.get(i).get(4)) &&checkMap.get(i).get(4))
             {
-                currentAnswer += "4|";
+                currentAnswer += "4";
             }
             if (GeneralUtils.isNotNull(checkMap.get(i).get(5)) &&checkMap.get(i).get(5))
             {
-                currentAnswer += "5|";
-            }
-            if (currentAnswer.endsWith("|"))
-            {
-                currentAnswer = currentAnswer.substring(0, currentAnswer.length() - 1);
+                currentAnswer += "5";
             }
             OnlineTrainingAnswer answer = getItem(i).getOnlineTrainingAnswer();
             answer.setExamID(examID);

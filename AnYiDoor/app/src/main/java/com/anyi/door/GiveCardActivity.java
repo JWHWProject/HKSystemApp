@@ -57,9 +57,11 @@ import cn.nj.www.my_module.bean.index.GiveOutterCardResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.OuterTypeResponse;
 import cn.nj.www.my_module.bean.index.UploadFileResponse;
+import cn.nj.www.my_module.bean.index.UserListResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
+import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -73,10 +75,6 @@ import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
 import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.AmountView;
-
-import static com.anyi.door.R.id.et_card_number;
-import static com.anyi.door.R.id.tv_user_train;
-import static com.anyi.door.R.id.tv_user_type;
 
 
 /**
@@ -92,13 +90,13 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.tv_sex)
     TextView tvSex;
 
-    @Bind(et_card_number)
+    @Bind(R.id.et_card_number)
     EditText etCardNumber;
 
     @Bind(R.id.et_name)
     EditText etName;
 
-    @Bind(tv_user_type)
+    @Bind(R.id.tv_user_type)
     TextView tvUserType;
 
     @Bind(R.id.tv_department_left)
@@ -149,7 +147,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.amount_view)
     AmountView amountView;
 
-    @Bind(tv_user_train)
+    @Bind(R.id.tv_user_train)
     TextView tvUserTrain;
 
     @Bind(R.id.rl_train)
@@ -288,7 +286,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         headView.setHiddenRight();
     }
 
-    private int amountDay=1;
+    private int amountDay = 1;
+
     @Override
     public void initView()
     {
@@ -307,7 +306,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onAmountChange(View view, int amount)
             {
-                amountDay=amount;
+                amountDay = amount;
 //                Toast.makeText(getApplicationContext(), "Amount=>  " + amount, Toast.LENGTH_SHORT).show();
             }
         });
@@ -534,9 +533,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-            NetLoadingDialog.getInstance().dismissDialog();
+
             if (tag.equals(GiveInnerCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
-            {  NetLoadingDialog.getInstance().dismissDialog();
+            {
+                NetLoadingDialog.getInstance().dismissDialog();
+                NetLoadingDialog.getInstance().dismissDialog();
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
                     GiveInnerCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveInnerCardResponse.class);
@@ -555,13 +556,32 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 }
             }
             if (tag.equals(GiveOutterCardResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
-            {  NetLoadingDialog.getInstance().dismissDialog();
+            {
+                NetLoadingDialog.getInstance().dismissDialog();
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
                     GiveOutterCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveOutterCardResponse.class);
                     if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
                     {
-                        DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+//                        1、外来人员发卡成功后，如果接口里直接返回培训ID，需要直接进入培训页面，确认开始培训，关联当前的cardNo；
+
+                        if (GeneralUtils.isNotNullOrZeroLenght(mGiveInnerCardResponse.getTrainingID()))
+                        {
+                            if (GeneralUtils.isNullOrZeroLenght(SharePref.getString(Constants.USER_LIST, "")))
+                            {
+                                UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
+                            }
+                            Intent trainIntent = new Intent(mContext, TrainListActy.class);
+                            trainIntent.putExtra(IntentCode.TRAIN_ID, mGiveInnerCardResponse.getTrainingID());
+                            trainIntent.putExtra(IntentCode.CARD_NUM, etCardNumber.getText().toString());
+                            startActivity(trainIntent);
+                            finish();
+                        }
+                        else
+                        {
+                            // 2、如果没有返回培训ID，那么只是提示发卡成功，通过首页的培训选择培训后确认开始培训前，需要输入（识别）卡号或者选择内部人员（提供了user/list）接口
+                            DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                        }
                     }
                     else
                     {
@@ -583,16 +603,18 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                         NetLoadingDialog.getInstance().loading(mContext);
                         UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                                 etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
-                                ,userTypeArr[userTypeIndex],tvReasonDetail.getText().toString(),(userTrainIndex+1)+"",amountDay+"",
+                                , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
                                 uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
                     }
                     else
-                    {  NetLoadingDialog.getInstance().dismissDialog();
+                    {
+                        NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 }
                 else
-                {  NetLoadingDialog.getInstance().dismissDialog();
+                {
+                    NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
             }
@@ -601,6 +623,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     }
 
     private String[] resonArr = new String[]{"男", "女"};
+
     private String[] trainArr = new String[]{"需要培训", "不培训"};
 
     List departList = GsonHelper.toType(Global.getLoginData(), LoginResponse.class).getDepartmentList();
@@ -833,14 +856,19 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 return;
             }
             List<File> files = new ArrayList<>();
-            if (img_uri != null && img_uri.size() > 0) {
-                for (UploadGoodsBean item : img_uri) {
-                    if (item != null && item.getUrl() != null) {
+            if (img_uri != null && img_uri.size() > 0)
+            {
+                for (UploadGoodsBean item : img_uri)
+                {
+                    if (item != null && item.getUrl() != null)
+                    {
                         files.add(new File(item.getUrl()));
                     }
                 }
             }
-            if(files.size()>=2){
+            if (files.size() >= 2)
+            {
+                NetLoadingDialog.getInstance().loading(mContext);
                 UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
             }
             else

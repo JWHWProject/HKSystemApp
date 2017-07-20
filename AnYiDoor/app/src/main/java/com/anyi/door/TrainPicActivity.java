@@ -267,6 +267,10 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
                         "您确定要中途取消考核？", "取消", "确定");
             }
+            if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                finish();
+            }
         }
         else if (event instanceof NetResponseEvent)
         {
@@ -280,7 +284,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 {
                     if (Constants.SUCESS_CODE.equals(mFinishTrainResponse.getResultCode()))
                     {
-                        DialogUtil.showDialogOneButton(mContext, "完成培训", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+                        DialogUtil.showDialogOneButton(mContext, "完成培训", "我知道了", NotiTag.TAG_CLOSE);
                     }
                     else
                     {

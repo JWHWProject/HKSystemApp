@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.ToastUtil;
 
 public class WelcomeAndJudgeActivity extends AppCompatActivity
 {
@@ -25,6 +26,7 @@ public class WelcomeAndJudgeActivity extends AppCompatActivity
         }
         else
         {
+            ToastUtil.makeText(this,"无法在该机型上运行");
             finish();
         }
     }

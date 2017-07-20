@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
-import cn.nj.www.my_module.bean.index.SearchTrainListResponse;
 import cn.nj.www.my_module.bean.index.StartTestResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainBean;
@@ -46,9 +45,9 @@ import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
-import cn.nj.www.my_module.tools.SharePref;
 import cn.nj.www.my_module.tools.ToastUtil;
-import de.greenrobot.event.EventBus;
+
+import static cn.nj.www.my_module.constant.IntentCode.TRAIN_ID;
 
 /**
  * train list
@@ -63,7 +62,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     private List<TrainBean> trainBeanListCopy = new ArrayList<>();
 
-    private String chooseID = "";
+    private String trainID = "";
 
     private String fromTest = "";
 
@@ -80,6 +79,8 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     private View topView;
 
+    private String cardNum="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +89,12 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
         if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT))) {
             fromTest = getIntent().getStringExtra(IntentCode.TEST_INTENT);
         }
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(TRAIN_ID))) {
+            trainID = getIntent().getStringExtra(IntentCode.TRAIN_ID);
+            cardNum = getIntent().getStringExtra(IntentCode.CARD_NUM);
+        }
+
+
         initAll();
     }
 
@@ -104,6 +111,10 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
         else {
             headView.setTitleText("培训");
             headView.setRightText("搜索");
+            //从发卡成功界面进入的
+            if (GeneralUtils.isNotNullOrZeroLenght(trainID)&&GeneralUtils.isNotNullOrZeroLenght(cardNum)){
+                DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+            }
         }
     }
 
@@ -162,11 +173,11 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
-                chooseID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
+                trainID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
                 fileType = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getFileType();
                 if (fromTest.equals("")) {
-//                    DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
-                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
+                    DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
+//                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
 
                 }
                 else if (fromTest.equals("1")) {
@@ -214,7 +225,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 CMLog.e("hq", userId);
                 //判断人名是否存在
                 if (GeneralUtils.isNotNullOrZeroLenght(userId)) {
-                    UserServiceImpl.instance().startTrain(chooseID, card, userId, StartTrainResponse.class.getName());
+                    UserServiceImpl.instance().startTrain(trainID, card, userId, StartTrainResponse.class.getName());
                 }
                 else {
                     NetLoadingDialog.getInstance().dismissDialog();
@@ -225,10 +236,10 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 //调用开始培训的接口
                 NetLoadingDialog.getInstance().loading(mContext);
                 if (fromTest.equals("")) {
-                    UserServiceImpl.instance().startTrain(chooseID, "", StartTrainResponse.class.getName());
+                    UserServiceImpl.instance().startTrain(trainID, cardNum, StartTrainResponse.class.getName());
                 }
                 else if (fromTest.equals("1")) {
-                    UserServiceImpl.instance().startOnlineTest(chooseID, "", StartTestResponse.class.getName());
+                    UserServiceImpl.instance().startOnlineTest(trainID, "", StartTestResponse.class.getName());
                 }
             }
         }
@@ -258,12 +269,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                     if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode())) {
                         //因为视频页面没有集成EventBus，就在该页面获取到数据后再传过去
                         NetLoadingDialog.getInstance().loading(mContext);
-                        if (fileType.equals("1")) {
-                            UserServiceImpl.instance().trainContent(chooseID, TrainContentResponse.class.getName());
-                        }
-                        else {
-                            UserServiceImpl.instance().trainContent(chooseID, TrainVideoResponse.class.getName());
-                        }
+                        UserServiceImpl.instance().trainContent(trainID, TrainContentResponse.class.getName());
 
                     }
                     else {
@@ -278,10 +284,19 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode())) {
-                        Intent intent = new Intent(mContext, TrainPicActivity.class);
-                        intent.putExtra(IntentCode.CHOOSE_ID, result);
-                        intent.putExtra(IntentCode.TRAIN_ID, chooseID);
-                        startActivity(new Intent(intent));
+
+                        if (mTrainContentResponse.getTraining().getFileType()==1){//图片
+                            Intent intent = new Intent(mContext, TrainPicActivity.class);
+                            intent.putExtra(IntentCode.CHOOSE_ID, result);
+                            intent.putExtra(TRAIN_ID, trainID);
+                            startActivity(new Intent(intent));
+                        }else {
+                            Intent intent = new Intent(mContext, TinyWindowPlayActivity.class);
+                            intent.putExtra(IntentCode.CHOOSE_ID, result);
+                            intent.putExtra(TRAIN_ID, trainID);
+                            startActivity(new Intent(intent));
+                        }
+
                     }
                     else {
                         ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
@@ -295,10 +310,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 TrainVideoResponse mTrainContentResponse = GsonHelper.toType(result, TrainVideoResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode())) {
-                        Intent intent = new Intent(mContext, TinyWindowPlayActivity.class);
-                        intent.putExtra(IntentCode.CHOOSE_ID, result);
-                        intent.putExtra(IntentCode.TRAIN_ID, chooseID);
-                        startActivity(new Intent(intent));
+
                     }
                     else {
                         ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());

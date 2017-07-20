@@ -51,14 +51,11 @@
             android:launchMode="singleTask">
 
         </activity>
+        <!--按home键之后退回到桌面，在次点击程序图标避免再次重新启动程序解决办法-->
         <activity
             android:name=".LoginActy"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+            >
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".GiveCardActivity"
@@ -82,10 +79,15 @@
 
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".TrainPicActivity"/>
-        <activity android:name=".TrainVideoActivity"/>
         <activity android:name="cn.nj.www.my_module.main.base.CommonWebViewActivity"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.anyi.door"
