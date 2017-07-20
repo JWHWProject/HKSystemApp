@@ -64,6 +64,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 
     private CommonAdapter<TrainContentResponse.ImageBean> adapter;
 
+    private MyTime myTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,7 +75,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         ButterKnife.bind(this);
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
-        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
+        trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
         initAll();
     }
 
@@ -126,6 +128,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         takePicMethod = new TakePicMethod(TrainPicActivity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
+        startTime(Double.parseDouble(mTrainContentResponse.getImageBeans().size()*4+""));
         flag = true;
         new Thread(new Runnable() {
             @Override
@@ -141,6 +144,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 //                            long halftime = mNiceVideoPlayer.getDuration() / 2;
 //                            maxtime = (int) (halftime / 1000f);
                             maxtime= mTrainContentResponse.getImageBeans().size()*4;
+
                             Random random = new Random();
                             if (maxtime == 0) {
                                 maxtime = 17;
@@ -235,13 +239,6 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 countDownTimer.start();
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        flag=false;
-        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainPicActivity.this));
     }
 
     @Override
@@ -340,4 +337,56 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
+
+
+
+    /**
+     * 倒计时
+     */
+    private class MyTime extends CountDownTimer
+    {
+        public MyTime(long millisInFuture, long countDownInterval)
+        {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish()
+        {
+            bnFinish.setEnabled(true);
+            bnFinish.setText(getResources().getString(R.string.finish_train));
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished)
+        {
+            bnFinish.setEnabled(false);
+            bnFinish.setText(getResources().getString(R.string.finish_train)+"("+GeneralUtils.splitToSecondTime((millisUntilFinished / 1000) + "")+")");
+        }
+    }
+
+    private void startTime(Double time)
+    {
+        cancelTime();
+        myTime = new MyTime(time.longValue() * 1000, Constants.Countdown_end);
+        myTime.start();
+    }
+
+    private void cancelTime()
+    {
+        if (myTime != null)
+        {
+            myTime.cancel();
+            myTime = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        flag=false;
+        cancelTime();
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainPicActivity.this));
+    }
+
 }

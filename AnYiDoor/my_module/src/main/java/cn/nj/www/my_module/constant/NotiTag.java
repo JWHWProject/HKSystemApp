@@ -74,6 +74,7 @@ public class NotiTag
     public static final String TAG_CANCEL_UPDATE= "TAG_CANCEL_UPDATE";
 
     public static final String TAG_START_TRAIN_DIALOG= "TAG_START_TRAIN_DIALOG";
+    public static final String TAG_START_TEST_DIALOG= "TAG_START_TEST_DIALOG";
 
     /**
      * 在当前界面操作tag

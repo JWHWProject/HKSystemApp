@@ -1,5 +1,6 @@
 package cn.nj.www.my_module.bean.index;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.nj.www.my_module.bean.BaseResponse;
@@ -21,6 +22,9 @@ public class UserListResponse extends BaseResponse
 
     public List<UserListBean> getUserList()
     {
+        if (null==userList){
+            userList = new ArrayList<>();
+        }
         return userList;
     }
 

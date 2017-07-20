@@ -34,7 +34,11 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".RegistSetPasswordActy"
@@ -55,6 +59,7 @@
         <activity
             android:name=".LoginActy"
             >
+
 
         </activity>
         <activity
@@ -79,11 +84,7 @@
 
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".TrainPicActivity"/>
         <activity android:name="cn.nj.www.my_module.main.base.CommonWebViewActivity"/>

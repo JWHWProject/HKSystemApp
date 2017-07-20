@@ -96,6 +96,7 @@
                     android:layout_marginRight="@dimen/pxtodp30"
                     android:layout_marginTop="@dimen/pxtodp60"
                     android:background="@drawable/common_pink_bn"
+                    android:enabled="false"
                     android:text="提交"
                     android:textColor="@color/white_color"
                     android:textSize="@dimen/pxtosp34"/>
