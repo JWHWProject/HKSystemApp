@@ -219,8 +219,10 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                     e.printStackTrace();
                                 }
                                 if(files.size()>=0) {
+                                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
                                 }else{
+                                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
                                     UserServiceImpl.instance().finishTest(examID, answerList, null,
                                             FinishTestResponse.class.getName());
                                 }
@@ -303,7 +305,13 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 //获取到所有数据，提交
                 if (time > maxtime) {
                     picCount = 3;
-                    TakePicture();
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                        NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                        UserServiceImpl.instance().finishTest(examID, answerList, null,
+                                FinishTestResponse.class.getName());
+                    }else {
+                        TakePicture();
+                    }
                 } else {
                     DialogUtil.showDialogOneButton(
                             TestListActivity.this, "您现在还无法完成考核~", "我知道了"
@@ -425,7 +433,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
-                        NetLoadingDialog.getInstance().loading(mContext);
+                        NetLoadingDialog.getInstance().loading(TestListActivity.this);
                         UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
                     } else {

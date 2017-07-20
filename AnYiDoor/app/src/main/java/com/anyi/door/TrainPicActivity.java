@@ -103,7 +103,11 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {
+        DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
+                "您确定要中途取消考核？", "取消", "确定");
+    }
     boolean flag = true;
 
     int time = 1;
@@ -215,8 +219,10 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                                     e.printStackTrace();
                                 }
                                 if(files.size()>=0) {
+                                    NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
                                 }else{
+                                    NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                                     UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
                                 }
                             }
@@ -258,7 +264,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             String tag = ((NoticeEvent) event).getTag();
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
-                finish();
+                DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
+                        "您确定要中途取消考核？", "取消", "确定");
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -289,7 +296,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
-                        NetLoadingDialog.getInstance().loading(mContext);
+                        NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
                     } else {
                         NetLoadingDialog.getInstance().dismissDialog();
@@ -315,7 +322,12 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 //获取到所有数据，提交
                 if (time > maxtime) {
                     picCount = 3;
-                    TakePicture();
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                        NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
+                        UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
+                    }else {
+                        TakePicture();
+                    }
                 } else {
                     DialogUtil.showDialogOneButton(
                             TrainPicActivity.this, "您现在还无法完成培训~", "我知道了"
