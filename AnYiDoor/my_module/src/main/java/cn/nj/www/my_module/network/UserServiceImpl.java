@@ -2,8 +2,6 @@ package cn.nj.www.my_module.network;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +57,12 @@ public class UserServiceImpl
         Map<String, String> param = new HashMap<String, String>();
         new NetWork()
                 .startPost(URLUtil.BANNER, param, tag);
+    }
+    public void getUserList(String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        new NetWork()
+                .startPost(URLUtil.USER_LIST, param, tag);
     }
 
     public void getOuterType(String tag)
@@ -144,7 +148,14 @@ public class UserServiceImpl
 //        fileparams.put("file", files);
         new NetWork().startPost(URLUtil.UPLOAD_PIC, param, fileparams, tag);
     }
-
+    public void uploadPic(List<File> files, String tag, NetWorkResponse.NetCallBack callBack)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        Map<String, List<File>> fileparams = new HashMap<String, List<File>>();
+        fileparams.put("file", files);
+//        fileparams.put("file", files);
+        new NetWork().startPost(URLUtil.UPLOAD_PIC, param, fileparams, tag,callBack);
+    }
     public void returnCard(String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
@@ -176,6 +187,15 @@ public class UserServiceImpl
                 .startPost(URLUtil.TRAIN_CONTENT, param, tag);
     }
 
+    public void startTrain(String trainingID, String cardNo,String userID, String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("trainingID", trainingID);
+        param.put("cardNo", cardNo);
+        param.put("userID",userID);
+        new NetWork()
+                .startPost(URLUtil.START_TRAIN, param, tag);
+    }
     public void startTrain(String trainingID, String cardNo, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
@@ -192,12 +212,22 @@ public class UserServiceImpl
         param.put("recordID", recordID);
         if (picUrlList != null)
         {
-            param.put("picUrlList", new Gson().toJson(picUrlList));
+            param.put("picUrlList", picUrlList);
         }
         new NetWork()
                 .startPost2(URLUtil.FINISH_TRAIN, param, tag);
     }
-
+    public void finishTrain(String recordID, List<String> picUrlList, String tag, NetWorkResponse.NetCallBack callBack)
+    {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("recordID", recordID);
+        if (picUrlList != null)
+        {
+            param.put("picUrlList", picUrlList);
+        }
+        new NetWork()
+                .startPost2(URLUtil.FINISH_TRAIN, param, tag,callBack);
+    }
     public void testDetail(String examID, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();

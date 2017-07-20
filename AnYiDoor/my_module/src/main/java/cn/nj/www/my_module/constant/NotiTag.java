@@ -70,6 +70,9 @@ public class NotiTag
      *  初始化成功
      */
     public static final String TAG_APP_INIT_SUCCESS= "TAG_APP_INIT_SUCCESS";
+    public static final String TAG_CANCEL_UPDATE= "TAG_CANCEL_UPDATE";
+
+    public static final String TAG_START_TRAIN_DIALOG= "TAG_START_TRAIN_DIALOG";
 
     /**
      * 在当前界面操作tag

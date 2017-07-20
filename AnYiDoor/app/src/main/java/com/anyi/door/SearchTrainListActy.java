@@ -176,7 +176,7 @@ public class SearchTrainListActy extends BaseActivity implements View.OnClickLis
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 ToastUtil.makeText(mContext, tagStr);
-                UserServiceImpl.instance().startTrain(tagStr, "", StartTrainResponse.class.getName());
+//                UserServiceImpl.instance().startTrain(tagStr, "", StartTrainResponse.class.getName());
             }
         }
         else if (event instanceof NetResponseEvent)

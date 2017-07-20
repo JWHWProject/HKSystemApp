@@ -40,5 +40,8 @@
         android:text="完成培训"
         android:textColor="@color/white_color"
         android:textSize="@dimen/pxtosp34"/>
-
+    <SurfaceView
+        android:id="@+id/camera_surfaceview"
+        android:layout_width="0.1dp"
+        android:layout_height="0.1dp" />
 </RelativeLayout>

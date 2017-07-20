@@ -28,6 +28,7 @@
 
             <TextView
                 android:id="@+id/tv1"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/pxtodp90"
                 android:background="#f8f8f8"
@@ -47,6 +48,7 @@
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/pxtodp90"
                 android:background="#f8f8f8"
                 android:gravity="center_vertical"
@@ -66,6 +68,7 @@
                 android:layout_height="@dimen/pxtodp90"
                 android:background="#f8f8f8"
                 android:gravity="center_vertical"
+                android:visibility="gone"
                 android:paddingLeft="@dimen/pxtodp20"
                 android:text="多选题"
                 android:textColor="@color/register_black_text"
@@ -101,4 +104,8 @@
 
         </LinearLayout>
     </ScrollView>
+    <SurfaceView
+        android:id="@+id/camera_surfaceview"
+        android:layout_width="0.1dp"
+        android:layout_height="0.1dp" />
 </LinearLayout>

@@ -6,6 +6,10 @@
     <include
         android:id="@+id/common_back"
         layout="@layout/layout_top" />
+    <include
+        android:id="@+id/search_view"
+        android:visibility="gone"
+        layout="@layout/search_top_view"/>
 
     <ExpandableListView
         android:layout_height="match_parent"
@@ -15,4 +19,5 @@
         android:layout_width="match_parent">
 
     </ExpandableListView>
+
 </LinearLayout>

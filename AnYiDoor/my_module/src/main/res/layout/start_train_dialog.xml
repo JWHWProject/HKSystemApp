@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/money_transferdebt_dialogll"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginLeft="@dimen/pxtodp60"
+              android:layout_marginRight="@dimen/pxtodp60"
+              android:background="@drawable/money_transfer_dialogbg"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/pxtodp10">
+
+
+    <TextView
+        android:id="@+id/dialogName_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp120"
+        android:gravity="center"
+        android:text="确定开始培训"
+        android:textColor="@color/register_success_reward"
+        android:textSize="@dimen/pxtosp36"/>
+
+
+    <LinearLayout
+        android:id="@+id/dialog_bottom_bns"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp190"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp66"
+            android:layout_marginBottom="@dimen/pxtodp30"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/pxtodp100"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="卡号"
+                android:textColor="@color/register_black_text"
+                android:textSize="@dimen/pxtodp32"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/pxtodp20"
+                android:id="@+id/et_card"
+                android:background="@drawable/app_start_train_et"
+                android:hint="请输入卡号"
+                android:paddingLeft="@dimen/pxtodp30"
+                android:textColor="@color/register_black_text"
+                android:textColorHint="@color/register_hint_text"
+                android:textSize="@dimen/pxtodp32"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pxtodp66"
+            android:layout_marginBottom="@dimen/pxtodp30"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/pxtodp100"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="人员"
+                android:textColor="@color/register_black_text"
+                android:textSize="@dimen/pxtodp32"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/et_name"
+                android:layout_marginRight="@dimen/pxtodp20"
+                android:background="@drawable/app_start_train_et"
+                android:hint="请输入企业内部人员姓名"
+                android:paddingLeft="@dimen/pxtodp30"
+                android:textColor="@color/register_black_text"
+                android:textColorHint="@color/register_hint_text"
+                android:textSize="@dimen/pxtodp32"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp92"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/transfer_cancel_bn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/money_nocolor_dialogbg"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/person_red_circle"
+            android:textSize="@dimen/pxtosp36"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@color/line"/>
+
+        <Button
+            android:id="@+id/transfer_ok_bn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/money_nocolor_dialogbg"
+            android:gravity="center"
+            android:text="确认"
+            android:textColor="@color/money_dialog_blue_text"
+            android:textSize="@dimen/pxtosp36"/>
+
+    </LinearLayout>
+</LinearLayout>

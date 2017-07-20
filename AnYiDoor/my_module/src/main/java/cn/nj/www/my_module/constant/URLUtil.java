@@ -40,6 +40,7 @@ public class URLUtil {
     public static final String FINISH_TEST = SERVER_BASE + "onlineTrainingExam/finish";
     public static final String uploaderFile = SERVER_BASE + "onlineTrainingExam/finish";
     public static final String outerType = SERVER_BASE + "card/outsidersTypeList";
+    public static final String USER_LIST = SERVER_BASE + "user/list";
     /**
      * 上传图片
      */
