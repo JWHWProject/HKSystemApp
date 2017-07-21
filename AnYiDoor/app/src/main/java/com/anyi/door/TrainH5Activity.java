@@ -14,7 +14,9 @@ import android.widget.ListView;
 import com.anyi.door.utils.TakePicMethod;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -38,7 +40,6 @@ import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
-import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -69,6 +70,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     private String url;
 
     private WebView webView;
+    private String timeStamp="";
 
 
     @Override
@@ -77,6 +79,8 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acty_train_webview);
         ButterKnife.bind(this);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp=sdf.format(new Date());
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
@@ -131,7 +135,12 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         takePicMethod = new TakePicMethod(TrainH5Activity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
-        startTime(Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + ""));
+        double d=Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4+ "");
+        if(d<10){
+            startTime(10d);
+        }else {
+            startTime(d);
+        }
         flag = true;
         new Thread(new Runnable()
         {
@@ -156,9 +165,9 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                             maxtime = mTrainContentResponse.getImageBeans().size() * 4;
 
                             Random random = new Random();
-                            if (maxtime == 0)
+                            if (maxtime <20)
                             {
-                                maxtime = 17;
+                                maxtime = 20;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
@@ -216,7 +225,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onTick(long millisUntilFinished)
                     {
-                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
+                        takePicMethod.startTakePhoto("TrainH5Activity_"+timeStamp+"_"+ picCount);
                     }
 
                     @Override
@@ -239,9 +248,30 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                                 try
                                 {
                                     files = new ArrayList<>();
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 1 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 2 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 3 + ".jpg"));
+                                    try {
+                                        File file1=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 1 + ".jpg");
+                                        if(file1.exists()){
+                                            files.add(file1);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file2=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 2 + ".jpg");
+                                        if(file2.exists()){
+                                            files.add(file2);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file3=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 3 + ".jpg");
+                                        if(file3.exists()){
+                                            files.add(file3);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 } catch (Exception e)
                                 {
                                     e.printStackTrace();
@@ -357,7 +387,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             case R.id.bn_finish:
                 //这边需要添加图片
                 //获取到所有数据，提交
-                if (time > maxtime)
+                if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
                     picCount = 3;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -428,7 +458,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         super.onDestroy();
         flag = false;
         cancelTime();
-        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainH5Activity.this));
+//        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainH5Activity.this));
     }
 
 }

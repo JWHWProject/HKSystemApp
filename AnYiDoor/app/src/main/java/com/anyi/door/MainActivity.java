@@ -47,6 +47,8 @@ import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.DisplayUtil;
+import cn.nj.www.my_module.tools.FileSystemManager;
+import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
@@ -125,6 +127,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         {
             SharePref.saveString(Constants.LAST_UPDATE_TIME, new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(MainActivity.this));
     }
 
     @Override

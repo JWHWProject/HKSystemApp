@@ -21,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,6 @@ import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
-import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
@@ -93,7 +94,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     private TestListActivity.MyTime myTime;
 
     private String examName = "";
-
+    private String timeStamp="";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -101,6 +102,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_sheet);
         ButterKnife.bind(this);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp=sdf.format(new Date());
         initAll();
         initTitle();
 
@@ -160,9 +163,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //                            maxtime = (int) (halftime / 1000f);
                             maxtime = answerList.size() * 4;
                             Random random = new Random();
-                            if (maxtime == 0)
+                            if (maxtime <20)
                             {
-                                maxtime = 17;
+                                maxtime = 20;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
@@ -220,7 +223,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onTick(long millisUntilFinished)
                     {
-                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
+                        takePicMethod.startTakePhoto("TestListActivity_"+timeStamp+"_"+ picCount);
                     }
 
                     @Override
@@ -243,9 +246,30 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 try
                                 {
                                     files = new ArrayList<>();
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 1 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 2 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity" + 3 + ".jpg"));
+                                    try {
+                                        File file1=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 1 + ".jpg");
+                                        if(file1.exists()){
+                                            files.add(file1);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file2=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 2 + ".jpg");
+                                        if(file2.exists()){
+                                            files.add(file2);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file3=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 3 + ".jpg");
+                                        if(file3.exists()){
+                                            files.add(file3);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 } catch (Exception e)
                                 {
                                     e.printStackTrace();
@@ -339,7 +363,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
                 //获取到所有数据，提交
-                if (time > maxtime)
+                if (bnFinish.getText().toString().trim().equals("提交"))
                 {
                     picCount = 3;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -444,7 +468,12 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                             }
 
                         }
-                        startTime(Double.parseDouble(examBeanList.size() * 4 + ""));
+                        double d=Double.parseDouble(examBeanList.size() * 4+ "");
+                        if(d<20){
+                            startTime(20d);
+                        }else {
+                            startTime(d);
+                        }
                     }
                     else
                     {
@@ -525,7 +554,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         public void onFinish()
         {
             bnFinish.setEnabled(true);
-            bnFinish.setText(getResources().getString(R.string.finish_train));
+            bnFinish.setText("提交");
         }
 
         @Override
@@ -559,7 +588,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         super.onDestroy();
         flag = false;
         cancelTime();
-        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
+//        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
     }
 
 }
