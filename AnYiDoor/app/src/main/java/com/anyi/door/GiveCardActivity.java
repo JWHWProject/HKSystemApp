@@ -851,7 +851,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             }
             if (tvReasonDetail.getText().toString().length() < 30)
             {
-                ToastUtil.makeText(mContext, "请输入事由，不少于30字");
+                ToastUtil.makeText(mContext, "请输入事由");
                 return;
             }
             if (tvUserTrain.getText().toString().equals("请选择"))
