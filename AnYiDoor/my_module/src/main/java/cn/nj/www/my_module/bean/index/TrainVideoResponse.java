@@ -35,7 +35,7 @@ public class TrainVideoResponse extends BaseResponse
      * picUrlList : []
      */
 
-    private String videoUrl;
+    private String fileUrl;
 
     private List<?> picUrlList;
 
@@ -49,14 +49,14 @@ public class TrainVideoResponse extends BaseResponse
         this.training = training;
     }
 
-    public String getVideoUrl()
+    public String getFileUrl()
     {
-        return videoUrl;
+        return fileUrl;
     }
 
-    public void setVideoUrl(String videoUrl)
+    public void setFileUrl(String fileUrl)
     {
-        this.videoUrl = videoUrl;
+        this.fileUrl = fileUrl;
     }
 
     public List<?> getPicUrlList()

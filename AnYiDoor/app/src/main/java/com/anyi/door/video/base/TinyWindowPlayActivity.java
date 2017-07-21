@@ -124,7 +124,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         bnFinish = (Button) findViewById(R.id.app_finish_bn);
         mNiceVideoPlayer = (NiceVideoPlayer) findViewById(R.id.nice_video_player);
         mNiceVideoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
-        mNiceVideoPlayer.setUp(mTrainContentResponse.getVideoUrl(), null);
+        mNiceVideoPlayer.setUp(mTrainContentResponse.getFileUrl(), null);
         TxVideoPlayerController controller = new TxVideoPlayerController(this);
         controller.setGetDuration(new TxVideoPlayerController.IGetDuration() {
             @Override
