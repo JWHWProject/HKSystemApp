@@ -882,7 +882,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             }
             else
             {
-                ToastUtil.makeText(mContext, "必须提供身份证正反面照片");
+                NetLoadingDialog.getInstance().loading(mContext);
+                UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                        etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
+                        , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
+                       null, GiveOutterCardResponse.class.getName());
             }
         }
     }

@@ -81,7 +81,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         timeStamp = sdf.format(new Date());
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
-        trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
+        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         CMLog.e("hq", "trainId:" + trainId);
         url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
         webView = (WebView) findViewById(R.id.common_web_view);
