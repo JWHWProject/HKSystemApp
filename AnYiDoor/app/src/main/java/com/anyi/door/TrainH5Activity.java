@@ -167,9 +167,9 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                             maxtime = mTrainContentResponse.getImageBeans().size() * 4;
 
                             Random random = new Random();
-                            if (maxtime < 20)
+                            if (maxtime < 10)
                             {
-                                maxtime = 20;
+                                maxtime = 10;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;

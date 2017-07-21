@@ -132,8 +132,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                 CMLog.e("hq", mNiceVideoPlayer.getDuration() + "获取到的时长");
                 if (!isWatched) {
                     long d=mNiceVideoPlayer.getDuration();
-                    if(d<20){
-                        startTime(20l);
+                    if(d<10){
+                        startTime(10);
                     }else {
                         startTime(d);
                     }

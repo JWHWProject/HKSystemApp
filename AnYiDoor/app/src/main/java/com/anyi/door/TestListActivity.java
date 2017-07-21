@@ -163,9 +163,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //                            maxtime = (int) (halftime / 1000f);
                             maxtime = answerList.size() * 4;
                             Random random = new Random();
-                            if (maxtime <20)
+                            if (maxtime <10)
                             {
-                                maxtime = 20;
+                                maxtime = 10;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;

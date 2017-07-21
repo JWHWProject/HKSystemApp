@@ -159,8 +159,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         picCount = 1;
         TakePicture();
         double d=Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4+ "");
-        if(d<20){
-            startTime(20d);
+        if(d<10){
+            startTime(10d);
         }else {
             startTime(d);
         }
