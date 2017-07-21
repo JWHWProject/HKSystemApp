@@ -41,7 +41,17 @@ public class TrainContentResponse extends BaseResponse
     private TrainingBean training;
 
 
-    private String videoUrl;
+    public String getFileUrl()
+    {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl)
+    {
+        this.fileUrl = fileUrl;
+    }
+
+    private String fileUrl;
 
     private List<String> picUrlList;
 
@@ -55,15 +65,7 @@ public class TrainContentResponse extends BaseResponse
         this.training = training;
     }
 
-    public String getVideoUrl()
-    {
-        return videoUrl;
-    }
 
-    public void setVideoUrl(String videoUrl)
-    {
-        this.videoUrl = videoUrl;
-    }
 
     public List<String> getPicUrlList()
     {

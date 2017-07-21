@@ -36,11 +36,6 @@ import com.anyi.door.utils.DbTOPxUtils;
 import com.anyi.door.utils.MyGridView;
 import com.anyi.door.utils.card.CardManager;
 import com.anyi.door.utils.card.Util;
-import com.zzti.fengyongge.imagepicker.PhotoPreviewActivity;
-import com.zzti.fengyongge.imagepicker.PhotoSelectorActivity;
-import com.zzti.fengyongge.imagepicker.model.PhotoModel;
-import com.zzti.fengyongge.imagepicker.util.CommonUtils;
-import com.zzti.fengyongge.imagepicker.util.FileUtils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -75,6 +70,11 @@ import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
 import cn.nj.www.my_module.tools.ToastUtil;
 import cn.nj.www.my_module.view.AmountView;
+import cn.nj.www.my_module.view.imagepicker.PhotoPreviewActivity;
+import cn.nj.www.my_module.view.imagepicker.PhotoSelectorActivity;
+import cn.nj.www.my_module.view.imagepicker.model.PhotoModel;
+import cn.nj.www.my_module.view.imagepicker.util.CommonUtils;
+import cn.nj.www.my_module.view.imagepicker.util.FileUtils;
 
 
 /**
@@ -849,9 +849,9 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请填写身份证号");
                 return;
             }
-            if (tvReasonDetail.getText().toString().length() < 30)
+            if (GeneralUtils.isNullOrZeroLenght(tvReasonDetail.getText().toString()))
             {
-                ToastUtil.makeText(mContext, "请输入事由，不少于30字");
+                ToastUtil.makeText(mContext, "请输入事由");
                 return;
             }
             if (tvUserTrain.getText().toString().equals("请选择"))

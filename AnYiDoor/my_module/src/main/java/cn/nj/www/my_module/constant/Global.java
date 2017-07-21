@@ -55,6 +55,7 @@ public class Global
      * 密码
      */
     private static final String PASSWORD = "password";
+    private static final String COMPANYID = "COMPANYID";
 
     private static final String LOGIN_DATA = "LOGIN_DATA";
 
@@ -191,6 +192,7 @@ public class Global
         saveUserName(userBean.getUserName());
         saveUserId(userBean.getUserID() + "");
         savePassword(userBean.getPassword());
+        saveCompanyId(userBean.getCompanyID());
         saveloginData(result);
     }
 
@@ -286,6 +288,20 @@ public class Global
         SharePref.saveString(PASSWORD, username);
         saveXS_PASSWORD_WORD(StringEncrypt.Encrypt(username));
     }
+    /**
+     * 密码
+     */
+    public static String getCompanyId()
+    {
+        return SharePref.getString(COMPANYID, "");
+    }
+
+    public static void saveCompanyId(String username)
+    {
+
+        SharePref.saveString(COMPANYID, username);
+        saveXS_PASSWORD_WORD(StringEncrypt.Encrypt(username));
+    }
 
     /**
      * 密码
@@ -374,7 +390,8 @@ public class Global
         savePassword("");
         saveUserRole("");
         savecaptcha("");
-        savepermInstanceDtos("");
+        saveCompanyId("");
+        saveloginData("");
     }
 
     /**

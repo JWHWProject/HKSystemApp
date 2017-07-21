@@ -4,7 +4,12 @@
     <color name="colorPrimary">#0076FF</color>
     <color name="colorPrimaryDark">#0076FF</color>
     <color name="colorAccent">#0076FF</color>
-
+    <color name="red">#e31f1f</color>
+    <color name="xian">#ecedef</color>
+    <color name="type_bg">#f1f1f1</color>
+    <color name="heavy">#323232</color>
+    <color name="light">#797979</color>
+    <color name="deep_grey">#646464</color>
     <color name="app_color">#0076FF</color>
     <color name="app_bg">#EFEFEF</color>
     <color name="app_color_click">#0076FF</color>

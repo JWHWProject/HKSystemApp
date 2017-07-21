@@ -11,6 +11,7 @@ import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.constant.URLUtil;
+import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.WebViewUtil;
@@ -52,6 +53,7 @@ public class CommonWebViewActivity extends BaseActivity
 //        NetLoadingDialog.getInstance().loading(this);
         webView = (WebView) findViewById(R.id.common_web_view);
 //        WebViewUtil.initWebView(this, webView, "https://www.baidu.com/?tn=47018152_dg");
+        CMLog.e("hq",url);
         WebViewUtil.initWebView(this, webView, url);
     }
 

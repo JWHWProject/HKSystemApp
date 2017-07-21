@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,274 +9,281 @@
     android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:id="@+id/activity_main"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="45dp">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:layout_marginLeft="@dimen/pxtodp120"
+            android:layout_marginRight="@dimen/pxtodp120"
+            android:gravity="center"
+            android:text="@string/company_name"
+            android:textColor="@color/register_black_text"
+            android:textSize="17sp"/>
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/pxtodp120"
-                android:layout_marginRight="@dimen/pxtodp120"
-                android:gravity="center"
-                android:text="@string/company_name"
-                android:textColor="@color/register_black_text"
-                android:textSize="17sp"/>
+        <TextView
+            android:id="@+id/top_view_right_tv"
+            android:layout_width="@dimen/pxtodp120"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:paddingRight="@dimen/pxtodp20"
+            android:text="退出"
+            android:textColor="@color/register_black_text"
+            android:textSize="16sp"/>
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/top_view_right_tv"
-                android:layout_width="@dimen/pxtodp120"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="right"
-                android:paddingRight="@dimen/pxtodp20"
-                android:text="退出"
-                android:textColor="@color/register_black_text"
-                android:textSize="16sp"/>
-        </RelativeLayout>
-
-    <cn.nj.www.my_module.view.banner.ConvenientBanner
-        android:id="@+id/index_banner"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/pxtodp496"/>
+        android:layout_height="match_parent">
+
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/pxtodp185"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/pxtodp30"
-            android:paddingTop="@dimen/pxtodp30">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/bn_card_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp72"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/pxtodp24"
-                    android:background="@drawable/app_img_bg_circle"
-                    android:paddingLeft="@dimen/pxtodp40"
-                    android:paddingRight="@dimen/pxtodp40"
-                    android:text="--"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtosp32"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:drawableLeft="@mipmap/icon_give"
-                    android:drawablePadding="@dimen/pxtodp6"
-                    android:text="今日发卡"
-                    android:textColor="@color/text_gray"
-                    android:textSize="@dimen/pxtodp24"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="@dimen/pxtodp1"
-                android:layout_height="match_parent"
-                android:background="@color/line"/>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/bn_train_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp72"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/pxtodp24"
-                    android:background="@drawable/app_img_bg_circle"
-                    android:paddingLeft="@dimen/pxtodp40"
-                    android:paddingRight="@dimen/pxtodp40"
-                    android:text="--"
-                    android:textColor="@color/app_blue"
-                    android:textSize="@dimen/pxtosp32"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:drawableLeft="@mipmap/icon_train_small"
-                    android:drawablePadding="@dimen/pxtodp6"
-                    android:text="今日培训"
-                    android:textColor="@color/text_gray"
-                    android:textSize="@dimen/pxtodp24"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="@dimen/pxtodp1"
-                android:layout_height="match_parent"
-                android:background="@color/line"/>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/bn_test_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp72"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/pxtodp24"
-                    android:background="@drawable/app_img_bg_circle"
-                    android:paddingLeft="@dimen/pxtodp40"
-                    android:paddingRight="@dimen/pxtodp40"
-                    android:text="--"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtosp32"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:drawableLeft="@mipmap/icon_test_small"
-                    android:drawablePadding="@dimen/pxtodp6"
-                    android:text="今日考核"
-                    android:textColor="@color/text_gray"
-                    android:textSize="@dimen/pxtodp24"/>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/pxtodp20"
-            android:background="#f8f8f8"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/pxtodp270"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_fk"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/pxtodp62">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp136"
-                    android:src="@mipmap/icon_home"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/pxtodp20"
-                    android:text="发卡"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtodp32"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_train"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/pxtodp62">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp136"
-                    android:src="@mipmap/icon_train"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/pxtodp20"
-                    android:text="培训"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtodp32"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_test"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/pxtodp62">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp136"
-                    android:src="@mipmap/icon_test"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/pxtodp20"
-                    android:text="考核"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtodp32"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:paddingBottom="@dimen/pxtodp30"
+            android:orientation="vertical">
+
+            <cn.nj.www.my_module.view.banner.ConvenientBanner
+                android:id="@+id/index_banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pxtodp496"/>
 
             <LinearLayout
-                android:id="@+id/ll_back"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/pxtodp270"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/pxtodp62">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pxtodp185"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/pxtodp30"
+                android:paddingTop="@dimen/pxtodp30">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/pxtodp136"
-                    android:src="@mipmap/icon_back"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/pxtodp20"
-                    android:text="还卡"
-                    android:textColor="@color/register_black_text"
-                    android:textSize="@dimen/pxtodp32"/>
+                    <Button
+                        android:id="@+id/bn_card_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp72"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/pxtodp24"
+                        android:background="@drawable/app_img_bg_circle"
+                        android:paddingLeft="@dimen/pxtodp40"
+                        android:paddingRight="@dimen/pxtodp40"
+                        android:text="--"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtosp32"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:drawableLeft="@mipmap/icon_give"
+                        android:drawablePadding="@dimen/pxtodp6"
+                        android:text="今日发卡"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/pxtodp24"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/pxtodp1"
+                    android:layout_height="match_parent"
+                    android:background="@color/line"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/bn_train_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp72"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/pxtodp24"
+                        android:background="@drawable/app_img_bg_circle"
+                        android:paddingLeft="@dimen/pxtodp40"
+                        android:paddingRight="@dimen/pxtodp40"
+                        android:text="--"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtosp32"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:drawableLeft="@mipmap/icon_train_small"
+                        android:drawablePadding="@dimen/pxtodp6"
+                        android:text="今日培训"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/pxtodp24"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/pxtodp1"
+                    android:layout_height="match_parent"
+                    android:background="@color/line"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/bn_test_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp72"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/pxtodp24"
+                        android:background="@drawable/app_img_bg_circle"
+                        android:paddingLeft="@dimen/pxtodp40"
+                        android:paddingRight="@dimen/pxtodp40"
+                        android:text="--"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtosp32"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:drawableLeft="@mipmap/icon_test_small"
+                        android:drawablePadding="@dimen/pxtodp6"
+                        android:text="今日考核"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/pxtodp24"/>
+                </RelativeLayout>
             </LinearLayout>
 
             <View
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pxtodp20"
+                android:background="#f8f8f8"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pxtodp270"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_fk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/pxtodp62">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp136"
+                        android:src="@mipmap/icon_home"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/pxtodp20"
+                        android:text="发卡"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtodp32"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_train"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/pxtodp62">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp136"
+                        android:src="@mipmap/icon_train"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/pxtodp20"
+                        android:text="培训"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtodp32"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_test"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/pxtodp62">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp136"
+                        android:src="@mipmap/icon_test"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/pxtodp20"
+                        android:text="考核"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtodp32"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"/>
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_back"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/pxtodp270"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/pxtodp62">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/pxtodp136"
+                        android:src="@mipmap/icon_back"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/pxtodp20"
+                        android:text="还卡"
+                        android:textColor="@color/register_black_text"
+                        android:textSize="@dimen/pxtodp32"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

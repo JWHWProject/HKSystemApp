@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 //    图片选择依赖
-    compile 'com.zzti.fengyongge:imagepicker:1.2.0'
+//    compile 'com.zzti.fengyongge:imagepicker:1.2.0'
     compile project(':nicevideoplayer')
 ////    视频播放依赖
 //    compile 'com.github.xiaoyanger0825:NiceVieoPlayer:v1.9'

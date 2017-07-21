@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.anyi.door.utils.TakePicMethod;
 
 import java.io.File;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -40,11 +42,15 @@ import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
-import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.ToastUtil;
+import cn.nj.www.my_module.view.imagepicker.PhotoPreviewActivity;
+import cn.nj.www.my_module.view.imagepicker.model.PhotoModel;
+import cn.nj.www.my_module.view.imagepicker.util.CommonUtils;
+
+import static com.anyi.door.R.id.bn_finish;
 
 /**
  * 完成培训视频
@@ -52,7 +58,7 @@ import cn.nj.www.my_module.tools.ToastUtil;
 public class TrainPicActivity extends BaseActivity implements View.OnClickListener
 {
 
-    @Bind(R.id.bn_finish)
+    @Bind(bn_finish)
     Button bnFinish;
 
     @Bind(R.id.myListView)
@@ -65,6 +71,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     private CommonAdapter<TrainContentResponse.ImageBean> adapter;
 
     private MyTime myTime;
+    private String timeStamp="";
 
 
     @Override
@@ -73,6 +80,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acty_train_pic);
         ButterKnife.bind(this);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp=sdf.format(new Date());
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
@@ -94,22 +103,41 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     public void initView()
     {
         initTitle();
-
+        final List<PhotoModel> single_photos = new ArrayList<PhotoModel>();
+        for (int i = 0; i < mTrainContentResponse.getImageBeans().size(); i++)
+        {
+            single_photos.add(new PhotoModel(mTrainContentResponse.getImageBeans().get(i).getUrl()));
+        }
         myListView.setAdapter(adapter = new CommonAdapter<TrainContentResponse.ImageBean>(mContext, mTrainContentResponse.getImageBeans(), R.layout.item_pic)
         {
             @Override
-            public void convert(ViewHolder helper, TrainContentResponse.ImageBean item)
+            public void convert(final ViewHolder helper, TrainContentResponse.ImageBean item)
             {
                 ImageView iv = helper.getView(R.id.ivImg);
-                ImageLoaderUtil.getInstance().initImage(mContext,item.getUrl(),iv,"");
+                ImageLoaderUtil.getInstance().initImage(mContext, item.getUrl(), iv, "");
+                iv.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("photos", (Serializable) single_photos);
+                        bundle.putInt("position", helper.getPosition());
+                        bundle.putBoolean("isSave", true);
+                        CommonUtils.launchActivity(TrainPicActivity.this, PhotoPreviewActivity.class, bundle);
+                    }
+                });
             }
         });
     }
+
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
-                "您确定要中途取消考核？", "取消", "确定");
+                "您确定要中途取消培训？", "取消", "确定");
     }
+
     boolean flag = true;
 
     int time = 1;
@@ -119,7 +147,9 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     int randomTime = -1;
 
     private int picCount = 1;
+
     private TakePicMethod takePicMethod;
+
     @Override
     public void initViewData()
     {
@@ -128,32 +158,48 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         takePicMethod = new TakePicMethod(TrainPicActivity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
-        startTime(Double.parseDouble(mTrainContentResponse.getImageBeans().size()*4+""));
+        double d=Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4+ "");
+        if(d<20){
+            startTime(20d);
+        }else {
+            startTime(d);
+        }
         flag = true;
-        new Thread(new Runnable() {
+        new Thread(new Runnable()
+        {
             @Override
-            public void run() {
-                while (flag) {
-                    try {
+            public void run()
+            {
+                while (flag)
+                {
+                    try
+                    {
                         Thread.sleep(1000);
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
                         e.printStackTrace();
                     }
-                    if (randomTime == -1) {
-                        if (mTrainContentResponse.getImageBeans().size()>0) {
+                    if (randomTime == -1)
+                    {
+                        if (mTrainContentResponse.getImageBeans().size() > 0)
+                        {
 //                            long halftime = mNiceVideoPlayer.getDuration() / 2;
 //                            maxtime = (int) (halftime / 1000f);
-                            maxtime= mTrainContentResponse.getImageBeans().size()*4;
+                            maxtime = mTrainContentResponse.getImageBeans().size() * 4;
 
                             Random random = new Random();
-                            if (maxtime == 0) {
-                                maxtime = 17;
+                            if (maxtime <20)
+                            {
+                                maxtime = 20;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
                         }
-                    } else {
-                        if (time == randomTime) {
+                    }
+                    else
+                    {
+                        if (time == randomTime)
+                        {
                             picCount = 2;
                             TakePicture();
                         }
@@ -163,15 +209,18 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             }
         }).start();
     }
+
     private SurfaceView mySurfaceView;
 
     private SurfaceHolder myHolder;
 
     // 初始化surface
     @SuppressWarnings("deprecation")
-    private void initSurface() {
+    private void initSurface()
+    {
         // 初始化surfaceview
-        if (mySurfaceView == null && myHolder == null) {
+        if (mySurfaceView == null && myHolder == null)
+        {
             mySurfaceView = (SurfaceView) findViewById(R.id.camera_surfaceview);
             // 初始化surfaceholder
             myHolder = mySurfaceView.getHolder();
@@ -183,28 +232,32 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 
     CountDownTimer countDownTimer;
 
-    private void TakePicture() {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)return;
-        if (!isTakeingPhoto) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(TrainPicActivity.this, "拍照中,请您对准摄像头注视5秒",Toast.LENGTH_SHORT).show();
-                }
-            });
+    private void TakePicture()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            return;
+        }
+        if (!isTakeingPhoto)
+        {
             isTakeingPhoto = true;
-            if (countDownTimer == null) {
-                countDownTimer = new CountDownTimer(10000, 3000) {
+            if (countDownTimer == null)
+            {
+                countDownTimer = new CountDownTimer(10000, 3000)
+                {
                     @Override
-                    public void onTick(long millisUntilFinished) {
-                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
+                    public void onTick(long millisUntilFinished)
+                    {
+                        takePicMethod.startTakePhoto("TrainPicActivity_"+timeStamp+"_"+ picCount);
                     }
 
                     @Override
-                    public void onFinish() {
+                    public void onFinish()
+                    {
                         countDownTimer.cancel();
                         isTakeingPhoto = false;
-                        try {
+                        try
+                        {
 //                            if (picCount == 1) {
 //                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
 //                            } else if (picCount == 2) {
@@ -212,30 +265,59 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 //                            } else {
 //                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
 //                            }
-                            if (picCount == 3) {
+                            if (picCount == 3)
+                            {
                                 List<File> files = null;
-                                try {
+                                try
+                                {
                                     files = new ArrayList<>();
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity" + 1 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity" + 2 + ".jpg"));
-                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity" + 3 + ".jpg"));
-                                } catch (Exception e) {
+                                    try {
+                                        File file1=new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity_"+timeStamp+"_"+ 1 + ".jpg");
+                                        if(file1.exists()){
+                                            files.add(file1);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file2=new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity_"+timeStamp+"_"+ 2 + ".jpg");
+                                        if(file2.exists()){
+                                            files.add(file2);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        File file3=new File(FileSystemManager.getSlientFilePath(TrainPicActivity.this) + File.separator + "TrainPicActivity_"+timeStamp+"_"+ 3 + ".jpg");
+                                        if(file3.exists()){
+                                            files.add(file3);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                } catch (Exception e)
+                                {
                                     e.printStackTrace();
                                 }
-                                if(files.size()>=0) {
+                                if (files.size() >= 0)
+                                {
                                     NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-                                }else{
+                                }
+                                else
+                                {
                                     NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                                     UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
                                 }
                             }
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                         }
                     }
                 };
             }
-            if (countDownTimer != null) {
+            if (countDownTimer != null)
+            {
                 countDownTimer.start();
             }
         }
@@ -262,7 +344,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
-                        "您确定要中途取消考核？", "取消", "确定");
+                        "您确定要中途取消培训？", "取消", "确定");
             }
             if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
@@ -293,17 +375,24 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
-                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
+                    {
                         NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
-                    } else {
+                    }
+                    else
+                    {
                         NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
-                } else {
+                }
+                else
+                {
                     NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
@@ -318,18 +407,24 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     {
         switch (v.getId())
         {
-            case R.id.bn_finish:
+            case bn_finish:
                 //这边需要添加图片
                 //获取到所有数据，提交
-                if (time > maxtime) {
+                if (bnFinish.getText().toString().trim().equals("完成培训"))
+                {
                     picCount = 3;
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    {
                         NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
-                    }else {
+                    }
+                    else
+                    {
                         TakePicture();
                     }
-                } else {
+                }
+                else
+                {
                     DialogUtil.showDialogOneButton(
                             TrainPicActivity.this, "您现在还无法完成培训~", "我知道了"
                             , "");
@@ -337,7 +432,6 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
-
 
 
     /**
@@ -361,7 +455,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         public void onTick(long millisUntilFinished)
         {
             bnFinish.setEnabled(false);
-            bnFinish.setText(getResources().getString(R.string.finish_train)+"("+GeneralUtils.splitToSecondTime((millisUntilFinished / 1000) + "")+")");
+            bnFinish.setText(getResources().getString(R.string.finish_train) + "(" + GeneralUtils.splitToSecondTime((millisUntilFinished / 1000) + "") + ")");
         }
     }
 
@@ -382,11 +476,12 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
-        flag=false;
+        flag = false;
         cancelTime();
-        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainPicActivity.this));
+//        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainPicActivity.this));
     }
 
 }

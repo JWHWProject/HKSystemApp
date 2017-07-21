@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">如东监管</string>
+    <string name="app_name">二道门</string>
     <string name="action_settings">Settings</string>
     <string name="exit_tips">再按一次退出程序</string>
     <string name="no_data">--</string>
@@ -226,5 +226,8 @@
     <string name="error_tips">加载失败╮(╯▽╰)╭</string>
     <string name="error_refresh">重新加载</string>
     <string name="loading_tips">正在加载...</string>
-
+    <string name="rationale_camera">我们需要访问您的相机才可以采集照片。</string>
+    <string name="write">我们需要访问您的照片、媒体内容和文件才可以展示照片。</string>
+    <string name="rationale_ask_again">如果没有请求的权限，这个应用程序可能无法正常工作。打开应用程序设置界面修改应用程序权限。</string>
+    <string name="title_settings_dialog">权限要求</string>
 </resources>

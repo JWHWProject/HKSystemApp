@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyi.door.utils.ForceUpdateDialog;
-import com.anyi.door.video.base.TinyWindowPlayActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.constant.URLUtil;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.CommonWebViewActivity;
@@ -47,6 +47,8 @@ import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.DisplayUtil;
+import cn.nj.www.my_module.tools.FileSystemManager;
+import cn.nj.www.my_module.tools.FileUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.SharePref;
@@ -128,6 +130,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(MainActivity.this));
+    }
+
+    @Override
     public void initView()
     {
         if (GeneralUtils.isNotNullOrZeroLenght(Global.getLoginData()))
@@ -142,6 +150,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 DialogUtil.exitAccountDialog(mContext);
             }
         });
+        bnCardNumber.setOnClickListener(this);
+        bnTrainNumber.setOnClickListener(this);
+        bnTestNumber.setOnClickListener(this);
     }
 
     @Override
@@ -222,6 +233,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             {
                 //取消更新
             }
+            if (NotiTag.TAG_EXIT_ACCOUNT.equals(tag))
+            {
+                //退出登录
+                Global.loginOut(mContext);
+                startActivity(new Intent(mContext, LoginActy.class));
+                finish();
+            }
         }
         if (event instanceof NetResponseEvent)
         {
@@ -298,9 +316,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                             ForceUpdateDialog mForceUpdateDialog = new ForceUpdateDialog(MainActivity.this, mUpdateResponse.getAppVersionInfo().getUpdateType() + "");
                             mForceUpdateDialog
                                     .setDownloadUrl(mUpdateResponse.getAppVersionInfo().getRequestUrl())
-                                    .setTitle(tvTitle.getText().toString() + "有更新啦")
+                                    .setTitle("检测到有新版本")
                                     .setReleaseTime(mUpdateResponse.getAppVersionInfo().getCreateTime())
-                                    .setVersionName(mUpdateResponse.getAppVersionInfo().getVersionCode() + "")
+                                    .setVersionName(mUpdateResponse.getAppVersionInfo().getVersionCodeShow() + "")
                                     .setUpdateDesc(mUpdateResponse.getAppVersionInfo().getUpdateDescription())
                                     .setFileName("anyi.apk")
                                     .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
@@ -327,7 +345,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         Window window = dlg.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = DisplayUtil.getWidth(mContext) * 3 / 5;//宽高可设置具体大小
+        lp.width = DisplayUtil.getWidth(mContext) * 5 / 8;//宽高可设置具体大小
 
         dlg.getWindow().setAttributes(lp);
     }
@@ -396,6 +414,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     {
         switch (view.getId())
         {
+            case R.id.bn_card_number:
+                Intent cardIntent = new Intent(mContext, CommonWebViewActivity.class);
+                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日发卡");
+                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +1);
+                startActivity(cardIntent);
+                break;
+            case R.id.bn_train_number:
+                Intent trainIntent = new Intent(mContext, CommonWebViewActivity.class);
+                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日培训");
+                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +2);
+                startActivity(trainIntent);
+                break;
+            case R.id.bn_test_number:
+                Intent testIntent1 = new Intent(mContext, CommonWebViewActivity.class);
+                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日考核");
+                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +3);
+                startActivity(testIntent1);
+                break;
+
             case R.id.ll_back:
                 startActivity(new Intent(mContext, GiveBackCardActivity.class));
                 break;

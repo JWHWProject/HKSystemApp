@@ -16,7 +16,7 @@
         android:layout_height="@dimen/pxtodp1"
         android:background="@drawable/line_view"/>
 
-    <ScrollView
+    <cn.nj.www.my_module.view.MyScrollView1
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -104,7 +104,7 @@
 
 
         </LinearLayout>
-    </ScrollView>
+    </cn.nj.www.my_module.view.MyScrollView1>
     <SurfaceView
         android:id="@+id/camera_surfaceview"
         android:layout_width="0.1dp"
