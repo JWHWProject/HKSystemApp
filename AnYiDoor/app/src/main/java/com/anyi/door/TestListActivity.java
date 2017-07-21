@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anyi.door.test_utils.JudgeAdapter;
 import com.anyi.door.test_utils.MultiltyAdapter;
@@ -213,14 +212,6 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         }
         if (!isTakeingPhoto)
         {
-            runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    Toast.makeText(TestListActivity.this, "拍照中,请您对准摄像头注视5秒", Toast.LENGTH_SHORT).show();
-                }
-            });
             isTakeingPhoto = true;
             if (countDownTimer == null)
             {

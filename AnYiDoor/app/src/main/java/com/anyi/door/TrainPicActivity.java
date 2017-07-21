@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.anyi.door.utils.TakePicMethod;
 
@@ -130,7 +129,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     public void onBackPressed()
     {
         DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
-                "您确定要中途取消考核？", "取消", "确定");
+                "您确定要中途取消培训？", "取消", "确定");
     }
 
     boolean flag = true;
@@ -230,14 +229,6 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         }
         if (!isTakeingPhoto)
         {
-            runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    Toast.makeText(TrainPicActivity.this, "拍照中,请您对准摄像头注视5秒", Toast.LENGTH_SHORT).show();
-                }
-            });
             isTakeingPhoto = true;
             if (countDownTimer == null)
             {

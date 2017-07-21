@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anyi.door.R;
 import com.anyi.door.utils.TakePicMethod;
@@ -247,7 +246,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         }
         if (!isWatched) {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
-                    "您确定要中途取消考核？", "取消", "确定");
+                    "您确定要中途取消培训？", "取消", "确定");
         }else {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                     "您确定要关闭？", "取消", "确定");
@@ -281,12 +280,6 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             return;
         }
         if (!isTakeingPhoto) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(TinyWindowPlayActivity.this, "拍照中,请您对准摄像头注视5秒", Toast.LENGTH_SHORT).show();
-                }
-            });
             isTakeingPhoto = true;
             if (countDownTimer == null) {
                 countDownTimer = new CountDownTimer(10000, 3000) {
