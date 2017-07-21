@@ -83,6 +83,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
         webView = (WebView) findViewById(R.id.common_web_view);
         WebViewUtil.initWebView(this, webView, url);
+
         initAll();
     }
 
