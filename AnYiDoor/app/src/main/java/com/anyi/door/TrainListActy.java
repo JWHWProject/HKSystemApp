@@ -41,7 +41,6 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
-import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -83,6 +82,8 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
     private View topView;
 
     private String cardNum = "";
+
+    private String selectedTestName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -208,6 +209,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 }
                 else if (fromTest.equals("1"))
                 {
+                    selectedTestName = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getTrainingName();
 //                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
                     DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
                 }
@@ -313,9 +315,9 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode()))
                     {
-                        CMLog.e("hq","跳转到考核页面");
                         Intent testIntent = new Intent(mContext, TestListActivity.class);
                         testIntent.putExtra(IntentCode.EXAM_ID, mStartTestResponse.getExamID());
+                        testIntent.putExtra(IntentCode.EXAM_NAME, selectedTestName);
                         startActivity(testIntent);
                     }
                     else
@@ -344,7 +346,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                         }
                         else
                         {
-                            ToastUtil.makeText(mContext,"无培训记录的ID");
+                            ToastUtil.makeText(mContext, "无培训记录的ID");
                         }
 
                     }

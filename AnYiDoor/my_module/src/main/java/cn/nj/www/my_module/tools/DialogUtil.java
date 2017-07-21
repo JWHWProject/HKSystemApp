@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import butterknife.OnTextChanged;
 import cn.nj.www.my_module.R;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.constant.Global;
@@ -234,7 +233,7 @@ public class DialogUtil {
 
                 Global.loginOut(context);
                 dialog.dismiss();
-                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_CLOSE_ACTIVITY_FROM_DIALOG));
+                EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_EXIT_ACCOUNT));
             }
         });
     }

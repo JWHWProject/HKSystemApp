@@ -102,8 +102,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_sheet);
         ButterKnife.bind(this);
-        initTitle();
         initAll();
+        initTitle();
 
 
     }

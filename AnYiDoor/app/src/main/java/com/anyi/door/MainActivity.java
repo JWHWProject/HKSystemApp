@@ -221,6 +221,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             {
                 //取消更新
             }
+            if (NotiTag.TAG_EXIT_ACCOUNT.equals(tag))
+            {
+                //退出登录
+                Global.loginOut(mContext);
+                startActivity(new Intent(mContext,LoginActy.class));
+                finish();
+            }
         }
         if (event instanceof NetResponseEvent)
         {

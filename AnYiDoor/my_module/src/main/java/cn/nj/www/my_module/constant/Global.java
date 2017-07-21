@@ -374,7 +374,7 @@ public class Global
         savePassword("");
         saveUserRole("");
         savecaptcha("");
-        savepermInstanceDtos("");
+        saveloginData("");
     }
 
     /**
