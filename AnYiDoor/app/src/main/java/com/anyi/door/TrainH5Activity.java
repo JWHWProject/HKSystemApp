@@ -37,6 +37,7 @@ import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
 import cn.nj.www.my_module.tools.GeneralUtils;
@@ -66,7 +67,8 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     private String url;
 
     private WebView webView;
-    private String timeStamp="";
+
+    private String timeStamp = "";
 
 
     @Override
@@ -75,11 +77,12 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acty_train_webview);
         ButterKnife.bind(this);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
-        timeStamp=sdf.format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp = sdf.format(new Date());
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
+        CMLog.e("hq", "trainId:" + trainId);
         url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
         webView = (WebView) findViewById(R.id.common_web_view);
         WebViewUtil.initWebView(this, webView, url);
@@ -131,10 +134,13 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         takePicMethod = new TakePicMethod(TrainH5Activity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
-        double d=Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4+ "");
-        if(d<10){
+        double d = Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + "");
+        if (d < 10)
+        {
             startTime(10d);
-        }else {
+        }
+        else
+        {
             startTime(d);
         }
         flag = true;
@@ -161,7 +167,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                             maxtime = mTrainContentResponse.getImageBeans().size() * 4;
 
                             Random random = new Random();
-                            if (maxtime <20)
+                            if (maxtime < 20)
                             {
                                 maxtime = 20;
                             }
@@ -221,7 +227,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onTick(long millisUntilFinished)
                     {
-                        takePicMethod.startTakePhoto("TrainH5Activity_"+timeStamp+"_"+ picCount);
+                        takePicMethod.startTakePhoto("TrainH5Activity_" + timeStamp + "_" + picCount);
                     }
 
                     @Override
@@ -244,28 +250,37 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                                 try
                                 {
                                     files = new ArrayList<>();
-                                    try {
-                                        File file1=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 1 + ".jpg");
-                                        if(file1.exists()){
+                                    try
+                                    {
+                                        File file1 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 1 + ".jpg");
+                                        if (file1.exists())
+                                        {
                                             files.add(file1);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
-                                    try {
-                                        File file2=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 2 + ".jpg");
-                                        if(file2.exists()){
+                                    try
+                                    {
+                                        File file2 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 2 + ".jpg");
+                                        if (file2.exists())
+                                        {
                                             files.add(file2);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
-                                    try {
-                                        File file3=new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_"+timeStamp+"_"+ 3 + ".jpg");
-                                        if(file3.exists()){
+                                    try
+                                    {
+                                        File file3 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 3 + ".jpg");
+                                        if (file3.exists())
+                                        {
                                             files.add(file3);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
                                 } catch (Exception e)

@@ -849,7 +849,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请填写身份证号");
                 return;
             }
-            if (tvReasonDetail.getText().toString().length() < 30)
+            if (GeneralUtils.isNullOrZeroLenght(tvReasonDetail.getText().toString()))
             {
                 ToastUtil.makeText(mContext, "请输入事由");
                 return;
