@@ -88,6 +88,7 @@
 
         </activity>
         <activity android:name=".TrainPicActivity"/>
+        <activity android:name=".TrainH5Activity"/>
         <activity android:name="cn.nj.www.my_module.main.base.CommonWebViewActivity"/>
 
         <provider

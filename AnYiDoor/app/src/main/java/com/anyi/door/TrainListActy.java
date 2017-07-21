@@ -375,9 +375,14 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                             intent.putExtra(IntentCode.RECORD_ID, recordID);
                             startActivity(new Intent(intent));
                         }
-                        else
+                        else if (mTrainContentResponse.getTraining().getFileType() == 2)
                         {
                             Intent intent = new Intent(mContext, TinyWindowPlayActivity.class);
+                            intent.putExtra(IntentCode.CHOOSE_ID, result);
+                            intent.putExtra(IntentCode.TRAIN_ID, recordID);
+                            startActivity(new Intent(intent));
+                        }else {
+                            Intent intent = new Intent(mContext, TrainH5Activity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
                             startActivity(new Intent(intent));

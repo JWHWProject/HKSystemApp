@@ -1,0 +1,434 @@
+package com.anyi.door;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.ListView;
+
+import com.anyi.door.utils.TakePicMethod;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.nj.www.my_module.adapter.CommonAdapter;
+import cn.nj.www.my_module.bean.BaseResponse;
+import cn.nj.www.my_module.bean.NetResponseEvent;
+import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.FinishTrainResponse;
+import cn.nj.www.my_module.bean.index.TrainContentResponse;
+import cn.nj.www.my_module.bean.index.UploadFileResponse;
+import cn.nj.www.my_module.constant.Constants;
+import cn.nj.www.my_module.constant.ErrorCode;
+import cn.nj.www.my_module.constant.IntentCode;
+import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.main.base.BaseActivity;
+import cn.nj.www.my_module.main.base.BaseApplication;
+import cn.nj.www.my_module.main.base.HeadView;
+import cn.nj.www.my_module.network.GsonHelper;
+import cn.nj.www.my_module.network.UserServiceImpl;
+import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.FileSystemManager;
+import cn.nj.www.my_module.tools.FileUtil;
+import cn.nj.www.my_module.tools.GeneralUtils;
+import cn.nj.www.my_module.tools.NetLoadingDialog;
+import cn.nj.www.my_module.tools.ToastUtil;
+import cn.nj.www.my_module.tools.WebViewUtil;
+
+/**
+ * 完成培训视频
+ */
+public class TrainH5Activity extends BaseActivity implements View.OnClickListener
+{
+
+    @Bind(R.id.bn_finish)
+    Button bnFinish;
+
+    @Bind(R.id.myListView)
+    ListView myListView;
+
+    private TrainContentResponse mTrainContentResponse;
+
+    private String trainId;
+
+    private CommonAdapter<TrainContentResponse.ImageBean> adapter;
+
+    private MyTime myTime;
+
+    private String title;
+
+    private String url;
+
+    private WebView webView;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.acty_train_webview);
+        ButterKnife.bind(this);
+        bnFinish.setOnClickListener(this);
+        mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
+        trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
+        title = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_TITLE);
+        url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
+        webView = (WebView) findViewById(R.id.common_web_view);
+        WebViewUtil.initWebView(this, webView, url);
+        initAll();
+    }
+
+
+    private void initTitle()
+    {
+        View view = findViewById(R.id.common_back);
+        HeadView headView = new HeadView((ViewGroup) view);
+        headView.setTitleText(mTrainContentResponse.getTraining().getTrainingName());
+        headView.setLeftImage(R.mipmap.app_title_back);
+        headView.setHiddenRight();
+    }
+
+
+    @Override
+    public void initView()
+    {
+        initTitle();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
+                "您确定要中途取消培训？", "取消", "确定");
+    }
+
+    boolean flag = true;
+
+    int time = 1;
+
+    int maxtime = 1;
+
+    int randomTime = -1;
+
+    private int picCount = 1;
+
+    private TakePicMethod takePicMethod;
+
+    @Override
+    public void initViewData()
+    {
+        //初始化surface
+        initSurface();
+        takePicMethod = new TakePicMethod(TrainH5Activity.this, mySurfaceView, myHolder);
+        picCount = 1;
+        TakePicture();
+        startTime(Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + ""));
+        flag = true;
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                while (flag)
+                {
+                    try
+                    {
+                        Thread.sleep(1000);
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    if (randomTime == -1)
+                    {
+                        if (mTrainContentResponse.getImageBeans().size() > 0)
+                        {
+//                            long halftime = mNiceVideoPlayer.getDuration() / 2;
+//                            maxtime = (int) (halftime / 1000f);
+                            maxtime = mTrainContentResponse.getImageBeans().size() * 4;
+
+                            Random random = new Random();
+                            if (maxtime == 0)
+                            {
+                                maxtime = 17;
+                            }
+                            randomTime = random.nextInt(maxtime);
+                            time = 1;
+                        }
+                    }
+                    else
+                    {
+                        if (time == randomTime)
+                        {
+                            picCount = 2;
+                            TakePicture();
+                        }
+                        time++;
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private SurfaceView mySurfaceView;
+
+    private SurfaceHolder myHolder;
+
+    // 初始化surface
+    @SuppressWarnings("deprecation")
+    private void initSurface()
+    {
+        // 初始化surfaceview
+        if (mySurfaceView == null && myHolder == null)
+        {
+            mySurfaceView = (SurfaceView) findViewById(R.id.camera_surfaceview);
+            // 初始化surfaceholder
+            myHolder = mySurfaceView.getHolder();
+        }
+
+    }
+
+    private boolean isTakeingPhoto = false;
+
+    CountDownTimer countDownTimer;
+
+    private void TakePicture()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            return;
+        }
+        if (!isTakeingPhoto)
+        {
+            isTakeingPhoto = true;
+            if (countDownTimer == null)
+            {
+                countDownTimer = new CountDownTimer(10000, 3000)
+                {
+                    @Override
+                    public void onTick(long millisUntilFinished)
+                    {
+                        takePicMethod.startTakePhoto("TinyWindowPlayActivity" + picCount);
+                    }
+
+                    @Override
+                    public void onFinish()
+                    {
+                        countDownTimer.cancel();
+                        isTakeingPhoto = false;
+                        try
+                        {
+//                            if (picCount == 1) {
+//                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            } else if (picCount == 2) {
+//                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            } else {
+//                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity" + picCount + ".jpg"));
+//                            }
+                            if (picCount == 3)
+                            {
+                                List<File> files = null;
+                                try
+                                {
+                                    files = new ArrayList<>();
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 1 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 2 + ".jpg"));
+                                    files.add(new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainPicActivity" + 3 + ".jpg"));
+                                } catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                if (files.size() >= 0)
+                                {
+                                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                                    UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+                                }
+                                else
+                                {
+                                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                                    UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
+                                }
+                            }
+                        } catch (Exception e)
+                        {
+                        }
+                    }
+                };
+            }
+            if (countDownTimer != null)
+            {
+                countDownTimer.start();
+            }
+        }
+    }
+
+    @Override
+    public void initEvent()
+    {
+
+    }
+
+    @Override
+    public void netResponse(BaseResponse event)
+    {
+
+    }
+
+    @Override
+    public void onEventMainThread(BaseResponse event)
+    {
+        if (event instanceof NoticeEvent)
+        {
+            String tag = ((NoticeEvent) event).getTag();
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
+                        "您确定要中途取消培训？", "取消", "确定");
+            }
+            if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                finish();
+            }
+        }
+        else if (event instanceof NetResponseEvent)
+        {
+            NetLoadingDialog.getInstance().dismissDialog();
+            String tag = ((NetResponseEvent) event).getTag();
+            String result = ((NetResponseEvent) event).getResult();
+            if (tag.equals(FinishTrainResponse.class.getName()))
+            {
+                FinishTrainResponse mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mFinishTrainResponse.getResultCode()))
+                    {
+                        DialogUtil.showDialogOneButton(mContext, "完成培训", "我知道了", NotiTag.TAG_CLOSE);
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mFinishTrainResponse.getResultCode(), mFinishTrainResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
+            if (tag.equals(UploadFileResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
+                    if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
+                    {
+                        NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                        UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
+                    }
+                    else
+                    {
+                        NetLoadingDialog.getInstance().dismissDialog();
+                        ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    NetLoadingDialog.getInstance().dismissDialog();
+                    ToastUtil.showError(mContext);
+                }
+            }
+        }
+
+    }
+
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.bn_finish:
+                //这边需要添加图片
+                //获取到所有数据，提交
+                if (time > maxtime)
+                {
+                    picCount = 3;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    {
+                        NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                        UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
+                    }
+                    else
+                    {
+                        TakePicture();
+                    }
+                }
+                else
+                {
+                    DialogUtil.showDialogOneButton(
+                            TrainH5Activity.this, "您现在还无法完成培训~", "我知道了"
+                            , "");
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * 倒计时
+     */
+    private class MyTime extends CountDownTimer
+    {
+        public MyTime(long millisInFuture, long countDownInterval)
+        {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish()
+        {
+            bnFinish.setEnabled(true);
+            bnFinish.setText(getResources().getString(R.string.finish_train));
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished)
+        {
+            bnFinish.setEnabled(false);
+            bnFinish.setText(getResources().getString(R.string.finish_train) + "(" + GeneralUtils.splitToSecondTime((millisUntilFinished / 1000) + "") + ")");
+        }
+    }
+
+    private void startTime(Double time)
+    {
+        cancelTime();
+        myTime = new MyTime(time.longValue() * 1000, Constants.Countdown_end);
+        myTime.start();
+    }
+
+    private void cancelTime()
+    {
+        if (myTime != null)
+        {
+            myTime.cancel();
+            myTime = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        flag = false;
+        cancelTime();
+        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainH5Activity.this));
+    }
+
+}
