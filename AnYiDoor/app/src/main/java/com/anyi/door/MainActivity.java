@@ -38,6 +38,7 @@ import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.IntentCode;
 import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.constant.URLUtil;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
 import cn.nj.www.my_module.main.base.CommonWebViewActivity;
@@ -141,6 +142,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 DialogUtil.exitAccountDialog(mContext);
             }
         });
+        bnCardNumber.setOnClickListener(this);
+        bnTrainNumber.setOnClickListener(this);
+        bnTestNumber.setOnClickListener(this);
     }
 
     @Override
@@ -225,7 +229,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             {
                 //退出登录
                 Global.loginOut(mContext);
-                startActivity(new Intent(mContext,LoginActy.class));
+                startActivity(new Intent(mContext, LoginActy.class));
                 finish();
             }
         }
@@ -402,6 +406,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     {
         switch (view.getId())
         {
+            case R.id.bn_card_number:
+                Intent cardIntent = new Intent(mContext, CommonWebViewActivity.class);
+                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日发卡");
+                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +1);
+                startActivity(cardIntent);
+                break;
+            case R.id.bn_train_number:
+                Intent trainIntent = new Intent(mContext, CommonWebViewActivity.class);
+                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日培训");
+                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +2);
+                startActivity(trainIntent);
+                break;
+            case R.id.bn_test_number:
+                Intent testIntent1 = new Intent(mContext, CommonWebViewActivity.class);
+                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日考核");
+                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +3);
+                startActivity(testIntent1);
+                break;
+
             case R.id.ll_back:
                 startActivity(new Intent(mContext, GiveBackCardActivity.class));
                 break;
