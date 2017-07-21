@@ -93,6 +93,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     private TestListActivity.MyTime myTime;
 
+    private String examName = "";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -110,7 +112,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     {
         View view = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) view);
-        headView.setTitleText("考核");
+        headView.setTitleText(examName + "考核");
         headView.setLeftImage(R.mipmap.app_title_back);
         headView.setHiddenRight();
     }
@@ -288,6 +290,10 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     {
         NetLoadingDialog.getInstance().loading(mContext);
         examID = getIntent().getStringExtra(IntentCode.EXAM_ID);
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.EXAM_NAME)))
+        {
+            examName = getIntent().getStringExtra(IntentCode.EXAM_NAME);
+        }
         UserServiceImpl.instance().testDetail(examID, ExamResponse.class.getName());
     }
 

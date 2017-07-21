@@ -14,7 +14,7 @@
         android:textColor="@color/register_black_text"
         android:textSize="@dimen/pxtodp30"/>
 
-    <RadioGroup
+    <RadioGroup  android:paddingLeft="@dimen/pxtodp20"
         android:id="@+id/group_me"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

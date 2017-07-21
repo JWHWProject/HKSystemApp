@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyi.door.utils.ForceUpdateDialog;
-import com.anyi.door.video.base.TinyWindowPlayActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -298,9 +297,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                             ForceUpdateDialog mForceUpdateDialog = new ForceUpdateDialog(MainActivity.this, mUpdateResponse.getAppVersionInfo().getUpdateType() + "");
                             mForceUpdateDialog
                                     .setDownloadUrl(mUpdateResponse.getAppVersionInfo().getRequestUrl())
-                                    .setTitle(tvTitle.getText().toString() + "有更新啦")
+                                    .setTitle("检测到有新版本")
                                     .setReleaseTime(mUpdateResponse.getAppVersionInfo().getCreateTime())
-                                    .setVersionName(mUpdateResponse.getAppVersionInfo().getVersionCode() + "")
+                                    .setVersionName(mUpdateResponse.getAppVersionInfo().getVersionCodeShow() + "")
                                     .setUpdateDesc(mUpdateResponse.getAppVersionInfo().getUpdateDescription())
                                     .setFileName("anyi.apk")
                                     .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
@@ -327,7 +326,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         Window window = dlg.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = DisplayUtil.getWidth(mContext) * 3 / 5;//宽高可设置具体大小
+        lp.width = DisplayUtil.getWidth(mContext) * 5 / 8;//宽高可设置具体大小
 
         dlg.getWindow().setAttributes(lp);
     }
