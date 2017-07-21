@@ -10,14 +10,16 @@
 
     <TextView
         android:id="@+id/group_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         android:paddingBottom="@dimen/pxtodp26"
         android:paddingTop="@dimen/pxtodp26"
-        android:textStyle="bold"
-        android:gravity="center_vertical"
+        android:text="ddd"
         android:textColor="@color/register_black_text"
         android:textSize="@dimen/pxtodp30"
+        android:textStyle="bold"
         />
 
     <ImageView
@@ -25,7 +27,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/pxtodp10"
+        android:paddingBottom="@dimen/pxtodp26"
+        android:paddingTop="@dimen/pxtodp26"
+        android:src="@mipmap/icon_down"/>
 
     <View
         android:layout_width="match_parent"

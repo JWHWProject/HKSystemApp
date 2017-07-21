@@ -9,7 +9,20 @@ public class NoticeEvent extends BaseResponse {
     private String url1;
     private String url2;
 
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+        this.setDuration(duration);
+    }
+
+    private long duration;
     public NoticeEvent(String tag) {
+        this.setTag(tag);
+    }
+    public NoticeEvent(String tag,long duration) {
         this.setTag(tag);
     }
 

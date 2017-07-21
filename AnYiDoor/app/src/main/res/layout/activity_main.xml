@@ -73,7 +73,7 @@
                     android:paddingLeft="@dimen/pxtodp40"
                     android:paddingRight="@dimen/pxtodp40"
                     android:text="--"
-                    android:textColor="@color/app_blue"
+                    android:textColor="@color/register_black_text"
                     android:textSize="@dimen/pxtosp32"/>
 
                 <TextView
@@ -111,7 +111,7 @@
                     android:paddingLeft="@dimen/pxtodp40"
                     android:paddingRight="@dimen/pxtodp40"
                     android:text="--"
-                    android:textColor="@color/register_black_text"
+                    android:textColor="@color/app_blue"
                     android:textSize="@dimen/pxtosp32"/>
 
                 <TextView
