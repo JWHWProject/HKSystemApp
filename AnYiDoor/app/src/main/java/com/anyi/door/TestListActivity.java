@@ -366,6 +366,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 if (bnFinish.getText().toString().trim().equals("提交"))
                 {
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);

@@ -150,6 +150,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bnFinish.getText().toString().trim().equals("完成培训")){
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId,

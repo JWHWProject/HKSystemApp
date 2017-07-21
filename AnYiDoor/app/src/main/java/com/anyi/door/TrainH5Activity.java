@@ -401,6 +401,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                 if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
