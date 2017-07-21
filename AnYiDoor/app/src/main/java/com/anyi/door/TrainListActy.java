@@ -204,13 +204,11 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 if (fromTest.equals(""))
                 {
                     DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
-//                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
 
                 }
                 else if (fromTest.equals("1"))
                 {
                     selectedTestName = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getTrainingName();
-//                    DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始考核", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
                     DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
                 }
                 return false;
@@ -385,6 +383,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                             Intent intent = new Intent(mContext, TrainH5Activity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
+                            intent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, mTrainContentResponse.getFileUrl());
                             startActivity(new Intent(intent));
                         }
 

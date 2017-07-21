@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.anyi.door.utils.TakePicMethod;
 
@@ -54,8 +53,6 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     @Bind(R.id.bn_finish)
     Button bnFinish;
 
-    @Bind(R.id.myListView)
-    ListView myListView;
 
     private TrainContentResponse mTrainContentResponse;
 
@@ -65,7 +62,6 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
 
     private MyTime myTime;
 
-    private String title;
 
     private String url;
 
@@ -84,7 +80,6 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
-        title = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_TITLE);
         url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
         webView = (WebView) findViewById(R.id.common_web_view);
         WebViewUtil.initWebView(this, webView, url);
