@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import cn.nj.www.my_module.R;
 
@@ -19,8 +20,7 @@ import cn.nj.www.my_module.R;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class NetLoadingDialog
-{
+public class NetLoadingDialog {
 
     private Dialog mDialog;
 
@@ -28,18 +28,17 @@ public class NetLoadingDialog
 
     private Context context;
 
-    private NetLoadingDialog()
-    {
+    private TextView tvTip;
+
+    private NetLoadingDialog() {
     }
 
     private static NetLoadingDialog netLoadingDialog;
 
 
-    public static NetLoadingDialog getInstance()
-    {
+    public static NetLoadingDialog getInstance() {
 
-        if (netLoadingDialog == null)
-        {
+        if (netLoadingDialog == null) {
             netLoadingDialog = new NetLoadingDialog();
         }
         return netLoadingDialog;
@@ -52,25 +51,29 @@ public class NetLoadingDialog
      *
      * @see [类、类#方法、类#成员]
      */
-    public void loading(Context context)
-    {
+    public void loading(Context context) {
         this.context = context;
-        try
-        {
-            if (isLDShow)
-            {
+        try {
+            if (isLDShow) {
                 hideLoadingDialog();
             }
             createDialog();
             mDialog.show();
             mDialog.setCanceledOnTouchOutside(false);
             isLDShow = true;
-        } catch (Exception e)
-        {
-            if (isLDShow && mDialog != null)
-            {
+            tvTip.setVisibility(View.GONE);
+        } catch (Exception e) {
+            if (isLDShow && mDialog != null) {
                 hideLoadingDialog();
             }
+        }
+    }
+
+    public void loading(Context context, String tip) {
+        loading(context);
+        if (GeneralUtils.isNotNullOrZeroLenght(tip)) {
+            tvTip.setVisibility(View.VISIBLE);
+            tvTip.setText(tip);
         }
     }
 
@@ -80,11 +83,9 @@ public class NetLoadingDialog
      *
      * @see [类、类#方法、类#成员]
      */
-    private void hideLoadingDialog()
-    {
+    private void hideLoadingDialog() {
         isLDShow = false;
-        if (mDialog != null && mDialog.isShowing())
-        {
+        if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
         }
     }
@@ -95,12 +96,12 @@ public class NetLoadingDialog
      *
      * @see [类、类#方法、类#成员]
      */
-    private void createDialog()
-    {
+    private void createDialog() {
         mDialog = null;
         mDialog = new Dialog(context, R.style.loading_dialog);
 //        mDialog.setOnDismissListener(onDismissListener);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
+        tvTip = (TextView) view.findViewById(R.id.tvTip);
         mDialog.setContentView(view);
     }
 
@@ -110,17 +111,14 @@ public class NetLoadingDialog
      *
      * @see [类、类#方法、类#成员]
      */
-    public void dismissDialog()
-    {
+    public void dismissDialog() {
         hideLoadingDialog();
     }
 
-    private OnDismissListener onDismissListener = new OnDismissListener()
-    {
+    private OnDismissListener onDismissListener = new OnDismissListener() {
 
         @Override
-        public void onDismiss(DialogInterface dialog)
-        {
+        public void onDismiss(DialogInterface dialog) {
         }
     };
 

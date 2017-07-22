@@ -48,6 +48,7 @@ public class UserServiceImpl
         param.put("versionCode", Constants.VERSION_NAME);
         param.put("gpsLong", gpsLong);
         param.put("gpsLati", gpsLati);
+        param.put("appFlag", "OnlineTraining");
         new NetWork()
                 .startPost(URLUtil.INIT, param, tag);
     }
@@ -223,7 +224,7 @@ public class UserServiceImpl
     public void testDetail(String examID, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
-        param.put("examID", examID);
+        param.put("trainingID", examID);
         new NetWork()
                 .startPost(URLUtil.TEST_DETAIL, param, tag);
     }

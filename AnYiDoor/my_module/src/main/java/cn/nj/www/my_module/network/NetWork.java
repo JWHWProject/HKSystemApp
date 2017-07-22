@@ -395,6 +395,7 @@ public class NetWork {
                             hashValue += value;
                         }
                     }
+                    CMLog.e("HTTP", "参数2：\n" + GsonHelper.toJson(map));
                     HttpEntity httpEntity = new StringEntity(GsonHelper.toJson(map), HTTP.UTF_8);
                     httpPost.setEntity(httpEntity);
                 }
@@ -415,7 +416,7 @@ public class NetWork {
                         return null;
                     }
                     CMLog.i(TAG, "respnse result:" + result);
-                    KLog.json(TAG, result);
+//                    KLog.json(TAG, result);
                     return result;
                 } else {
                     CMLog.i(TAG, "http response code:" + httpResponse.getStatusLine().getStatusCode());

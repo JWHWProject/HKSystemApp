@@ -96,6 +96,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     private String examName = "";
     private String timeStamp="";
 
+    private String trainId="";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -276,7 +278,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 }
                                 if (files.size() >= 0)
                                 {
-                                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                                    NetLoadingDialog.getInstance().loading(TestListActivity.this,"提交中,请稍后");
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
                                 }
                                 else
@@ -305,11 +307,12 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     {
         NetLoadingDialog.getInstance().loading(mContext);
         examID = getIntent().getStringExtra(IntentCode.EXAM_ID);
+        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.EXAM_NAME)))
         {
             examName = getIntent().getStringExtra(IntentCode.EXAM_NAME);
         }
-        UserServiceImpl.instance().testDetail(examID, ExamResponse.class.getName());
+        UserServiceImpl.instance().testDetail(trainId, ExamResponse.class.getName());
     }
 
     List<OnlineTrainingAnswer> answerList = new ArrayList<>();
@@ -366,7 +369,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 if (bnFinish.getText().toString().trim().equals("提交"))
                 {
                     picCount = 3;
-                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                    NetLoadingDialog.getInstance().loading(TestListActivity.this,"提交中，请稍后");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
@@ -513,7 +516,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
-                        NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                        NetLoadingDialog.getInstance().loading(TestListActivity.this,"提交中，请稍后");
                         UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
                     }

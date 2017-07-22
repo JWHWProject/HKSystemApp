@@ -315,6 +315,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                     {
                         Intent testIntent = new Intent(mContext, TestListActivity.class);
                         testIntent.putExtra(IntentCode.EXAM_ID, mStartTestResponse.getExamID());
+                        testIntent.putExtra(IntentCode.TRAIN_ID, trainID);
                         testIntent.putExtra(IntentCode.EXAM_NAME, selectedTestName);
                         startActivity(testIntent);
                     }

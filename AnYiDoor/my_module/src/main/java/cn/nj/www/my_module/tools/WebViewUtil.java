@@ -2,6 +2,7 @@ package cn.nj.www.my_module.tools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.DisplayMetrics;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
@@ -23,10 +24,20 @@ public class WebViewUtil
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setAllowFileAccess(true);
         //        webView.getSettings().setPluginsEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.getSettings().setCacheMode(webView.getSettings().LOAD_NO_CACHE);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setDatabaseEnabled(true);
+        webView.getSettings().setDisplayZoomControls(false);
+        webView.getSettings().setJavaScriptEnabled(true); // 设置支持javascript脚本  
+        webView.getSettings().setAllowFileAccess(true); // 允许访问文件  
+        webView.getSettings().setBuiltInZoomControls(true); // 设置显示缩放按钮  
+        webView.getSettings().setSupportZoom(true); // 支持缩放
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webView.getSettings().setLoadWithOverviewMode(true);
+
+
 //        webView.getSettings().setBuiltInZoomControls(false);
         // webView.setInitialScale(25);
         if (BaseApplication.cookieStore != null)

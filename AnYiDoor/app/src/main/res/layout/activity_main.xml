@@ -26,11 +26,13 @@
 
         <TextView
             android:id="@+id/top_view_right_tv"
-            android:layout_width="@dimen/pxtodp120"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/pxtodp160"
+            android:paddingLeft="@dimen/pxtodp40"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+
             android:layout_centerVertical="true"
-            android:gravity="right"
+            android:gravity="center_vertical|right"
             android:paddingRight="@dimen/pxtodp20"
             android:text="退出"
             android:textColor="@color/register_black_text"

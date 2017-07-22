@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">二道门</string>
     <string name="action_settings">Settings</string>
     <string name="exit_tips">再按一次退出程序</string>
     <string name="no_data">--</string>
