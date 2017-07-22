@@ -99,6 +99,8 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
             if (tag.equals(LoginResponse.class.getName())) {
                 LoginResponse loginResponse = GsonHelper.toType(result, LoginResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+                    String a = loginResponse.getResultCode();
+                    String b = Constants.SUCESS_CODE;
                     if (Constants.SUCESS_CODE.equals(loginResponse.getResultCode())) {
                         Global.saveLoginUserData(mContext,result);
                         ToastUtil.makeText(mContext, "登录成功");

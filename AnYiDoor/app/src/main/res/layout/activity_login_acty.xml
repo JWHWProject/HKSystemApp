@@ -36,7 +36,6 @@
 
             <EditText
                 android:id="@+id/app_login_name_et"
-                android:text="18052017661"
                 style="@style/register_input_user_infos_et"
                 android:hint="请输入账号"/>
         </LinearLayout>
@@ -63,7 +62,6 @@
                 android:id="@+id/app_login_psd_et"
                 style="@style/register_input_user_infos_et"
                 android:hint="请输入密码"
-                android:text="123456"
                 android:inputType="textPassword"/>
         </LinearLayout>
 

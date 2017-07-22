@@ -820,11 +820,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
         if (llInner.getVisibility() == View.VISIBLE)
         {
-            if (tvDepartment.getText().toString().equals("请选择"))
-            {
-                ToastUtil.makeText(mContext, "请选择部门");
-                return;
-            }
+//            if (tvDepartment.getText().toString().equals("请选择"))
+//            {
+//                ToastUtil.makeText(mContext, "请选择部门");
+//                return;
+//            }
             if (GeneralUtils.isNullOrZeroLenght(etNumber.getText().toString()))
             {
                 ToastUtil.makeText(mContext, "请填写工号");

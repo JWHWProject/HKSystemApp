@@ -289,12 +289,12 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                                 }
                                 if (files.size() >= 0)
                                 {
-                                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
                                     UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
                                 }
                                 else
                                 {
-                                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
                                     UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
                                 }
                             }
@@ -341,11 +341,12 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         }
         else if (event instanceof NetResponseEvent)
         {
-            NetLoadingDialog.getInstance().dismissDialog();
+
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(FinishTrainResponse.class.getName()))
             {
+                NetLoadingDialog.getInstance().dismissDialog();
                 FinishTrainResponse mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
@@ -355,11 +356,13 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     }
                     else
                     {
+                        bnFinish.setEnabled(true);
                         ErrorCode.doCode(this, mFinishTrainResponse.getResultCode(), mFinishTrainResponse.getDesc());
                     }
                 }
                 else
                 {
+                    bnFinish.setEnabled(false);
                     ToastUtil.showError(this);
                 }
             }
@@ -370,17 +373,18 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
-                        NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                        NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
                         UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
                     }
                     else
                     {
+                        bnFinish.setEnabled(true);
                         NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 }
                 else
-                {
+                {bnFinish.setEnabled(true);
                     NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
@@ -398,10 +402,11 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             case R.id.bn_finish:
                 //这边需要添加图片
                 //获取到所有数据，提交
+
                 if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
-                    picCount = 3;
-                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+                    picCount = 3;    bnFinish.setEnabled(false);
+                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
