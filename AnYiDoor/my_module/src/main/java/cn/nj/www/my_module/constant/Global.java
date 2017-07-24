@@ -209,6 +209,15 @@ public class Global
     {
         SharePref.saveString(XS_PASSWORD_WORD, username);
     }
+    public static String getLastLoginName()
+    {
+        return SharePref.getString("lastLoginName", "");
+    }
+
+    public static void saveLastLoginName(String username)
+    {
+        SharePref.saveString("lastLoginName", username);
+    }
 
     /**
      * 客户端标识密码（x-s-password），加密时使用明文

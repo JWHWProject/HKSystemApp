@@ -31,9 +31,13 @@ import cn.nj.www.my_module.view.ClearPasswordEditText;
 public class LoginActy extends BaseActivity implements View.OnClickListener {
 
     private Button commitBn;
+
     private ClearEditText nameET;
+
     private ClearPasswordEditText psdET;
+
     private TextView forgetTv, registTv;
+
     ProgressDialog dialog;
 
     @Override
@@ -65,7 +69,11 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
         commitBn = (Button) findViewById(R.id.app_login_bn);
         registTv = (TextView) findViewById(R.id.app_register_tv);
         forgetTv = (TextView) findViewById(R.id.app_forget_tv);
-
+        nameET.setText(Global.getLastLoginName());
+        nameET.setSelection(Global.getLastLoginName().length());
+        psdET.getEditText().setHint("请输入密码");
+        psdET.getEditText().setTextSize(15);
+        psdET.getEditText().setHintTextColor(getResources().getColor(R.color.register_hint_text));
     }
 
     @Override
@@ -81,8 +89,7 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void netResponse(BaseResponse event)
-    {
+    public void netResponse(BaseResponse event) {
 
     }
 
@@ -101,17 +108,18 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
             if (tag.equals(LoginResponse.class.getName())) {
                 LoginResponse loginResponse = GsonHelper.toType(result, LoginResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    String a = loginResponse.getResultCode();
-                    String b = Constants.SUCESS_CODE;
                     if (Constants.SUCESS_CODE.equals(loginResponse.getResultCode())) {
-                        Global.saveLoginUserData(mContext,result);
+                        Global.saveLoginUserData(mContext, result);
+                        Global.saveLastLoginName(nameET.getText().toString());
                         ToastUtil.makeText(mContext, "登录成功");
-                        startActivity(new Intent(mContext,MainActivity.class));
+                        startActivity(new Intent(mContext, MainActivity.class));
                         finish();
-                    } else {
+                    }
+                    else {
                         ErrorCode.doCode(this, loginResponse.getResultCode(), loginResponse.getDesc());
                     }
-                } else {
+                }
+                else {
                     ToastUtil.showError(this);
                 }
             }
@@ -130,10 +138,12 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
                         UserServiceImpl.instance().login(nameET.getText().toString().trim(), StringEncrypt.Encrypt(psdET.getText().toString().trim()),
                                 LoginResponse.class.getName());
 
-                    } else {
+                    }
+                    else {
                         ToastUtil.makeText(mContext, "请输入用户名");
                     }
-                } else {
+                }
+                else {
                     ToastUtil.makeText(mContext, "请输入密码");
                 }
                 break;
