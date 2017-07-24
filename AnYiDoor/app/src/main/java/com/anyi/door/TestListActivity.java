@@ -96,7 +96,6 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     private String timeStamp = "";
 
-    private String trainId = "";
 
     private String examFinishID;
 
@@ -277,12 +276,12 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initViewData() {
         NetLoadingDialog.getInstance().loading(mContext);
-        examID = getIntent().getStringExtra(IntentCode.EXAM_ID);
-        examFinishID = getIntent().getStringExtra(IntentCode.EXAM_FINISH_ID);
+        examFinishID = getIntent().getStringExtra(IntentCode.EXAM_ID);
+        examID = getIntent().getStringExtra(IntentCode.EXAM_FINISH_ID);
         if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.EXAM_NAME))) {
             examName = getIntent().getStringExtra(IntentCode.EXAM_NAME);
         }
-        UserServiceImpl.instance().testDetail(trainId, ExamResponse.class.getName());
+        UserServiceImpl.instance().testDetail(examID, ExamResponse.class.getName());
     }
 
     List<OnlineTrainingAnswer> answerList = new ArrayList<>();
