@@ -73,8 +73,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
     private String trainId;
 
     private MyTime myTime;
-
-    private String timeStamp = "";
+    private String timeStamp="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +86,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         //获取数据
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainVideoResponse.class);
         trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        timeStamp = sdf.format(new Date());
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp=sdf.format(new Date());
         initTitle();
         init();
 
@@ -101,8 +100,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                 if (!isWatched) {
                     DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                             "您确定要中途取消培训？", "取消", "确定");
-                }
-                else {
+                }else {
                     DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                             "您确定要关闭？", "取消", "确定");
                 }
@@ -133,11 +131,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             public void getDuration() {
                 CMLog.e("hq", mNiceVideoPlayer.getDuration() + "获取到的时长");
                 if (!isWatched) {
-                    long d = mNiceVideoPlayer.getDuration();
-                    if (d < 10) {
+                    long d=mNiceVideoPlayer.getDuration();
+                    if(d<10){
                         startTime(10);
-                    }
-                    else {
+                    }else {
                         startTime(d);
                     }
                 }
@@ -151,7 +148,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         bnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bnFinish.getText().toString().trim().equals("完成培训")) {
+                if (bnFinish.getText().toString().trim().equals("完成培训")){
                     picCount = 3;
                     NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this, "提交中,请稍后");
                     bnFinish.setEnabled(false);
@@ -164,6 +161,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                         if (event instanceof NetResponseEvent) {
                                             String tag = ((NetResponseEvent) event).getTag();
                                             String result = ((NetResponseEvent) event).getResult();
+                                            NetLoadingDialog.getInstance().dismissDialog();
                                             if (tag.equals(FinishTrainResponse.class.getName())) {
                                                 NetLoadingDialog.getInstance().dismissDialog();
                                                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
@@ -260,8 +258,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         if (!isWatched) {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                     "您确定要中途取消培训？", "取消", "确定");
-        }
-        else {
+        }else {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
                     "您确定要关闭？", "取消", "确定");
         }
@@ -299,7 +296,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                 countDownTimer = new CountDownTimer(10000, 3000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        takePicMethod.startTakePhoto("TinyWindowPlayActivity_" + timeStamp + "_" + picCount);
+                        takePicMethod.startTakePhoto("TinyWindowPlayActivity_"+timeStamp+"_"+ picCount);
                     }
 
                     @Override
@@ -308,38 +305,38 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                         isTakeingPhoto = false;
                         try {
                             if (picCount == 1) {
-                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ picCount + ".jpg"));
                             }
                             else if (picCount == 2) {
                                 bnFinish.setVisibility(View.VISIBLE);
-                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ picCount + ".jpg"));
                             }
                             else {
-                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ picCount + ".jpg"));
                             }
                             if (picCount == 3) {
                                 List<File> files = null;
                                 try {
                                     files = new ArrayList<>();
                                     try {
-                                        File file1 = new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + 1 + ".jpg");
-                                        if (file1.exists()) {
+                                        File file1=new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ 1 + ".jpg");
+                                        if(file1.exists()){
                                             files.add(file1);
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                     try {
-                                        File file2 = new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + 2 + ".jpg");
-                                        if (file2.exists()) {
+                                        File file2=new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ 2 + ".jpg");
+                                        if(file2.exists()){
                                             files.add(file2);
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                     try {
-                                        File file3 = new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + 3 + ".jpg");
-                                        if (file3.exists()) {
+                                        File file3=new File(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_"+timeStamp+"_"+ 3 + ".jpg");
+                                        if(file3.exists()){
                                             files.add(file3);
                                         }
                                     } catch (Exception e) {
@@ -356,6 +353,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                             if (event instanceof NetResponseEvent) {
                                                 String tag = ((NetResponseEvent) event).getTag();
                                                 String result = ((NetResponseEvent) event).getResult();
+                                                NetLoadingDialog.getInstance().dismissDialog();
                                                 if (tag.equals(UploadFileResponse.class.getName())) {
                                                     if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                                                         UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
@@ -384,13 +382,11 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                                                                         }
                                                                                         else {
                                                                                             bnFinish.setEnabled(true);
-                                                                                            NetLoadingDialog.getInstance().dismissDialog();
                                                                                             ErrorCode.doCode(TinyWindowPlayActivity.this, finishTrainResponse.getResultCode(), finishTrainResponse.getDesc());
                                                                                         }
                                                                                     }
                                                                                     else {
                                                                                         bnFinish.setEnabled(true);
-                                                                                        NetLoadingDialog.getInstance().dismissDialog();
                                                                                         ToastUtil.showError(TinyWindowPlayActivity.this);
                                                                                     }
                                                                                 }

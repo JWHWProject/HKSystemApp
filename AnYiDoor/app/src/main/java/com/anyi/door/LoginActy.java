@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import cn.nj.www.my_module.bean.BaseResponse;
@@ -26,11 +25,14 @@ import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
 import cn.nj.www.my_module.tools.StringEncrypt;
 import cn.nj.www.my_module.tools.ToastUtil;
+import cn.nj.www.my_module.view.ClearEditText;
+import cn.nj.www.my_module.view.ClearPasswordEditText;
 
 public class LoginActy extends BaseActivity implements View.OnClickListener {
 
     private Button commitBn;
-    private EditText nameET, psdET;
+    private ClearEditText nameET;
+    private ClearPasswordEditText psdET;
     private TextView forgetTv, registTv;
     ProgressDialog dialog;
 
@@ -58,8 +60,8 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
     @Override
     public void initView() {
         initTitle();
-        nameET = (EditText) findViewById(R.id.app_login_name_et);
-        psdET = (EditText) findViewById(R.id.app_login_psd_et);
+        nameET = (ClearEditText) findViewById(R.id.app_login_name_et);
+        psdET = (ClearPasswordEditText) findViewById(R.id.app_login_psd_et);
         commitBn = (Button) findViewById(R.id.app_login_bn);
         registTv = (TextView) findViewById(R.id.app_register_tv);
         forgetTv = (TextView) findViewById(R.id.app_forget_tv);

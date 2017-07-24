@@ -341,12 +341,11 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         }
         else if (event instanceof NetResponseEvent)
         {
-
+            NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(FinishTrainResponse.class.getName()))
             {
-                NetLoadingDialog.getInstance().dismissDialog();
                 FinishTrainResponse mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {

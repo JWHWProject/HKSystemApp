@@ -98,6 +98,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     private String trainId = "";
 
+    private String examFinishID;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,7 +258,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 }
                                 else {
                                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                                    UserServiceImpl.instance().finishTest(examID, answerList, null,
+                                    UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
                                             FinishTestResponse.class.getName());
                                 }
                             }
@@ -276,7 +278,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     public void initViewData() {
         NetLoadingDialog.getInstance().loading(mContext);
         examID = getIntent().getStringExtra(IntentCode.EXAM_ID);
-        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
+        examFinishID = getIntent().getStringExtra(IntentCode.EXAM_FINISH_ID);
         if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.EXAM_NAME))) {
             examName = getIntent().getStringExtra(IntentCode.EXAM_NAME);
         }
@@ -327,7 +329,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                        UserServiceImpl.instance().finishTest(examID, answerList, null,
+                        UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
                                 FinishTestResponse.class.getName());
                         bnFinish.setEnabled(false);
                     }
@@ -376,6 +378,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             }
         }
         else if (event instanceof NetResponseEvent) {
+            NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(ExamResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
@@ -448,7 +451,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     UploadFileResponse uploadFileResponse = GsonHelper.toType(result, UploadFileResponse.class);
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode())) {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
-                        UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
+                        UserServiceImpl.instance().finishTest(examFinishID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
                     }
                     else {
