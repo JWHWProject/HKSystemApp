@@ -163,9 +163,9 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //                            maxtime = (int) (halftime / 1000f);
                             maxtime = answerList.size() * 4;
                             Random random = new Random();
-                            if (maxtime <20)
+                            if (maxtime <10)
                             {
-                                maxtime = 20;
+                                maxtime = 10;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
@@ -366,6 +366,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 if (bnFinish.getText().toString().trim().equals("提交"))
                 {
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TestListActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);

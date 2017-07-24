@@ -209,7 +209,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 else if (fromTest.equals("1"))
                 {
                     selectedTestName = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getTrainingName();
-                    DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
+                    DialogUtil.startTestDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
                 }
                 return false;
             }

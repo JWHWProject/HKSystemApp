@@ -2,7 +2,7 @@
 <LinearLayout android:id="@+id/money_transferdebt_dialogll"
               xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="360px"
+              android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:layout_marginLeft="@dimen/pxtodp60"
               android:layout_marginRight="@dimen/pxtodp60"

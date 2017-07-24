@@ -81,7 +81,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         timeStamp = sdf.format(new Date());
         bnFinish.setOnClickListener(this);
         mTrainContentResponse = GsonHelper.toType(getIntent().getStringExtra(IntentCode.CHOOSE_ID), TrainContentResponse.class);
-        trainId = getIntent().getStringExtra(IntentCode.RECORD_ID);
+        trainId = getIntent().getStringExtra(IntentCode.TRAIN_ID);
         CMLog.e("hq", "trainId:" + trainId);
         url = getIntent().getStringExtra(IntentCode.COMMON_WEB_VIEW_URL);
         webView = (WebView) findViewById(R.id.common_web_view);
@@ -167,9 +167,9 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                             maxtime = mTrainContentResponse.getImageBeans().size() * 4;
 
                             Random random = new Random();
-                            if (maxtime < 20)
+                            if (maxtime < 10)
                             {
-                                maxtime = 20;
+                                maxtime = 10;
                             }
                             randomTime = random.nextInt(maxtime);
                             time = 1;
@@ -401,6 +401,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                 if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TrainH5Activity.this);

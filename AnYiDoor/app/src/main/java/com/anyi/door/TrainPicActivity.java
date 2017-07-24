@@ -159,8 +159,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         picCount = 1;
         TakePicture();
         double d=Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4+ "");
-        if(d<20){
-            startTime(20d);
+        if(d<10){
+            startTime(10d);
         }else {
             startTime(d);
         }
@@ -413,6 +413,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TrainPicActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TrainPicActivity.this);

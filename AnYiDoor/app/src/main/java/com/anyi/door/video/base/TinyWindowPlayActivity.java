@@ -132,8 +132,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                 CMLog.e("hq", mNiceVideoPlayer.getDuration() + "获取到的时长");
                 if (!isWatched) {
                     long d=mNiceVideoPlayer.getDuration();
-                    if(d<20){
-                        startTime(20l);
+                    if(d<10){
+                        startTime(10);
                     }else {
                         startTime(d);
                     }
@@ -150,6 +150,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bnFinish.getText().toString().trim().equals("完成培训")){
                     picCount = 3;
+                    NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         NetLoadingDialog.getInstance().loading(TinyWindowPlayActivity.this);
                         UserServiceImpl.instance().finishTrain(trainId,
