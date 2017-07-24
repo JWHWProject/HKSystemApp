@@ -3,7 +3,10 @@
     <declare-styleable name="ConvenientBanner">
         <attr name="canLoop" format="boolean" />
     </declare-styleable>
-
+    <declare-styleable name="ClearPasswordEditTextAttrs">
+        <attr name="hint" format="string"/>
+        <attr name="mEye" format="boolean"/>
+    </declare-styleable>
     <!--加载 对话框样式-->
     <style name="loading_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsTranslucent">true</item>
