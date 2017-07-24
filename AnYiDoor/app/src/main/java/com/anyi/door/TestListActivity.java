@@ -89,7 +89,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     private JudgeAdapter judgeAdapter;
 
 
-    private String examID;
+    private String examID,examFinishID;
 
     private TestListActivity.MyTime myTime;
 
@@ -292,7 +292,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 else
                                 {
                                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                                    UserServiceImpl.instance().finishTest(examID, answerList, null,
+                                    UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
                                             FinishTestResponse.class.getName());
                                 }
                             }
@@ -315,6 +315,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     {
         NetLoadingDialog.getInstance().loading(mContext);
         examID = getIntent().getStringExtra(IntentCode.EXAM_ID);
+        examFinishID = getIntent().getStringExtra(IntentCode.EXAM_FINISH_ID);
         if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.EXAM_NAME)))
         {
             examName = getIntent().getStringExtra(IntentCode.EXAM_NAME);
@@ -382,7 +383,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                        UserServiceImpl.instance().finishTest(examID, answerList, null,
+                        UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
                                 FinishTestResponse.class.getName());
                     }
                     else
@@ -425,7 +426,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                         else
                         {
                             NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                            UserServiceImpl.instance().finishTest(examID, answerList, null,
+                            UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
                                     FinishTestResponse.class.getName());
                         }
                     }
@@ -570,7 +571,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                        UserServiceImpl.instance().finishTest(examID, answerList, uploadFileResponse.getUrlList(),
+                        UserServiceImpl.instance().finishTest(examFinishID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
                     }
                     else

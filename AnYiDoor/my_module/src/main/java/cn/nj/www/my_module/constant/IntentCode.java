@@ -13,6 +13,7 @@ public class IntentCode
     public static String COMMON_WEB_VIEW_TITLE = "common_web_view_title";
     public static String REGISTER_PHONE = "REGISTER_PHONE";
     public static String EXAM_ID = "EXAM_ID";
+    public static String EXAM_FINISH_ID = "EXAM_FINISH_ID";
     public static String EXAM_NAME = "EXAM_NAME";
 
     /**
