@@ -365,7 +365,6 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 //获取到所有数据，提交
                 if (bnFinish.getText().toString().trim().equals("提交"))
                 {
-                    picCount = 3;
                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
@@ -375,7 +374,41 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                     else
                     {
-                        TakePicture();
+                        List<File> files = null;
+                        try
+                        {
+                            files = new ArrayList<>();
+                            try {
+                                File file1=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 1 + ".jpg");
+                                if(file1.exists()){
+                                    files.add(file1);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                File file2=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 2 + ".jpg");
+                                if(file2.exists()){
+                                    files.add(file2);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        if (files.size() >= 0)
+                        {
+                            NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                            UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+                        }
+                        else
+                        {
+                            NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                            UserServiceImpl.instance().finishTest(examID, answerList, null,
+                                    FinishTestResponse.class.getName());
+                        }
                     }
                 }
                 else
