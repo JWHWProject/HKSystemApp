@@ -94,7 +94,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     private TestListActivity.MyTime myTime;
 
     private String examName = "";
-    private String timeStamp="";
+
+    private String timeStamp = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -102,8 +103,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_sheet);
         ButterKnife.bind(this);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
-        timeStamp=sdf.format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        timeStamp = sdf.format(new Date());
         initAll();
         initTitle();
 
@@ -163,7 +164,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //                            maxtime = (int) (halftime / 1000f);
                             maxtime = answerList.size() * 4;
                             Random random = new Random();
-                            if (maxtime <10)
+                            if (maxtime < 10)
                             {
                                 maxtime = 10;
                             }
@@ -223,7 +224,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onTick(long millisUntilFinished)
                     {
-                        takePicMethod.startTakePhoto("TestListActivity_"+timeStamp+"_"+ picCount);
+                        takePicMethod.startTakePhoto("TestListActivity_" + timeStamp + "_" + picCount);
                     }
 
                     @Override
@@ -246,28 +247,37 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 try
                                 {
                                     files = new ArrayList<>();
-                                    try {
-                                        File file1=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 1 + ".jpg");
-                                        if(file1.exists()){
+                                    try
+                                    {
+                                        File file1 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 1 + ".jpg");
+                                        if (file1.exists())
+                                        {
                                             files.add(file1);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
-                                    try {
-                                        File file2=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 2 + ".jpg");
-                                        if(file2.exists()){
+                                    try
+                                    {
+                                        File file2 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 2 + ".jpg");
+                                        if (file2.exists())
+                                        {
                                             files.add(file2);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
-                                    try {
-                                        File file3=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 3 + ".jpg");
-                                        if(file3.exists()){
+                                    try
+                                    {
+                                        File file3 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 3 + ".jpg");
+                                        if (file3.exists())
+                                        {
                                             files.add(file3);
                                         }
-                                    } catch (Exception e) {
+                                    } catch (Exception e)
+                                    {
                                         e.printStackTrace();
                                     }
                                 } catch (Exception e)
@@ -323,6 +333,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View view)
             {
+                answerList.clear();
+
                 //判断
                 if (judgeAdapter != null)
                 {
@@ -365,6 +377,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 //获取到所有数据，提交
                 if (bnFinish.getText().toString().trim().equals("提交"))
                 {
+                    bnFinish.setEnabled(false);
                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
@@ -378,20 +391,26 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                         try
                         {
                             files = new ArrayList<>();
-                            try {
-                                File file1=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 1 + ".jpg");
-                                if(file1.exists()){
+                            try
+                            {
+                                File file1 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 1 + ".jpg");
+                                if (file1.exists())
+                                {
                                     files.add(file1);
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception e)
+                            {
                                 e.printStackTrace();
                             }
-                            try {
-                                File file2=new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_"+timeStamp+"_"+ 2 + ".jpg");
-                                if(file2.exists()){
+                            try
+                            {
+                                File file2 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 2 + ".jpg");
+                                if (file2.exists())
+                                {
                                     files.add(file2);
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception e)
+                            {
                                 e.printStackTrace();
                             }
                         } catch (Exception e)
@@ -459,7 +478,6 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
         }
         else if (event instanceof NetResponseEvent)
         {
-            NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(ExamResponse.class.getName()) && BaseApplication.currentActivity.equals(this.getClass().getName()))
@@ -502,20 +520,23 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                             }
 
                         }
-                        double d=Double.parseDouble(examBeanList.size() * 4+ "");
-                        if(d<20){
+                        double d = Double.parseDouble(examBeanList.size() * 4 + "");
+                        if (d < 20)
+                        {
                             startTime(20d);
-                        }else {
+                        }
+                        else
+                        {
                             startTime(d);
                         }
                     }
                     else
-                    {
+                    {   NetLoadingDialog.getInstance().dismissDialog();
                         ErrorCode.doCode(mContext, mExamResponse.getResultCode(), mExamResponse.getDesc());
                     }
                 }
                 else
-                {
+                {   NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
             }
@@ -531,11 +552,13 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                     else
                     {
+                        bnFinish.setEnabled(true);
                         ErrorCode.doCode(mContext, mFinishTestResponse.getResultCode(), mFinishTestResponse.getDesc());
                     }
                 }
                 else
                 {
+                    bnFinish.setEnabled(true);
                     ToastUtil.showError(mContext);
                 }
             }
@@ -553,11 +576,13 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     else
                     {
                         NetLoadingDialog.getInstance().dismissDialog();
+                        bnFinish.setEnabled(true);
                         ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
                     }
                 }
                 else
                 {
+                    bnFinish.setEnabled(true);
                     NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
