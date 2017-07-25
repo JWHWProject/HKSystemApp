@@ -111,7 +111,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     public void onBackPressed()
     {
         DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
-                "您确定要中途取消培训？", "取消", "确定");
+                "您确定要中途取消培训？", "取消", "确定",trainId,false);
     }
 
     boolean flag = true;
@@ -332,7 +332,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
-                        "您确定要中途取消培训？", "取消", "确定");
+                        "您确定要中途取消培训？", "取消", "确定",trainId,false);
             }
             if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {

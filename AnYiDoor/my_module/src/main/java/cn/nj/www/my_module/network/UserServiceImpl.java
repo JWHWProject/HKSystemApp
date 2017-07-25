@@ -3,7 +3,6 @@ package cn.nj.www.my_module.network;
 import android.content.Context;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,6 +171,20 @@ public class UserServiceImpl
         new NetWork()
                 .startPost(URLUtil.TRAINLIST, param, tag);
     }
+    public void cancelTrainOrTest(String id,Boolean isTest, String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        if (isTest){
+            param.put("examID", id);
+            new NetWork()
+                    .startPost(URLUtil.CANCEL_TEST, param, tag);
+        }else {
+            param.put("recordID", id);
+            new NetWork()
+                    .startPost(URLUtil.CANCEL_TRAIN, param, tag);
+        }
+
+    }
 
     public void trainList(String tag)
     {
@@ -250,23 +263,23 @@ public class UserServiceImpl
     }
 
 
-    /**
-     * 上传附件
-     */
-    public void upLoadFile(String attachmentPacketId, File file, String tag)
-    {
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("sessionUserId", Global.getUserId());//当前用户id
-        if (!attachmentPacketId.equals(""))
-        {
-            param.put("attachmentPacketId", attachmentPacketId);
-        }
-        Map<String, List<File>> fileparams = new HashMap<String, List<File>>();
-        List<File> files = new ArrayList<>();
-        files.add(file);
-        fileparams.put("file", files);
-        new NetWork()
-                .startPost(URLUtil.uploaderFile, param, fileparams, tag);
-    }
+//    /**
+//     * 上传附件
+//     */
+//    public void upLoadFile(String attachmentPacketId, File file, String tag)
+//    {
+//        Map<String, String> param = new HashMap<String, String>();
+//        param.put("sessionUserId", Global.getUserId());//当前用户id
+//        if (!attachmentPacketId.equals(""))
+//        {
+//            param.put("attachmentPacketId", attachmentPacketId);
+//        }
+//        Map<String, List<File>> fileparams = new HashMap<String, List<File>>();
+//        List<File> files = new ArrayList<>();
+//        files.add(file);
+//        fileparams.put("file", files);
+//        new NetWork()
+//                .startPost(URLUtil.uploaderFile, param, fileparams, tag);
+//    }
 
 }

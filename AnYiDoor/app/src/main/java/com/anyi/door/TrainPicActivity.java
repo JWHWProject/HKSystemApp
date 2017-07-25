@@ -135,7 +135,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     public void onBackPressed()
     {
         DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
-                "您确定要中途取消培训？", "取消", "确定");
+                "您确定要中途取消培训？", "取消", "确定",trainId,false);
     }
 
     boolean flag = true;
@@ -344,7 +344,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 DialogUtil.showCloseTwoBnttonDialog(TrainPicActivity.this,
-                        "您确定要中途取消培训？", "取消", "确定");
+                        "您确定要中途取消培训？", "取消", "确定",trainId,false);
             }
             if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {

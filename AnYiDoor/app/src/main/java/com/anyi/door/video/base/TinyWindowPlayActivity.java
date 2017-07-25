@@ -99,10 +99,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!isWatched) {
                     DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
-                            "您确定要中途取消培训？", "取消", "确定");
+                            "您确定要中途取消培训？", "取消", "确定",trainId,false);
                 }else {
                     DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
-                            "您确定要关闭？", "取消", "确定");
+                            "您确定要关闭？", "取消", "确定",trainId,false);
                 }
 
             }
@@ -380,10 +380,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
         }
         if (!isWatched) {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
-                    "您确定要中途取消培训？", "取消", "确定");
+                    "您确定要中途取消培训？", "取消", "确定",trainId,false);
         }else {
             DialogUtil.showCloseTwoBnttonDialog(TinyWindowPlayActivity.this,
-                    "您确定要关闭？", "取消", "确定");
+                    "您确定要关闭？", "取消", "确定",trainId,false);
         }
 
     }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/money_transferdebt_dialogll"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginLeft="@dimen/pxtodp60"
+              android:layout_marginRight="@dimen/pxtodp60"
+              android:background="@drawable/money_transfer_dialogbg"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/pxtodp10">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_height="@dimen/pxtodp130">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp130"
+            android:gravity="center"
+            android:text="你本次的考核分数为"
+            android:textColor="@color/register_success_reward"
+            android:textSize="@dimen/pxtosp36"
+            />
+        <TextView
+            android:id="@+id/mark_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp130"
+            android:gravity="center"
+            android:text="0"
+            android:paddingLeft="@dimen/pxtodp4"
+            android:textStyle="bold"
+            android:textColor="@color/register_success_redText"
+            android:textSize="@dimen/pxtosp40"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp130"
+            android:gravity="center"
+            android:text=","
+            android:textColor="@color/register_success_reward"
+            android:textSize="@dimen/pxtosp36"
+            />
+        <TextView
+            android:id="@+id/result_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp130"
+            android:gravity="center"
+            android:paddingLeft="@dimen/pxtodp4"
+            android:text=""
+            android:textColor="@color/register_success_redText"
+            android:textSize="@dimen/pxtosp36"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:background="@color/line"/>
+
+    <LinearLayout
+        android:id="@+id/dialog_bottom_bns"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/pxtodp90"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/transfer_ok_bn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/money_nocolor_dialogbg"
+            android:gravity="center"
+            android:textColor="@color/money_dialog_blue_text"
+            android:textSize="@dimen/pxtosp36"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

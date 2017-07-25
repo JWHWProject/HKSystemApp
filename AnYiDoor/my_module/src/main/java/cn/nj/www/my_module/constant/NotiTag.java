@@ -14,6 +14,7 @@ public class NotiTag
      * 关闭堆栈界面
      */
     public static final String TAG_CLOSE = "close";
+    public static final String TAG_CLOSE_WITH_UEL = "TAG_CLOSE_WITH_UEL";
 
     /**
      * 关闭当前界面

@@ -33,6 +33,7 @@ import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
+import cn.nj.www.my_module.bean.index.CancelResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.OuterTypeResponse;
 import cn.nj.www.my_module.bean.index.UpdateResponse;
@@ -134,7 +135,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(MainActivity.this));
     }
@@ -191,8 +193,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     private void bannerFirstInit()
     {
         //第一次展示默认本地图片
-        localImages.add(R.mipmap.ic_launcher);//默认图片
-        localImages.add(R.mipmap.about_icon);//默认图片
+        localImages.add(R.mipmap.app_icon);//默认图片
         mBanner = (ConvenientBanner) findViewById(R.id.index_banner);
         mBanner.setPages(
                 new CBViewHolderCreator<LocalImageHolderView>()
@@ -260,6 +261,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                         SharePref.saveString(Constants.USER_LIST, result);
                         CMLog.e("hq", SharePref.getString(Constants.USER_LIST, ""));
                     }
+                }
+            }
+            if (tag.equals(CancelResponse.class.getName()))
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    CMLog.e("hq", "中途取消：" + result);
                 }
             }
             if (tag.equals(BannerResponse.class.getName()))
@@ -421,19 +429,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             case R.id.bn_card_number:
                 Intent cardIntent = new Intent(mContext, CommonWebViewActivity.class);
                 cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日发卡");
-                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +1);
+                cardIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL + 1);
                 startActivity(cardIntent);
                 break;
             case R.id.bn_train_number:
                 Intent trainIntent = new Intent(mContext, CommonWebViewActivity.class);
                 trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日培训");
-                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +2);
+                trainIntent.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL + 2);
                 startActivity(trainIntent);
                 break;
             case R.id.bn_test_number:
                 Intent testIntent1 = new Intent(mContext, CommonWebViewActivity.class);
                 testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_TITLE, "今日考核");
-                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL +3);
+                testIntent1.putExtra(IntentCode.COMMON_WEB_VIEW_URL, URLUtil.H5_UEL + 3);
                 startActivity(testIntent1);
                 break;
 
@@ -560,31 +568,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     // 定义一个变量，来标识是否退出
     private static boolean isExit = false;
 
-    Handler mHandler = new Handler() {
+    Handler mHandler = new Handler()
+    {
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg)
+        {
             super.handleMessage(msg);
             isExit = false;
         }
     };
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
             exit();
             return false;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void exit() {
-        if (!isExit) {
+    private void exit()
+    {
+        if (!isExit)
+        {
             isExit = true;
             Toast.makeText(getApplicationContext(), "再按一次退出程序",
                     Toast.LENGTH_SHORT).show();
             // 利用handler延迟发送更改状态信息
             mHandler.sendEmptyMessageDelayed(0, 2000);
-        } else {
+        }
+        else
+        {
             finish();
             System.exit(0);
         }

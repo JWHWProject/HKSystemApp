@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import cn.nj.www.my_module.R;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.CancelResponse;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
+import cn.nj.www.my_module.network.UserServiceImpl;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -25,34 +27,44 @@ import de.greenrobot.event.EventBus;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class DialogUtil {
+public class DialogUtil
+{
 
 
     /**
      * <一个按钮的dialog>
      */
-    public static void showDialogOneButton(Context context, String title, String sumbit, final String tag) {
+    public static void showDialogResultButton(Context context, int mark, String result, String sumbit, final String tag)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
-        dialog.setContentView(R.layout.one_button_dialog);
+        dialog.setContentView(R.layout.result_one_button_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
         dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
-        TextView tvContent = (TextView) dialog.findViewById(R.id.dialogName_tv);
+        TextView tvMark = (TextView) dialog.findViewById(R.id.mark_tv);
+        TextView tvResult = (TextView) dialog.findViewById(R.id.result_tv);
         Button btSubmit = (Button) dialog.findViewById(R.id.transfer_ok_bn);
-        tvContent.setText(title);
+        tvMark.setText(mark + "");
+        tvResult.setText(result);
         btSubmit.setText(sumbit);
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
-        btSubmit.setOnClickListener(new View.OnClickListener() {
+        btSubmit.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 dialog.dismiss();
                 EventBus.getDefault().post(new NoticeEvent(tag));
             }
         });
     }
 
-    public static void showCloseDialogOneButton(final Context context, String title, String sumbit, final String tag) {
+    /**
+     * <一个按钮的dialog>
+     */
+    public static void showDialogOneButton(Context context, String title, String sumbit, final String tag)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.one_button_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -63,10 +75,36 @@ public class DialogUtil {
         btSubmit.setText(sumbit);
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
-        btSubmit.setOnClickListener(new View.OnClickListener() {
+        btSubmit.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                EventBus.getDefault().post(new NoticeEvent(tag));
+            }
+        });
+    }
+
+    public static void showCloseDialogOneButton(final Context context, String title, String sumbit, final String tag)
+    {
+        final Dialog dialog = new Dialog(context, R.style.main_dialog);
+        dialog.setContentView(R.layout.one_button_dialog);
+        dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView tvContent = (TextView) dialog.findViewById(R.id.dialogName_tv);
+        Button btSubmit = (Button) dialog.findViewById(R.id.transfer_ok_bn);
+        tvContent.setText(title);
+        btSubmit.setText(sumbit);
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        btSubmit.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
                 ((Activity) context).finish();
                 dialog.dismiss();
                 EventBus.getDefault().post(new NoticeEvent(tag));
@@ -74,15 +112,18 @@ public class DialogUtil {
         });
     }
 
-    public static void startTestDialog(final Context context, final String tag) {
+    public static void startTestDialog(final Context context, final String tag)
+    {
         startTrainOrExamDialog(context, tag, "确定开始考核");
     }
 
-    public static void startTrainDialog(final Context context, final String tag) {
+    public static void startTrainDialog(final Context context, final String tag)
+    {
         startTrainOrExamDialog(context, tag, "确定开始培训");
     }
 
-    public static void startTrainOrExamDialog(final Context context, final String tag, String title) {
+    public static void startTrainOrExamDialog(final Context context, final String tag, String title)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.start_train_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -94,53 +135,66 @@ public class DialogUtil {
         final Button bnOk = (Button) dialog.findViewById(R.id.transfer_ok_bn);
         tvName.setText(title);
         dialog.show();
-        TextWatcher textWatcher = new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() > 0) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                if (s.toString().length() > 0)
+                {
                     bnOk.setTextColor(context.getResources().getColor(R.color.money_dialog_blue_text));
                 }
-                else {
+                else
+                {
                     bnOk.setTextColor(context.getResources().getColor(R.color.line));
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
 
             }
         };
         etCard.addTextChangedListener(textWatcher);
         etName.addTextChangedListener(textWatcher);
         dialog.setCanceledOnTouchOutside(false);
-        bnCancel.setOnClickListener(new View.OnClickListener() {
+        bnCancel.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 dialog.dismiss();
             }
         });
-        bnOk.setOnClickListener(new View.OnClickListener() {
+        bnOk.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
-                if (GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString()) || GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())) {
+            public void onClick(View v)
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString()) || GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString()))
+                {
                     EventBus.getDefault().post(new NoticeEvent(tag, etCard.getText().toString(), etName.getText().toString()));
                     dialog.dismiss();
                 }
-                else {
+                else
+                {
                     ToastUtil.makeText(context, "请填写任一信息");
                 }
             }
         });
     }
 
-    public static void showNoTipTwoBnttonDialog(Context context, String title, String left, String right, final String leftTag, final String rightTag) {
+    public static void showNoTipTwoBnttonDialog(Context context, String title, String left, String right, final String leftTag, final String rightTag)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.person_save_barcode_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -155,24 +209,29 @@ public class DialogUtil {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.main_dialog);
-        leftBn.setOnClickListener(new View.OnClickListener() {
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 EventBus.getDefault().post(new NoticeEvent(leftTag));
                 dialog.dismiss();
             }
         });
-        rightBn.setOnClickListener(new View.OnClickListener() {
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 EventBus.getDefault().post(new NoticeEvent(rightTag));
                 dialog.dismiss();
             }
         });
     }
 
-    public static void showCloseTwoBnttonDialog(final Context context, String title, String left, String right) {
+    public static void showCloseTwoBnttonDialog(final Context context, String title, String left, String right, final String id, final boolean isTest)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.person_save_barcode_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -187,23 +246,29 @@ public class DialogUtil {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.main_dialog);
-        leftBn.setOnClickListener(new View.OnClickListener() {
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 dialog.dismiss();
             }
         });
-        rightBn.setOnClickListener(new View.OnClickListener() {
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                UserServiceImpl.instance().cancelTrainOrTest(id, isTest, CancelResponse.class.getName());
                 ((Activity) context).finish();
                 dialog.dismiss();
             }
         });
     }
 
-    public static void exitAccountDialog(final Context context) {
+    public static void exitAccountDialog(final Context context)
+    {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.person_save_barcode_dialog);
         dialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -220,16 +285,20 @@ public class DialogUtil {
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.main_dialog);
-        leftBn.setOnClickListener(new View.OnClickListener() {
+        leftBn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 dialog.dismiss();
             }
         });
-        rightBn.setOnClickListener(new View.OnClickListener() {
+        rightBn.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
                 Global.loginOut(context);
                 dialog.dismiss();
@@ -239,7 +308,8 @@ public class DialogUtil {
     }
 
 
-    public static Dialog initDialog(Context context, int layout) {
+    public static Dialog initDialog(Context context, int layout)
+    {
         Dialog oneButtonDialog = new Dialog(context, R.style.from_bottom_dialog);
         oneButtonDialog.setContentView(layout);
         oneButtonDialog.getWindow().getAttributes().width = WindowManager.LayoutParams.MATCH_PARENT;
