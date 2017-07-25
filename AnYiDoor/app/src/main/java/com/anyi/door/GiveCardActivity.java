@@ -893,7 +893,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请选择外来事由");
                 return;
             }
-            if (!GeneralUtils.isUserExistBackUserId(tvJdDepartment.getText().toString()).equals("")){
+            if (GeneralUtils.isUserExistBackUserId(et_jd.getText().toString()).equals("")){
                 ToastUtil.makeText(mContext, "请填写正确的接待人员");
                 return;
             }
