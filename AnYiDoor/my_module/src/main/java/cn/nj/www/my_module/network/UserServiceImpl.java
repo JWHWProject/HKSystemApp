@@ -9,7 +9,6 @@ import java.util.Map;
 
 import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
 import cn.nj.www.my_module.constant.Constants;
-import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.URLUtil;
 import cn.nj.www.my_module.tools.SharePref;
 
@@ -102,11 +101,13 @@ public class UserServiceImpl
                 .startPost(URLUtil.GIVE_CARD, param, tag);
     }
 
-    public void giveCard(String cardNo, String name, int gender, String phone, String fromCompany, String idCard
+    public void giveCard(String receiveDepartment,String receiver,String cardNo, String name, int gender, String phone, String fromCompany, String idCard
             , String outsidersType, String reason, String needTraining, String validTime
             , List<String> urls, String tag)
     {
         Map<String, Object> param = new HashMap<String, Object>();
+        param.put("receiveDepartment", receiveDepartment);
+        param.put("receiver", receiver);
         param.put("cardNo", cardNo);
         param.put("name", name);
         param.put("gender", gender + "");
@@ -247,7 +248,7 @@ public class UserServiceImpl
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
         param.put("cardNo", cardNo);
-        param.put("userID", Global.getUserId());
+        param.put("userID","");
         new NetWork()
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
     }

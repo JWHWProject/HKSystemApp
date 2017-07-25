@@ -36,7 +36,11 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".RegistSetPasswordActy"
@@ -63,6 +67,7 @@
             android:name=".GiveCardActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|stateUnchanged">
+
         </activity>
         <activity
             android:name=".FindPasswordCodeActy"
@@ -81,11 +86,7 @@
 
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".TrainPicActivity"/>
         <activity android:name=".TrainH5Activity"/>

@@ -114,6 +114,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.ll_inner)
     LinearLayout llInner;
 
+    @Bind(R.id.et_jd)
+    EditText et_jd;
     @Bind(R.id.et_phone)
     EditText etPhone;
 
@@ -128,6 +130,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.tv_explain)
     TextView tvExplain;
+    @Bind(R.id.tv_jd)
+    TextView tvJdDepartment;
 
     @Bind(R.id.ll_outer)
     LinearLayout llOuter;
@@ -140,6 +144,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.rl_user_type)
     RelativeLayout rlUserType;
+    @Bind(R.id.rl_jd_department)
+    RelativeLayout rlJdDepartment;
 
     @Bind(R.id.rl_department)
     RelativeLayout rlDepartment;
@@ -301,6 +307,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
         rlDepartment.setOnClickListener(this);
         rlTrain.setOnClickListener(this);
         rlUserType.setOnClickListener(this);
+        rlJdDepartment.setOnClickListener(this);
         LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
@@ -612,7 +619,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         NetLoadingDialog.getInstance().loading(mContext);
-                        UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                        String jdDepartment = tvJdDepartment.getText().toString();
+                        if (jdDepartment.equals("请选择")){
+                            jdDepartment="";
+                        }
+                        UserServiceImpl.instance().giveCard(jdDepartment,et_jd.getText().toString(),etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                                 etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                                 , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
                                 uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
@@ -677,6 +688,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                 }).show();
                 break;
             case R.id.rl_department:
+            case R.id.rl_jd_department:
                 new AlertDialog.Builder(mContext).setTitle("请选择")
                         .setSingleChoiceItems(
                                 departmentArr, departmentIndex,
@@ -685,6 +697,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                     public void onClick(DialogInterface dialog, int which)
                                     {
                                         tvDepartment.setText(departmentArr[which]);
+                                        tvJdDepartment.setText(departmentArr[which]);
                                         departmentIndex = which;
                                         dialog.dismiss();
                                     }
@@ -889,11 +902,15 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             }
             else
             {
+                String jdDepartment = tvJdDepartment.getText().toString();
+                if (jdDepartment.equals("请选择")){
+                    jdDepartment="";
+                }
                 NetLoadingDialog.getInstance().loading(mContext);
-                UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                UserServiceImpl.instance().giveCard(jdDepartment,et_jd.getText().toString(),etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                         etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                         , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
-                       null, GiveOutterCardResponse.class.getName());
+                        null, GiveOutterCardResponse.class.getName());
             }
         }
     }
