@@ -524,19 +524,19 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                             if (key.equals("单选题"))
                             {
                                 tv2.setVisibility(View.VISIBLE);
-                                singleAdapter = new SingleListAdapter(mContext, valueList, examID);
+                                singleAdapter = new SingleListAdapter(mContext, valueList, examFinishID);
                                 listView2.setAdapter(singleAdapter);
                             }
                             if (key.equals("判断题"))
                             {
                                 tv1.setVisibility(View.VISIBLE);
-                                judgeAdapter = new JudgeAdapter(mContext, valueList, examID);
+                                judgeAdapter = new JudgeAdapter(mContext, valueList, examFinishID);
                                 listView1.setAdapter(judgeAdapter);
                             }
                             if (key.equals("多选题"))
                             {
                                 tv3.setVisibility(View.VISIBLE);
-                                multiltyAdapter = new MultiltyAdapter(mContext, valueList, examID);
+                                multiltyAdapter = new MultiltyAdapter(mContext, valueList, examFinishID);
                                 listView3.setAdapter(multiltyAdapter);
                             }
 
