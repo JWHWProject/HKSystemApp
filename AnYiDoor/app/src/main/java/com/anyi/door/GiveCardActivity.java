@@ -408,7 +408,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onClick(View arg0)
                     {
-
+                        Log.e("sub",maxSize+","+(img_uri.size() - 1));
                         if (maxSize - (img_uri.size() - 1) == 0)
                         {
                             ToastUtil.makeText(mContext, "最多添加" + maxSize + "张");
@@ -436,6 +436,15 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     {
                         is_addNull = true;
                         String img_url = img_uri.remove(position).getUrl();
+                        int postion=-1;
+                        for(int i=0;i<single_photos.size();i++){
+                            if(single_photos.get(i).getOriginalPath().equals(img_url)){
+                                postion=i;
+                            }
+                        }
+                        if(position!=-1) {
+                            single_photos.remove(postion);
+                        }
                         for (int i = 0; i < img_uri.size(); i++)
                         {
                             if (img_uri.get(i) == null)
