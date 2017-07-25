@@ -55,6 +55,15 @@ public class PhotoPreviewActivity extends BasePhotoPreviewActivity implements Ph
 
 
 		} else if (extras.containsKey("album")) { // 点击图片查看
+			if(isSave){ // 是否保存（一般保存网络图片，本地图片只能查看）
+				bnSave.setVisibility(View.VISIBLE);
+				bindData(true);
+				updatePercent();
+
+			}else{
+				bnSave.setVisibility(View.GONE);
+				bindData(false);
+			}
 			String albumName = extras.getString("album"); // 相册
 			this.current = extras.getInt("position");
 			if (!StringUtils.isNull(albumName) && albumName.equals(PhotoSelectorActivity.RECCENT_PHOTO)) {

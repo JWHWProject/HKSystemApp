@@ -64,6 +64,7 @@ import cn.nj.www.my_module.main.base.HeadView;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
+import cn.nj.www.my_module.tools.DisplayUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.ImageLoaderUtil;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
@@ -75,6 +76,8 @@ import cn.nj.www.my_module.view.imagepicker.PhotoSelectorActivity;
 import cn.nj.www.my_module.view.imagepicker.model.PhotoModel;
 import cn.nj.www.my_module.view.imagepicker.util.CommonUtils;
 import cn.nj.www.my_module.view.imagepicker.util.FileUtils;
+
+import static com.anyi.door.R.id.add_IB;
 
 
 /**
@@ -378,7 +381,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.add_IB = (ImageView) convertView.findViewById(R.id.add_IB);
+            holder.add_IB = (ImageView) convertView.findViewById(add_IB);
+            int imgWidth = DisplayUtil.getWidth(mContext) / 4;
+            ViewGroup.LayoutParams addParams = holder.add_IB.getLayoutParams();
+            addParams.width = addParams.height = imgWidth;
+            holder.add_IB.setLayoutParams(addParams);
             holder.delete_IV = (ImageView) convertView.findViewById(R.id.delete_IV);
 
             AbsListView.LayoutParams param = new AbsListView.LayoutParams(screen_widthOffset, screen_widthOffset);
