@@ -404,8 +404,9 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
 
                 if (bnFinish.getText().toString().trim().equals("完成培训"))
                 {
-                    picCount = 3;    bnFinish.setEnabled(false);
-                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+//                    picCount = 3;
+                    bnFinish.setEnabled(false);
+//                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     {
                         NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
@@ -413,7 +414,46 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     }
                     else
                     {
-                        TakePicture();
+                        List<File> files = null;
+                        try
+                        {
+                            files = new ArrayList<>();
+                            try
+                            {
+                                File file1 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 1 + ".jpg");
+                                if (file1.exists())
+                                {
+                                    files.add(file1);
+                                }
+                            } catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            try
+                            {
+                                File file2 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 2 + ".jpg");
+                                if (file2.exists())
+                                {
+                                    files.add(file2);
+                                }
+                            } catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        if (files.size() >= 0)
+                        {
+                            NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+                            UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+                        }
+                        else
+                        {
+                            NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+                            UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
+                        }
                     }
                 }
                 else

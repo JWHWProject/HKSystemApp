@@ -324,7 +324,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                 }
                 //获取到所有数据，提交
                 if (bnFinish.getText().toString().trim().equals("提交")) {
-                    picCount = 3;
+//                    picCount = 3;
                     NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this);
@@ -334,8 +334,38 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                     else {
                         bnFinish.setEnabled(false);
-                        NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
-                        TakePicture();
+//                        NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
+                        List<File> files = null;
+                        try {
+                            files = new ArrayList<>();
+                            try {
+                                File file1 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 1 + ".jpg");
+                                if (file1.exists()) {
+                                    files.add(file1);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                File file2 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 2 + ".jpg");
+                                if (file2.exists()) {
+                                    files.add(file2);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (files.size() >= 0) {
+                            NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
+                            UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+                        }
+                        else {
+                            NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                            UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
+                                    FinishTestResponse.class.getName());
+                        }
                     }
                 }
                 else {
