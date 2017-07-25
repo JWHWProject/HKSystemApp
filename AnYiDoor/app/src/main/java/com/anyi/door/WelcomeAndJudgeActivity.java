@@ -25,6 +25,7 @@ public class WelcomeAndJudgeActivity extends AppCompatActivity
         {
             startActivity(new Intent(this, LoginActy.class));
         }
+        finish();
 //        }
 //        else
 //        {
