@@ -57,7 +57,11 @@
         <activity
             android:name=".LoginActy"
             >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".GiveCardActivity"
@@ -82,11 +86,7 @@
 
         <!--发布时要用这个-->
         <activity android:name=".WelcomeAndJudgeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".TrainPicActivity"/>
         <activity android:name=".TrainH5Activity"/>

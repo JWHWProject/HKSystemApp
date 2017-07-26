@@ -78,6 +78,7 @@ public class UserServiceImpl
         param.put("password", password);
         param.put("loginType", "1");
         param.put("smsCode", "");
+        param.put("model", android.os.Build.MODEL);
         new NetWork()
                 .startPost(URLUtil.LOGIN, param, tag);
     }
@@ -243,12 +244,12 @@ public class UserServiceImpl
                 .startPost(URLUtil.TEST_DETAIL, param, tag);
     }
 
-    public void startOnlineTest(String trainingID, String cardNo, String tag)
+    public void startOnlineTest(String trainingID, String cardNo, String userId,String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
         param.put("cardNo", cardNo);
-        param.put("userID","");
+        param.put("userID",userId);
         new NetWork()
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
     }

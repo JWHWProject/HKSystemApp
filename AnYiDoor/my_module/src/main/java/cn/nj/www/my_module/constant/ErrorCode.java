@@ -43,6 +43,10 @@ public class ErrorCode
         {
             DialogUtil.showDialogOneButton(context, GeneralUtils.isNullOrZeroLenght(info) ? "还卡失败" : info, "我知道了", "");
         }
+        else if (code.equals("200007"))
+        {
+            DialogUtil.showCloseDialogOneButton(context,"未授权，不能使用该应用", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
+        }
         else
         {
             ToastUtil.makeText(context, info);

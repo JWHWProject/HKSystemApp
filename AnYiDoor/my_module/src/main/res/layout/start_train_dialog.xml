@@ -48,7 +48,7 @@
                 android:layout_marginRight="@dimen/pxtodp20"
                 android:id="@+id/et_card"
                 android:background="@drawable/app_start_train_et"
-                android:hint="请输入卡号"
+                android:hint="外来人员只需要输入卡号"
                 android:paddingLeft="@dimen/pxtodp30"
                 android:textColor="@color/register_black_text"
                 android:textColorHint="@color/register_hint_text"

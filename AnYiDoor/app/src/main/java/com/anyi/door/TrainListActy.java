@@ -259,14 +259,30 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 NetLoadingDialog.getInstance().loading(mContext);
                 String userId = GeneralUtils.isUserExistBackUserId(name);
                 //判断人名是否存在
-                if (GeneralUtils.isNotNullOrZeroLenght(userId))
+                if (GeneralUtils.isNotNullOrZeroLenght(userId))//存在该人
                 {
                     UserServiceImpl.instance().startTrain(trainID, card, userId, StartTrainResponse.class.getName());
                 }
-                else
+                else//该人不存在
                 {
-                    NetLoadingDialog.getInstance().dismissDialog();
-                    ToastUtil.makeText(mContext, "不存在该人员信息");
+                    //存在卡号
+                    if (GeneralUtils.isNotNullOrZeroLenght(card))
+                    {
+                        UserServiceImpl.instance().startTrain(trainID, card, userId, StartTrainResponse.class.getName());
+
+                    }
+                    else//不存在卡号
+                    {
+                        NetLoadingDialog.getInstance().dismissDialog();
+                        if (GeneralUtils.isNotNullOrZeroLenght(name))
+                        {//输入人名
+                            ToastUtil.makeText(mContext, "不存在该人员信息");
+                        }
+                        else
+                        {
+                            ToastUtil.makeText(mContext, "请填写信息");
+                        }
+                    }
                 }
             }
             if (NotiTag.TAG_START_TEST_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
@@ -276,15 +292,31 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 String name = ((NoticeEvent) event).getUrl2();
                 NetLoadingDialog.getInstance().loading(mContext);
                 String userId = GeneralUtils.isUserExistBackUserId(name);
+
                 //判断人名是否存在
-                if (GeneralUtils.isNotNullOrZeroLenght(userId))
+                if (GeneralUtils.isNotNullOrZeroLenght(userId))//存在该人
                 {
-                    UserServiceImpl.instance().startOnlineTest(trainID, card, StartTestResponse.class.getName());
+                    UserServiceImpl.instance().startOnlineTest(trainID, card, userId, StartTestResponse.class.getName());
                 }
-                else
+                else//该人不存在
                 {
-                    NetLoadingDialog.getInstance().dismissDialog();
-                    ToastUtil.makeText(mContext, "不存在该人员信息");
+                    //存在卡号
+                    if (GeneralUtils.isNotNullOrZeroLenght(card))
+                    {
+                        UserServiceImpl.instance().startOnlineTest(trainID, card, userId, StartTestResponse.class.getName());
+                    }
+                    else//不存在卡号
+                    {
+                        NetLoadingDialog.getInstance().dismissDialog();
+                        if (GeneralUtils.isNotNullOrZeroLenght(name))
+                        {//输入人名
+                            ToastUtil.makeText(mContext, "不存在该人员信息");
+                        }
+                        else
+                        {
+                            ToastUtil.makeText(mContext, "请填写信息");
+                        }
+                    }
                 }
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
@@ -297,7 +329,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                 }
                 else if (fromTest.equals("1"))
                 {
-                    UserServiceImpl.instance().startOnlineTest(trainID, "", StartTestResponse.class.getName());
+                    UserServiceImpl.instance().startOnlineTest(trainID, cardNum, "", StartTestResponse.class.getName());
                 }
             }
         }
@@ -381,7 +413,9 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
                             startActivity(new Intent(intent));
-                        }else {
+                        }
+                        else
+                        {
                             Intent intent = new Intent(mContext, TrainH5Activity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
