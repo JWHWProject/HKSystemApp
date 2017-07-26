@@ -342,6 +342,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View view)
             {
                 //判断
+                answerList.clear();
                 if (judgeAdapter != null)
                 {
                     if (judgeAdapter.isFinishAll())
