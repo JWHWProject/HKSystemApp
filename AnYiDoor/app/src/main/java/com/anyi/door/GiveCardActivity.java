@@ -116,6 +116,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.et_jd)
     EditText et_jd;
+
     @Bind(R.id.et_phone)
     EditText etPhone;
 
@@ -130,6 +131,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.tv_explain)
     TextView tvExplain;
+
     @Bind(R.id.tv_jd)
     TextView tvJdDepartment;
 
@@ -144,6 +146,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.rl_user_type)
     RelativeLayout rlUserType;
+
     @Bind(R.id.rl_jd_department)
     RelativeLayout rlJdDepartment;
 
@@ -408,7 +411,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onClick(View arg0)
                     {
-                        Log.e("sub",maxSize+","+(img_uri.size() - 1));
+                        Log.e("sub", maxSize + "," + (img_uri.size() - 1));
                         if (maxSize - (img_uri.size() - 1) == 0)
                         {
                             ToastUtil.makeText(mContext, "最多添加" + maxSize + "张");
@@ -436,13 +439,16 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     {
                         is_addNull = true;
                         String img_url = img_uri.remove(position).getUrl();
-                        int postion=-1;
-                        for(int i=0;i<single_photos.size();i++){
-                            if(single_photos.get(i).getOriginalPath().equals(img_url)){
-                                postion=i;
+                        int postion = -1;
+                        for (int i = 0; i < single_photos.size(); i++)
+                        {
+                            if (single_photos.get(i).getOriginalPath().equals(img_url))
+                            {
+                                postion = i;
                             }
                         }
-                        if(position!=-1) {
+                        if (position != -1)
+                        {
                             single_photos.remove(postion);
                         }
                         for (int i = 0; i < img_uri.size(); i++)
@@ -629,10 +635,11 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     {
                         NetLoadingDialog.getInstance().loading(mContext);
                         String jdDepartment = tvJdDepartment.getText().toString();
-                        if (jdDepartment.equals("请选择")){
-                            jdDepartment="";
+                        if (jdDepartment.equals("请选择"))
+                        {
+                            jdDepartment = "";
                         }
-                        UserServiceImpl.instance().giveCard(jdDepartment,et_jd.getText().toString(),etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                        UserServiceImpl.instance().giveCard(jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                                 etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                                 , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
                                 uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
@@ -723,9 +730,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                                     {
                                         tvUserTrain.setText(trainArr[which]);
                                         userTrainIndex = which;
-                                        if (trainArr[which].equals("不培训")){
+                                        if (trainArr[which].equals("不培训"))
+                                        {
                                             findViewById(R.id.rl_date).setVisibility(View.GONE);
-                                        }else {
+                                        }
+                                        else
+                                        {
                                             findViewById(R.id.rl_date).setVisibility(View.VISIBLE);
                                         }
                                         dialog.dismiss();
@@ -893,7 +903,13 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请选择外来事由");
                 return;
             }
-            if (GeneralUtils.isUserExistBackUserId(et_jd.getText().toString()).equals("")){
+            if (tvDepartment.getText().toString().equals("请选择"))
+            {
+                ToastUtil.makeText(mContext, "请选择接待部门");
+                return;
+            }
+            if (GeneralUtils.isNotNullOrZeroLenght(et_jd.getText().toString()) && GeneralUtils.isUserExistBackUserId(et_jd.getText().toString()).equals(""))
+            {
                 ToastUtil.makeText(mContext, "请填写正确的接待人员");
                 return;
             }
@@ -918,11 +934,12 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             else
             {
                 String jdDepartment = tvJdDepartment.getText().toString();
-                if (jdDepartment.equals("请选择")){
-                    jdDepartment="";
+                if (jdDepartment.equals("请选择"))
+                {
+                    jdDepartment = "";
                 }
                 NetLoadingDialog.getInstance().loading(mContext);
-                UserServiceImpl.instance().giveCard(jdDepartment,et_jd.getText().toString(),etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                UserServiceImpl.instance().giveCard(jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                         etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                         , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
                         null, GiveOutterCardResponse.class.getName());

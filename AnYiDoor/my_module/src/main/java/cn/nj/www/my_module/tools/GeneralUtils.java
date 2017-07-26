@@ -104,7 +104,7 @@ public final class GeneralUtils {
             UserListResponse mUserListResponse = GsonHelper.toType(result, UserListResponse.class);
             List<UserListResponse.UserListBean> userList = mUserListResponse.getUserList();
             for (int i = 0; i < userList.size(); i++) {
-                if (userList.get(i).getUserName().equals(str) ) {
+                if (userList.get(i).getUserName().equals(str) ||userList.get(i).getNickName().equals(str)) {
                     return userList.get(i).getUserID();
                 }
             }
