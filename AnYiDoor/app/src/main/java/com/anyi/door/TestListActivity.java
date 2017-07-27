@@ -165,7 +165,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                     if (randomTime == -1)
                     {
-                        if (answerList.size() > 0)
+                        if (examBeanList.size() > 0)
                         {
 //                            long halftime = mNiceVideoPlayer.getDuration() / 2;
 //                            maxtime = (int) (halftime / 1000f);
@@ -181,10 +181,28 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     }
                     else
                     {
+
                         if (time == randomTime)
                         {
                             picCount = 2;
-                            TakePicture();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    while (isTakeingPhoto){
+                                        try {
+                                            Thread.sleep(100);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            TakePicture();
+                                        }
+                                    });
+                                }
+                            }).start();
                         }
                         time++;
                     }
