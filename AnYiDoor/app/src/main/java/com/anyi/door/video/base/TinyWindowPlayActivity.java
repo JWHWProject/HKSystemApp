@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyi.door.MainActivity;
 import com.anyi.door.R;
 import com.anyi.door.utils.TakePicMethod;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
@@ -513,6 +514,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity {
                                                                                     if (GeneralUtils.isNotNullOrZeroLenght(result)) {
                                                                                         FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                                                                                         if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode())) {
+                                                                                            MainActivity.getNewBannerAndDataShow();
                                                                                             runOnUiThread(new Runnable() {
                                                                                                 @Override
                                                                                                 public void run() {

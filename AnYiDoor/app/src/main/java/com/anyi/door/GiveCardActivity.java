@@ -576,6 +576,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     GiveInnerCardResponse mGiveInnerCardResponse = GsonHelper.toType(result, GiveInnerCardResponse.class);
                     if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
                     {
+                        MainActivity.getNewBannerAndDataShow();
                         DialogUtil.showDialogOneButton(mContext, "发卡成功", "我知道了", NotiTag.TAG_CLOSE_ACTIVITY);
                     }
                     else
@@ -600,6 +601,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
                         if (GeneralUtils.isNotNullOrZeroLenght(mGiveInnerCardResponse.getTrainingID()))
                         {
+                            MainActivity.getNewBannerAndDataShow();
                             if (GeneralUtils.isNullOrZeroLenght(SharePref.getString(Constants.USER_LIST, "")))
                             {
                                 UserServiceImpl.instance().getUserList(UserListResponse.class.getName());

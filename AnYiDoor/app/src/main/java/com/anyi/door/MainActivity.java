@@ -168,7 +168,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     public void initViewData()
     {
         NetLoadingDialog.getInstance().loading(mContext);
-        UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
+        getNewBannerAndDataShow();
         UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
         UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
         UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
@@ -182,6 +182,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             UserServiceImpl.instance().init("","", UpdateResponse.class.getName());
             e.printStackTrace();
         }
+    }
+
+    public static void getNewBannerAndDataShow()
+    {
+        UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
     }
 
     @Override

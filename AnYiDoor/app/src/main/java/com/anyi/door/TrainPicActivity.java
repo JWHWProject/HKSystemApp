@@ -380,6 +380,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
                 {
                     if (Constants.SUCESS_CODE.equals(mFinishTrainResponse.getResultCode()))
                     {
+                        MainActivity.getNewBannerAndDataShow();
                         DialogUtil.showDialogOneButton(mContext, "完成培训", "我知道了", NotiTag.TAG_CLOSE);
                     }
                     else

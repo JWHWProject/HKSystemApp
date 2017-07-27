@@ -588,6 +588,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     mFinishTestResponse = GsonHelper.toType(result, FinishTestResponse.class);
                     if (Constants.SUCESS_CODE.equals(mFinishTestResponse.getResultCode()))
                     {
+                        MainActivity.getNewBannerAndDataShow();
                         DialogUtil.showDialogResultButton(mContext, mFinishTestResponse.getMark(),  mFinishTestResponse.getPass(), "我知道了",
                                 NotiTag.TAG_CLOSE_WITH_UEL);
                     }
