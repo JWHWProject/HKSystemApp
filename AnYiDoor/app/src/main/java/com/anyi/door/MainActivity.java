@@ -33,6 +33,7 @@ import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.BannerResponse;
+import cn.nj.www.my_module.bean.index.BaseTrainListResponse;
 import cn.nj.www.my_module.bean.index.CancelResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
 import cn.nj.www.my_module.bean.index.OuterTypeResponse;
@@ -112,6 +113,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 
     private ConvenientBanner mBanner;
 
+    public static String trainListDateResult;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -168,8 +171,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         UserServiceImpl.instance().getBanner(BannerResponse.class.getName());
         UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
         UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
-        String lngAndLat = getLngAndLat(MainActivity.this);
-        UserServiceImpl.instance().init(lngAndLat.split(",")[0], lngAndLat.split(",")[1], UpdateResponse.class.getName());
+        UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
+        //定位权限问题
+        try
+        {
+            String lngAndLat = getLngAndLat(MainActivity.this);
+            UserServiceImpl.instance().init(lngAndLat.split(",")[0], lngAndLat.split(",")[1], UpdateResponse.class.getName());
+        } catch (Exception e)
+        {
+            UserServiceImpl.instance().init("","", UpdateResponse.class.getName());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -251,6 +263,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
+            if (tag.equals(BaseTrainListResponse.class.getName()))
+            {
+                BaseTrainListResponse mTrainListResponse = GsonHelper.toType(result, BaseTrainListResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                    {
+                       trainListDateResult = result;
+                    }
+                }
+            }
             if (tag.equals(UserListResponse.class.getName()))
             {
                 UserListResponse mUserListResponse = GsonHelper.toType(result, UserListResponse.class);

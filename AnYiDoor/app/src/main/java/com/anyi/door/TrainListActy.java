@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import cn.nj.www.my_module.bean.BaseResponse;
 import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
+import cn.nj.www.my_module.bean.index.BaseTrainListResponse;
 import cn.nj.www.my_module.bean.index.StartTestResponse;
 import cn.nj.www.my_module.bean.index.StartTrainResponse;
 import cn.nj.www.my_module.bean.index.TrainBean;
@@ -141,7 +142,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
             {
                 findViewById(R.id.search_view).setVisibility(View.GONE);
                 topView.setVisibility(View.VISIBLE);
-                UserServiceImpl.instance().trainList(TrainListResponse.class.getName());
+                trainList();
             }
         });
         ivSearchClear.setOnClickListener(new View.OnClickListener()
@@ -216,11 +217,39 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         });
     }
 
+    private void trainList()
+    {
+        if (GeneralUtils.isNullOrZeroLenght(MainActivity.trainListDateResult)){
+            UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
+        }else {
+            trainBeanList.clear();
+            try
+            {
+                JSONObject jsonObject = new JSONObject(MainActivity.trainListDateResult);
+                Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                {
+                }.getType());
+                Iterator entries = map.entrySet().iterator();
+                while (entries.hasNext())
+                {
+                    Map.Entry entry = (Map.Entry) entries.next();
+                    String key = (String) entry.getKey();
+                    List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
+                    trainBeanList.add(new TrainBean(key, valueList));
+                }
+                final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
+                listView.setAdapter(adapter);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void initViewData()
     {
-        NetLoadingDialog.getInstance().loading(mContext);
-        UserServiceImpl.instance().trainList(TrainListResponse.class.getName());
+        trainList();
     }
 
     @Override
@@ -498,6 +527,51 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
                     ToastUtil.showError(this);
                 }
             }
+            if (tag.equals(BaseTrainListResponse.class.getName()))
+            {
+                BaseTrainListResponse mTrainListResponse = GsonHelper.toType(result, BaseTrainListResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                    {
+                        trainBeanList.clear();
+                        try
+                        {
+                            JSONObject jsonObject = new JSONObject(result);
+                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                            {
+                            }.getType());
+                            Iterator entries = map.entrySet().iterator();
+                            while (entries.hasNext())
+                            {
+                                Map.Entry entry = (Map.Entry) entries.next();
+                                String key = (String) entry.getKey();
+                                List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
+                                trainBeanList.add(new TrainBean(key, valueList));
+                            }
+                            final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
+                            listView.setAdapter(adapter);
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        } finally
+                        {
+                            if (trainBeanList.size() == 0)
+                            {
+                                ToastUtil.makeText(mContext, "无相关记录");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
         }
 
     }
@@ -513,7 +587,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener
         {
             findViewById(R.id.search_view).setVisibility(View.GONE);
             topView.setVisibility(View.VISIBLE);
-            UserServiceImpl.instance().trainList(TrainListResponse.class.getName());
+            trainList();
         }
     }
 
