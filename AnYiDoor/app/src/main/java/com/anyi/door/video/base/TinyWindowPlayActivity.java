@@ -1,7 +1,6 @@
 package com.anyi.door.video.base;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -571,19 +570,19 @@ public class TinyWindowPlayActivity extends AppCompatActivity
                         isTakeingPhoto = false;
                         try
                         {
-                            if (picCount == 1)
-                            {
-                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
-                            }
-                            else if (picCount == 2)
-                            {
-                                bnFinish.setVisibility(View.VISIBLE);
-                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
-                            }
-                            else
-                            {
-                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
-                            }
+//                            if (picCount == 1)
+//                            {
+//                                ivImg1.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+//                            }
+//                            else if (picCount == 2)
+//                            {
+//                                bnFinish.setVisibility(View.VISIBLE);
+//                                ivImg2.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+//                            }
+//                            else
+//                            {
+//                                ivImg3.setImageBitmap(BitmapFactory.decodeFile(FileSystemManager.getSlientFilePath(TinyWindowPlayActivity.this) + File.separator + "TinyWindowPlayActivity_" + timeStamp + "_" + picCount + ".jpg"));
+//                            }
                             if (picCount == 3)
                             {
                                 List<File> files = null;

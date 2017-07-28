@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.nj.www.my_module.tools.FileSystemManager;
+import cn.nj.www.my_module.view.imagepicker.util.ImageUtils;
 
 
 /**
@@ -118,9 +119,9 @@ public class TakePicMethod {
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             Matrix matrix = new Matrix();
             matrix.preRotate(90);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                    bitmap.getHeight(), matrix, true);
-
+//            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+//                    bitmap.getHeight(), matrix, true);
+            bitmap= ImageUtils.compressImage(bitmap);
             try {
                 FileOutputStream fos = new FileOutputStream(filename);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -204,7 +205,7 @@ public class TakePicMethod {
     /**
      * 压缩图片
      */
-    public void resizePhoto() {
+    public void resizePhoto(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);

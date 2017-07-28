@@ -140,8 +140,12 @@ public class JudgeAdapter extends BaseAdapter
         holder.t.setText((position + 1) + "." + list.get(position).getQuestion()); // Set the question body
         if (list.get(position).current != Model.NONE)
         {
-            RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current);
-            r.setChecked(true);
+            try {
+                RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current);
+                r.setChecked(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         else
         {
