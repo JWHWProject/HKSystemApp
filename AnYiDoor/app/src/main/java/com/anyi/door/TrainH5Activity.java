@@ -1,5 +1,6 @@
 package com.anyi.door;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,6 +12,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import com.anyi.door.utils.TakePicMethod;
+import com.anyi.door.utils.signature.HandWriteActivity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -70,6 +72,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
 
     private String timeStamp = "";
 
+    private String signatureUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -111,7 +114,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     public void onBackPressed()
     {
         DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
-                "您确定要中途取消培训？", "取消", "确定",trainId,false);
+                "您确定要中途取消培训？", "取消", "确定", trainId, false);
     }
 
     boolean flag = true;
@@ -180,19 +183,26 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                         if (time == randomTime)
                         {
                             picCount = 2;
-                            new Thread(new Runnable() {
+                            new Thread(new Runnable()
+                            {
                                 @Override
-                                public void run() {
-                                    while (isTakeingPhoto){
-                                        try {
+                                public void run()
+                                {
+                                    while (isTakeingPhoto)
+                                    {
+                                        try
+                                        {
                                             Thread.sleep(100);
-                                        } catch (InterruptedException e) {
+                                        } catch (InterruptedException e)
+                                        {
                                             e.printStackTrace();
                                         }
                                     }
-                                    runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable()
+                                    {
                                         @Override
-                                        public void run() {
+                                        public void run()
+                                        {
                                             TakePicture();
                                         }
                                     });
@@ -312,7 +322,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                                 else
                                 {
                                     NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                                    UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
+                                    UserServiceImpl.instance().finishTrain(trainId, null,signatureUrl, FinishTrainResponse.class.getName());
                                 }
                             }
                         } catch (Exception e)
@@ -349,11 +359,15 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 DialogUtil.showCloseTwoBnttonDialog(TrainH5Activity.this,
-                        "您确定要中途取消培训？", "取消", "确定",trainId,false);
+                        "您确定要中途取消培训？", "取消", "确定", trainId, false);
             }
             if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 finish();
+            }
+            if (NotiTag.TAG_SIGNATURE_URL.equals(tag))
+            {
+                signatureUrl = ((NoticeEvent) event).getText();
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -391,7 +405,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                        UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), FinishTrainResponse.class.getName());
+                        UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), signatureUrl,FinishTrainResponse.class.getName());
                     }
                     else
                     {
@@ -401,7 +415,8 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     }
                 }
                 else
-                {bnFinish.setEnabled(true);
+                {
+                    bnFinish.setEnabled(true);
                     NetLoadingDialog.getInstance().dismissDialog();
                     ToastUtil.showError(mContext);
                 }
@@ -420,70 +435,87 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                 //这边需要添加图片
                 //获取到所有数据，提交
 
-                if (bnFinish.getText().toString().trim().equals("完成培训"))
-                {
-//                    picCount = 3;
-                    bnFinish.setEnabled(false);
-//                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    {
-                        NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
-                        UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
-                    }
-                    else
-                    {
-                        List<File> files = null;
-                        try
-                        {
-                            files = new ArrayList<>();
-                            try
-                            {
-                                File file1 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 1 + ".jpg");
-                                if (file1.exists())
-                                {
-                                    files.add(file1);
-                                }
-                            } catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                            try
-                            {
-                                File file2 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 2 + ".jpg");
-                                if (file2.exists())
-                                {
-                                    files.add(file2);
-                                }
-                            } catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                        if (files.size() >= 0)
-                        {
-                            NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                            UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-                        }
-                        else
-                        {
-                            NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                            UserServiceImpl.instance().finishTrain(trainId, null, FinishTrainResponse.class.getName());
-                        }
-                    }
-                }
-                else
-                {
-                    DialogUtil.showDialogOneButton(
-                            TrainH5Activity.this, "您现在还无法完成培训~", "我知道了"
-                            , "");
-                }
+                submitClick();
                 break;
         }
     }
 
+    private void submitClick()
+    {
+        if (bnFinish.getText().toString().trim().equals("完成培训"))
+        {
+            if (GeneralUtils.isNullOrZeroLenght(signatureUrl))
+            {
+                startActivityForResult(new Intent(mContext, HandWriteActivity.class), 1);
+            }
+            else
+            {
+                doSubmit();
+            }
+        }
+        else
+        {
+            DialogUtil.showDialogOneButton(
+                    TrainH5Activity.this, "您现在还无法完成培训~", "我知道了"
+                    , "");
+        }
+    }
+
+    private void doSubmit()
+    {
+
+//                    picCount = 3;
+        bnFinish.setEnabled(false);
+//                    NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
+            UserServiceImpl.instance().finishTrain(trainId, null,signatureUrl, FinishTrainResponse.class.getName());
+        }
+        else
+        {
+            List<File> files = null;
+            try
+            {
+                files = new ArrayList<>();
+                try
+                {
+                    File file1 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 1 + ".jpg");
+                    if (file1.exists())
+                    {
+                        files.add(file1);
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                try
+                {
+                    File file2 = new File(FileSystemManager.getSlientFilePath(TrainH5Activity.this) + File.separator + "TrainH5Activity_" + timeStamp + "_" + 2 + ".jpg");
+                    if (file2.exists())
+                    {
+                        files.add(file2);
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            if (files.size() >= 0)
+            {
+                NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+                UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+            }
+            else
+            {
+                NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
+                UserServiceImpl.instance().finishTrain(trainId, null, signatureUrl,FinishTrainResponse.class.getName());
+            }
+        }
+    }
 
     /**
      * 倒计时
@@ -535,4 +567,12 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
 //        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TrainH5Activity.this));
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == 100)
+        { signatureUrl =data.getStringExtra("url");
+            submitClick();
+        }
+    }
 }

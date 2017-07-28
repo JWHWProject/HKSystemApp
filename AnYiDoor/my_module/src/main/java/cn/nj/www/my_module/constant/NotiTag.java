@@ -36,6 +36,7 @@ public class NotiTag
      * 右边按钮操作
      */
     public static final String TAG_DO_RIGHT = "do_right";
+    public static final String TAG_SIGNATURE_URL = "TAG_SIGNATURE_URL";
     /**
      * 右边按钮操作
      */

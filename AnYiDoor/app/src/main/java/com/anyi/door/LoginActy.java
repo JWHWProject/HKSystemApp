@@ -1,6 +1,5 @@
 package com.anyi.door;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -38,12 +37,14 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
 
     private TextView forgetTv, registTv;
 
-    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialog = new ProgressDialog(mContext);
+        if (GeneralUtils.isNotNullOrZeroLenght(Global.getLoginData()))
+        {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         setContentView(R.layout.activity_login_acty);
         initAll();
     }

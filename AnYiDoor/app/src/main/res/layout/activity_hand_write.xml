@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/ll"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <include
+        android:id="@+id/common_back"
+        layout="@layout/layout_top"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pxtodp1"
+        android:layout_below="@+id/common_back"
+        android:background="@color/line"/>
+
+    <com.anyi.door.utils.signature.LinePathView
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/line"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/pxtodp130"
+        android:background="#FFFFFF"/>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/pxtodp20"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/clear1"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp90"
+            android:layout_marginLeft="@dimen/pxtodp30"
+            android:layout_marginRight="@dimen/pxtodp30"
+            android:layout_marginTop="@dimen/pxtodp54"
+            android:layout_weight="1"
+            android:background="@drawable/common_pink_bn"
+            android:text="重写"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/pxtosp34"
+            />
+
+        <Button
+            android:id="@+id/save1"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/pxtodp90"
+            android:layout_marginLeft="@dimen/pxtodp40"
+            android:layout_marginRight="@dimen/pxtodp30"
+            android:layout_marginTop="@dimen/pxtodp54"
+            android:layout_weight="1"
+            android:background="@drawable/common_pink_bn"
+            android:text="确定"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/pxtosp34"
+            />
+
+        <Button
+            android:id="@+id/change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="改变颜色"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/changewidth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="改变宽度"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -91,7 +91,7 @@ public class UserServiceImpl
                 .startPost(URLUtil.INDEX_DATA, param, tag);
     }
 
-    public void giveCard(String cardNo, String name, int gender, String department, String jobNum, String tag)
+    public void giveCard(String signature,String cardNo, String name, int gender, String department, String jobNum, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("cardNo", cardNo);
@@ -99,11 +99,12 @@ public class UserServiceImpl
         param.put("gender", gender + "");
         param.put("department", department);
         param.put("jobNum", jobNum);
+        param.put("signPicUrl", signature);
         new NetWork()
                 .startPost(URLUtil.GIVE_CARD, param, tag);
     }
 
-    public void giveCard(String receiveDepartment,String receiver,String cardNo, String name, int gender, String phone, String fromCompany, String idCard
+    public void giveCard(String signature,String receiveDepartment,String receiver,String cardNo, String name, int gender, String phone, String fromCompany, String idCard
             , String outsidersType, String reason, String needTraining, String validTime
             , List<String> urls, String tag)
     {
@@ -113,6 +114,7 @@ public class UserServiceImpl
         param.put("cardNo", cardNo);
         param.put("name", name);
         param.put("gender", gender + "");
+        param.put("signPicUrl", signature);
         param.put("phone", phone);
         param.put("fromCompany", fromCompany);
         param.put("idCard", idCard);
@@ -215,10 +217,11 @@ public class UserServiceImpl
     }
 
 
-    public void finishTrain(String recordID, List<String> picUrlList, String tag)
+    public void finishTrain(String recordID, List<String> picUrlList,String signature, String tag)
     {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("recordID", recordID);
+        param.put("signPicUrl", signature);
         if (picUrlList != null)
         {
             param.put("picUrlList", picUrlList);
@@ -226,10 +229,11 @@ public class UserServiceImpl
         new NetWork()
                 .startPost2(URLUtil.FINISH_TRAIN, param, tag);
     }
-    public void finishTrain(String recordID, List<String> picUrlList, String tag, NetWorkResponse.NetCallBack callBack)
+    public void finishTrain(String signature,String recordID, List<String> picUrlList, String tag, NetWorkResponse.NetCallBack callBack)
     {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("recordID", recordID);
+        param.put("signPicUrl", signature);
         if (picUrlList != null)
         {
             param.put("picUrlList", picUrlList);
@@ -255,12 +259,13 @@ public class UserServiceImpl
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
     }
 
-    public void finishTest(String examID, List<OnlineTrainingAnswer> answerList, List<String> picUrlList, String tag)
+    public void finishTest(String signPicUrl,String examID, List<OnlineTrainingAnswer> answerList, List<String> picUrlList, String tag)
     {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("examID", examID);
         param.put("answerList", answerList);
         param.put("picUrlList", picUrlList);
+        param.put("signPicUrl", signPicUrl);
         new NetWork()
                 .startPost2(URLUtil.FINISH_TEST, param, tag);
     }

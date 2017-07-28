@@ -15,6 +15,7 @@ import com.anyi.door.test_utils.JudgeAdapter;
 import com.anyi.door.test_utils.MultiltyAdapter;
 import com.anyi.door.test_utils.SingleListAdapter;
 import com.anyi.door.utils.TakePicMethod;
+import com.anyi.door.utils.signature.HandWriteActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -104,6 +105,8 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 
     private FinishTestResponse mFinishTestResponse;
 
+    private String signatureUrl;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -185,19 +188,26 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                         if (time == randomTime)
                         {
                             picCount = 2;
-                            new Thread(new Runnable() {
+                            new Thread(new Runnable()
+                            {
                                 @Override
-                                public void run() {
-                                    while (isTakeingPhoto){
-                                        try {
+                                public void run()
+                                {
+                                    while (isTakeingPhoto)
+                                    {
+                                        try
+                                        {
                                             Thread.sleep(100);
-                                        } catch (InterruptedException e) {
+                                        } catch (InterruptedException e)
+                                        {
                                             e.printStackTrace();
                                         }
                                     }
-                                    runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable()
+                                    {
                                         @Override
-                                        public void run() {
+                                        public void run()
+                                        {
                                             TakePicture();
                                         }
                                     });
@@ -317,7 +327,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                                 else
                                 {
                                     NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                                    UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
+                                    UserServiceImpl.instance().finishTest(signatureUrl,examFinishID, answerList, null,
                                             FinishTestResponse.class.getName());
                                 }
                             }
@@ -359,113 +369,131 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View view)
             {
-                //判断
-                answerList.clear();
-                if (judgeAdapter != null)
-                {
-                    if (judgeAdapter.isFinishAll())
-                    {
-                        answerList.addAll(judgeAdapter.getAnswerList());
-                    }
-                    else
-                    {
-                        ToastUtil.makeText(mContext, "请完成所有题目后提交");
-                        return;
-                    }
-                }
-                //单选
-                if (singleAdapter != null)
-                {
-                    if (singleAdapter.isFinishAll())
-                    {
-                        answerList.addAll(singleAdapter.getAnswerList());
-                    }
-                    else
-                    {
-                        ToastUtil.makeText(mContext, "请完成所有题目后提交");
-                        return;
-                    }
-                }
-                //多选
-                if (multiltyAdapter != null)
-                {
-                    if (multiltyAdapter.isFinishAll())
-                    {
-                        answerList.addAll(multiltyAdapter.getAnswerList());
-                    }
-                    else
-                    {
-                        ToastUtil.makeText(mContext, "请完成所有题目后提交");
-                        return;
-                    }
-                }
+
                 //获取到所有数据，提交
-                if (bnFinish.getText().toString().trim().equals("提交"))
-                {
-//                    picCount = 3;
-                    NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    {
-                        NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                        UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
-                                FinishTestResponse.class.getName());
-                        bnFinish.setEnabled(false);
-                    }
-                    else
-                    {
-                        bnFinish.setEnabled(false);
-//                        NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
-                        List<File> files = null;
-                        try
-                        {
-                            files = new ArrayList<>();
-                            try
-                            {
-                                File file1 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 1 + ".jpg");
-                                if (file1.exists())
-                                {
-                                    files.add(file1);
-                                }
-                            } catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                            try
-                            {
-                                File file2 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 2 + ".jpg");
-                                if (file2.exists())
-                                {
-                                    files.add(file2);
-                                }
-                            } catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                        if (files.size() >= 0)
-                        {
-                            NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
-                            UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
-                        }
-                        else
-                        {
-                            NetLoadingDialog.getInstance().loading(TestListActivity.this);
-                            UserServiceImpl.instance().finishTest(examFinishID, answerList, null,
-                                    FinishTestResponse.class.getName());
-                        }
-                    }
-                }
-                else
-                {
-                    DialogUtil.showDialogOneButton(
-                            TestListActivity.this, "您现在还无法完成考核~", "我知道了"
-                            , "");
-                }
+                submitClick();
             }
         });
+    }
+
+    private void submitClick()
+    {
+        if (bnFinish.getText().toString().trim().equals("提交"))
+        {
+            if (GeneralUtils.isNullOrZeroLenght(signatureUrl))
+            {
+                startActivityForResult(new Intent(mContext, HandWriteActivity.class), 1);
+            }
+            else
+            {
+                doSubmit();
+            }
+        }
+        else
+        {
+            DialogUtil.showDialogOneButton(
+                    TestListActivity.this, "您现在还无法完成考核~", "我知道了"
+                    , "");
+        }
+    }
+
+    private void doSubmit()
+    {
+        //判断
+        answerList.clear();
+        if (judgeAdapter != null)
+        {
+            if (judgeAdapter.isFinishAll())
+            {
+                answerList.addAll(judgeAdapter.getAnswerList());
+            }
+            else
+            {
+                ToastUtil.makeText(mContext, "请完成所有题目后提交");
+                return;
+            }
+        }
+        //单选
+        if (singleAdapter != null)
+        {
+            if (singleAdapter.isFinishAll())
+            {
+                answerList.addAll(singleAdapter.getAnswerList());
+            }
+            else
+            {
+                ToastUtil.makeText(mContext, "请完成所有题目后提交");
+                return;
+            }
+        }
+        //多选
+        if (multiltyAdapter != null)
+        {
+            if (multiltyAdapter.isFinishAll())
+            {
+                answerList.addAll(multiltyAdapter.getAnswerList());
+            }
+            else
+            {
+                ToastUtil.makeText(mContext, "请完成所有题目后提交");
+                return;
+            }
+        }
+//                    picCount = 3;
+        NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            NetLoadingDialog.getInstance().loading(TestListActivity.this);
+            UserServiceImpl.instance().finishTest(signatureUrl,examFinishID, answerList, null,
+                    FinishTestResponse.class.getName());
+            bnFinish.setEnabled(false);
+        }
+        else
+        {
+            bnFinish.setEnabled(false);
+//                        NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
+            List<File> files = null;
+            try
+            {
+                files = new ArrayList<>();
+                try
+                {
+                    File file1 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 1 + ".jpg");
+                    if (file1.exists())
+                    {
+                        files.add(file1);
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                try
+                {
+                    File file2 = new File(FileSystemManager.getSlientFilePath(TestListActivity.this) + File.separator + "TestListActivity_" + timeStamp + "_" + 2 + ".jpg");
+                    if (file2.exists())
+                    {
+                        files.add(file2);
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            if (files.size() >= 0)
+            {
+                NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中,请稍后");
+                UserServiceImpl.instance().uploadPic(files, UploadFileResponse.class.getName());
+            }
+            else
+            {
+                NetLoadingDialog.getInstance().loading(TestListActivity.this);
+                UserServiceImpl.instance().finishTest(signatureUrl,examFinishID, answerList, null,
+                        FinishTestResponse.class.getName());
+            }
+        }
     }
 
     @Override
@@ -493,7 +521,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
             if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
                 DialogUtil.showCloseTwoBnttonDialog(mContext,
-                        "您确定要中途取消考核？", "取消", "确定",examFinishID,true);
+                        "您确定要中途取消考核？", "取消", "确定", examFinishID, true);
             }
             if (NotiTag.TAG_CLOSE_ACTIVITY_FROM_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
@@ -513,6 +541,10 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     startActivity(intentDoFile);
                 }
                 finish();
+            }
+            if (NotiTag.TAG_SIGNATURE_URL.equals(tag))
+            {
+                signatureUrl = ((NoticeEvent) event).getText();
             }
         }
         else if (event instanceof NetResponseEvent)
@@ -589,7 +621,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(mFinishTestResponse.getResultCode()))
                     {
                         MainActivity.getNewBannerAndDataShow();
-                        DialogUtil.showDialogResultButton(mContext, mFinishTestResponse.getMark(),  mFinishTestResponse.getPass(), "我知道了",
+                        DialogUtil.showDialogResultButton(mContext, mFinishTestResponse.getMark(), mFinishTestResponse.getPass(), "我知道了",
                                 NotiTag.TAG_CLOSE_WITH_UEL);
                     }
                     else
@@ -612,7 +644,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         NetLoadingDialog.getInstance().loading(TestListActivity.this, "提交中，请稍后");
-                        UserServiceImpl.instance().finishTest(examFinishID, answerList, uploadFileResponse.getUrlList(),
+                        UserServiceImpl.instance().finishTest(signatureUrl,examFinishID, answerList, uploadFileResponse.getUrlList(),
                                 FinishTestResponse.class.getName());
                     }
                     else
@@ -637,7 +669,7 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
     public void onBackPressed()
     {
         DialogUtil.showCloseTwoBnttonDialog(mContext,
-                "您确定要中途取消考核？", "取消", "确定",examFinishID,true);
+                "您确定要中途取消考核？", "取消", "确定", examFinishID, true);
     }
 
 
@@ -692,4 +724,12 @@ public class TestListActivity extends BaseActivity implements View.OnClickListen
 //        FileUtil.deleteDirectory(FileSystemManager.getSlientFilePath(TestListActivity.this));
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == 100)
+        { signatureUrl =data.getStringExtra("url");
+            submitClick();
+        }
+    }
 }

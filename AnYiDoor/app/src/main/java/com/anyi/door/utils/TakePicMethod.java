@@ -117,7 +117,7 @@ public class TakePicMethod {
             // 将得到的照片进行270°旋转，使其竖直
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             Matrix matrix = new Matrix();
-            matrix.preRotate(270);
+            matrix.preRotate(90);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, true);
 

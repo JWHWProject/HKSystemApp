@@ -316,6 +316,10 @@ public class FileSystemManager
                 FileUtil.createNewFile(getCacheFilePath(context) + "img" + File.separator);
         return imgPath;
     }
+    public static String getSignaturePath(Context context)
+    {
+        return  getImgPath(context)+"signature.png";
+    }
 
     /**
      * <列表页面图片缓存目录>

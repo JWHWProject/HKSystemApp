@@ -1,7 +1,6 @@
 package cn.nj.www.my_module.main.base;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +38,7 @@ public abstract class BaseActivity extends PermissionActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         mContext = this;
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         BaseApplication.getInstance().addActivity(this);
         EventBus.getDefault().register(this);

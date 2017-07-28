@@ -36,6 +36,7 @@ import com.anyi.door.utils.DbTOPxUtils;
 import com.anyi.door.utils.MyGridView;
 import com.anyi.door.utils.card.CardManager;
 import com.anyi.door.utils.card.Util;
+import com.anyi.door.utils.signature.HandWriteActivity;
 
 import java.io.File;
 import java.io.Serializable;
@@ -164,6 +165,8 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
 
     @Bind(R.id.rl_train)
     RelativeLayout rlTrain;
+
+    private String signatureUrl;
 
     /**
      * 图片最多上传两张，身份证正反面
@@ -503,7 +506,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View view)
             {
-                upLoadData();
+                    upLoadData();
             }
         });
 //        rlReason.setOnClickListener(this);
@@ -560,6 +563,10 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
             {
                 finish();
             }
+            if (NotiTag.TAG_SIGNATURE_URL.equals(tag))
+            {
+                signatureUrl = ((NoticeEvent) event).getText();
+            }
         }
         if (event instanceof NetResponseEvent)
         {
@@ -598,7 +605,6 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                     if (Constants.SUCESS_CODE.equals(mGiveInnerCardResponse.getResultCode()))
                     {
 //                        1、外来人员发卡成功后，如果接口里直接返回培训ID，需要直接进入培训页面，确认开始培训，关联当前的cardNo；
-
                         if (GeneralUtils.isNotNullOrZeroLenght(mGiveInnerCardResponse.getTrainingID()))
                         {
                             MainActivity.getNewBannerAndDataShow();
@@ -641,7 +647,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                         {
                             jdDepartment = "";
                         }
-                        UserServiceImpl.instance().giveCard(jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                        UserServiceImpl.instance().giveCard(signatureUrl,jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
                                 etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
                                 , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
                                 uploadFileResponse.getUrlList(), GiveOutterCardResponse.class.getName());
@@ -773,27 +779,22 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null)
+        if (resultCode == 100)
         {
-            if (resultCode == 1)
+            signatureUrl =data.getStringExtra("url");
+            if (GeneralUtils.isNullOrZeroLenght(signatureUrl))
             {
-                String result = data.getStringExtra("reason");
-                tvReasonDetail.setText(result);
-                if (GeneralUtils.isNotNullOrZeroLenght(tvReasonDetail.getText().toString()))
-                {
-                    tvReasonDetail.setVisibility(View.VISIBLE);
-                    tvExplain.setText("修改");
-                }
-                else
-                {
-                    tvReasonDetail.setVisibility(View.GONE);
-                    tvExplain.setText("请填写");
-                }
-                return;
+                startActivityForResult(new Intent(mContext, HandWriteActivity.class), 1);
             }
+            else
+            {
+                upLoadData();
+            }
+            return;
         }
         switch (requestCode)
         {
+
             case 0:
                 if (data != null)
                 {
@@ -871,7 +872,13 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 ToastUtil.makeText(mContext, "请填写工号");
                 return;
             }
-            UserServiceImpl.instance().giveCard(etCardNumber.getText().toString(), etName.getText().toString(), sexIndex, tvDepartment.getText().toString(), etNumber.getText().toString(), GiveInnerCardResponse.class.getName());
+            if (GeneralUtils.isNullOrZeroLenght(signatureUrl))
+            {
+                startActivityForResult(new Intent(mContext, HandWriteActivity.class), 1);
+
+            }else {
+                UserServiceImpl.instance().giveCard(signatureUrl,etCardNumber.getText().toString(), etName.getText().toString(), sexIndex, tvDepartment.getText().toString(), etNumber.getText().toString(), GiveInnerCardResponse.class.getName());
+            }
         }
         else
         {
@@ -940,11 +947,17 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                 {
                     jdDepartment = "";
                 }
-                NetLoadingDialog.getInstance().loading(mContext);
-                UserServiceImpl.instance().giveCard(jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
-                        etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
-                        , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
-                        null, GiveOutterCardResponse.class.getName());
+                if (GeneralUtils.isNullOrZeroLenght(signatureUrl))
+                {
+                    startActivityForResult(new Intent(mContext, HandWriteActivity.class), 1);
+
+                }else {
+                    NetLoadingDialog.getInstance().loading(mContext);
+                    UserServiceImpl.instance().giveCard(signatureUrl,jdDepartment, et_jd.getText().toString(), etCardNumber.getText().toString(), etName.getText().toString(), sexIndex,
+                            etPhone.getText().toString(), etCompany.getText().toString(), etId.getText().toString()
+                            , userTypeArr[userTypeIndex], tvReasonDetail.getText().toString(), (userTrainIndex + 1) + "", amountDay + "",
+                            null, GiveOutterCardResponse.class.getName());
+                }
             }
         }
     }
