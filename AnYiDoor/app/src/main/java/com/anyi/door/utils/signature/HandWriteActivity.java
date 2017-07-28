@@ -23,7 +23,6 @@ import cn.nj.www.my_module.bean.NetResponseEvent;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.UploadFileResponse;
 import cn.nj.www.my_module.constant.Constants;
-import cn.nj.www.my_module.constant.ErrorCode;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.main.base.BaseActivity;
 import cn.nj.www.my_module.main.base.BaseApplication;
@@ -172,7 +171,7 @@ public class HandWriteActivity extends BaseActivity
                     }
                     else
                     {
-                        ErrorCode.doCode(mContext, uploadFileResponse.getResultCode(), uploadFileResponse.getDesc());
+                        ToastUtil.makeText(mContext,"请签写正确的姓名");
                     }
                 }
                 else

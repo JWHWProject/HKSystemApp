@@ -221,7 +221,7 @@ public class LinePathView extends View {
         }
         bitmap = ImageUtils.compressPngImage(bitmap);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
         byte[] buffer = bos.toByteArray();
         if (buffer != null) {
             File file = new File(path);

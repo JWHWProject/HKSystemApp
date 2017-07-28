@@ -44,14 +44,6 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(new Intent(MainActivity.this, HandWriteActivity.class), 1);
             }
         });
-        btn2.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivityForResult(new Intent(MainActivity.this, LandscapeActivity.class), 1);
-            }
-        });
     }
 
     @Override
