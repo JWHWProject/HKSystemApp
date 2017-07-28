@@ -63,6 +63,12 @@ public class UserServiceImpl
         new NetWork()
                 .startPost(URLUtil.USER_LIST, param, tag);
     }
+    public void getOutCommerList(String tag)
+    {
+        Map<String, String> param = new HashMap<String, String>();
+        new NetWork()
+                .startPost(URLUtil.outerPeople, param, tag);
+    }
 
     public void getOuterType(String tag)
     {

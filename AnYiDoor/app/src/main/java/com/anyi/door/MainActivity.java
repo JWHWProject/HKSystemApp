@@ -36,6 +36,7 @@ import cn.nj.www.my_module.bean.index.BannerResponse;
 import cn.nj.www.my_module.bean.index.BaseTrainListResponse;
 import cn.nj.www.my_module.bean.index.CancelResponse;
 import cn.nj.www.my_module.bean.index.LoginResponse;
+import cn.nj.www.my_module.bean.index.OuterPeopleResponse;
 import cn.nj.www.my_module.bean.index.OuterTypeResponse;
 import cn.nj.www.my_module.bean.index.UpdateResponse;
 import cn.nj.www.my_module.bean.index.UserListResponse;
@@ -170,6 +171,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         NetLoadingDialog.getInstance().loading(mContext);
         getNewBannerAndDataShow();
         UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
+        UserServiceImpl.instance().getOutCommerList(OuterPeopleResponse.class.getName());
         UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
         UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
         //定位权限问题
@@ -275,7 +277,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 {
                     if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
                     {
-                       trainListDateResult = result;
+                        trainListDateResult = result;
                     }
                 }
             }
@@ -336,6 +338,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                     else
                     {
                         ErrorCode.doCode(this, mOuterTypeResponse.getResultCode(), mOuterTypeResponse.getDesc());
+                    }
+                }
+                else
+                {
+                    ToastUtil.showError(this);
+                }
+            }
+
+            else if (tag.equals(OuterPeopleResponse.class.getName()))
+            {
+                OuterPeopleResponse mOuterPeopleResponse = GsonHelper.toType(result, OuterPeopleResponse.class);
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mOuterPeopleResponse.getResultCode()))
+                    {
+                        SharePref.saveString(Constants.OUTER_PEOPLE, result);
+                    }
+                    else
+                    {
+                        ErrorCode.doCode(this, mOuterPeopleResponse.getResultCode(), mOuterPeopleResponse.getDesc());
                     }
                 }
                 else

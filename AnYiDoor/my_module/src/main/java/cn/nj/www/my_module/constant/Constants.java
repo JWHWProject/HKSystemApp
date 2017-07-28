@@ -26,6 +26,7 @@ public class Constants
     public static final String VERSION_NAME = "1";
     public static final int VERSION_CODE= 1;
     public static final String OUTER_TYPE = "OUTER_TYPE";
+    public static final String OUTER_PEOPLE = "OUTER_PEOPLE";
 
 
     /**
