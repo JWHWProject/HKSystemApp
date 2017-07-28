@@ -180,7 +180,6 @@ public class HandWriteActivity extends BaseActivity
                 }
             }
         }
-
     }
 
     @Override

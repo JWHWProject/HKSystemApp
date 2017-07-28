@@ -610,11 +610,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            exit();
-            return false;
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK)
+//        {
+//            exit();
+//            return false;
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
