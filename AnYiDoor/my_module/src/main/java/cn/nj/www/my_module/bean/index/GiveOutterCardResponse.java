@@ -12,6 +12,15 @@ public class GiveOutterCardResponse extends BaseResponse
      */
 
     private String trainingID;
+    private String outsidersID;
+
+    public String getOutsidersID() {
+        return outsidersID;
+    }
+
+    public void setOutsidersID(String outsidersID) {
+        this.outsidersID = outsidersID;
+    }
 
     public String getTrainingID()
     {

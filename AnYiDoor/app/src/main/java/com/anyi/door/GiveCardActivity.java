@@ -614,7 +614,7 @@ public class GiveCardActivity extends BaseActivity implements View.OnClickListen
                             }
                             Intent trainIntent = new Intent(mContext, TrainListActy.class);
                             trainIntent.putExtra(IntentCode.TRAIN_ID, mGiveInnerCardResponse.getTrainingID());
-                            trainIntent.putExtra(IntentCode.CARD_NUM, etCardNumber.getText().toString());
+                            trainIntent.putExtra(IntentCode.CARD_NUM, mGiveInnerCardResponse.getOutsidersID());
                             startActivity(trainIntent);
                             finish();
                         }

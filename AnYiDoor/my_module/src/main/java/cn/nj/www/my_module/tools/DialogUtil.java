@@ -14,9 +14,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import cn.nj.www.my_module.R;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.CancelResponse;
+import cn.nj.www.my_module.bean.index.OuterPeopleResponse;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.network.UserServiceImpl;
@@ -191,10 +194,12 @@ public class DialogUtil
                 if (s.toString().length() > 0)
                 {
                     bnOk.setTextColor(context.getResources().getColor(R.color.money_dialog_blue_text));
+                    bnOk.setEnabled(true);
                 }
                 else
                 {
                     bnOk.setTextColor(context.getResources().getColor(R.color.line));
+                    bnOk.setEnabled(false);
                 }
             }
 
@@ -224,7 +229,27 @@ public class DialogUtil
             {
                 if (GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString()) || GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString()))
                 {
-                    EventBus.getDefault().post(new NoticeEvent(tag,type, etCard.getText().toString(), etName.getText().toString()));
+                    //传外来或者内部人员id
+                    if (type==1){//外部人员
+                        String outerId = "";
+                        if(GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString())){
+                            outerId= GeneralUtils.isOuterCardExistBackUserId(etCard.getText().toString());
+                        }else {
+                            outerId= GeneralUtils.isOuterPeopleExistBackUserId(etName.getText().toString());
+                        }
+                        if (GeneralUtils.isNotNullOrZeroLenght(outerId)){
+                            EventBus.getDefault().post(new NoticeEvent(tag,type,outerId, ""));
+                        }else {
+                            ToastUtil.makeText(context,"无该人员信息");
+                            return;
+                        }
+                    }else {//内部人员
+                        if (GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString())){
+                            EventBus.getDefault().post(new NoticeEvent(tag,type,"", etName.getText().toString()));
+                        }else {
+                            ToastUtil.makeText(context,"请填写人员名称");
+                        }
+                    }
                     dialog.dismiss();
                 }
                 else

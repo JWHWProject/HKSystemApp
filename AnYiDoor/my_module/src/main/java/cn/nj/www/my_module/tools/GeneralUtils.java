@@ -126,7 +126,7 @@ public final class GeneralUtils {
             List<OuterPeopleResponse.OutsidersListBean> userList = mUserListResponse.getOutsidersList();
             for (int i = 0; i < userList.size(); i++) {
                 if (userList.get(i).getUserName().equals(str)) {
-                    return userList.get(i).getUserID();
+                    return userList.get(i).getId();
                 }
             }
         }
@@ -147,6 +147,26 @@ public final class GeneralUtils {
             }
         }
         return listBeanList;
+    }
+    /**
+     * 外部人员卡号判断是否正确
+     * @return
+     */
+    public static String isOuterCardExistBackUserId(String str) {
+        String result = SharePref.getString(Constants.OUTER_PEOPLE, "");
+        List<OuterPeopleResponse.OutsidersListBean> listBeanList =new ArrayList<>();
+        if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            OuterPeopleResponse mUserListResponse = GsonHelper.toType(result, OuterPeopleResponse.class);
+            if (null!=mUserListResponse.getOutsidersList()){
+                listBeanList= mUserListResponse.getOutsidersList();
+                for (int i = 0; i<listBeanList.size();i++){
+                    if (str.equals(listBeanList.get(i).getCardNo())){
+                        return listBeanList.get(i).getId();
+                    }
+                }
+            }
+        }
+        return "";
     }
 
         /**

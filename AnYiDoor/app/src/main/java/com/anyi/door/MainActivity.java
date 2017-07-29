@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         getNewBannerAndDataShow();
         UserServiceImpl.instance().getOuterType(OuterTypeResponse.class.getName());
         UserServiceImpl.instance().getOutCommerList(OuterPeopleResponse.class.getName());
-        UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
+//        UserServiceImpl.instance().getUserList(UserListResponse.class.getName());
         UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
         //定位权限问题
         try

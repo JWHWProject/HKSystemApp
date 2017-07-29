@@ -48,8 +48,8 @@ public final class CMLog
     static
     {
         // TODO 发布的时候改成asset
-        setLogType(LogType.asset);
-//        setLogType(LogType.verbose);
+//        setLogType(LogType.asset);
+        setLogType(LogType.verbose);
     }
 
     private CMLog()

@@ -74,6 +74,7 @@
         android:id="@+id/dialog_bottom_bns"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/pxtodp190"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
@@ -125,7 +126,6 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:id="@+id/et_name"
-                android:layout_marginRight="@dimen/pxtodp20"
                 android:background="@drawable/app_start_train_et"
                 android:hint="请输入企业内部人员姓名"
                 android:paddingLeft="@dimen/pxtodp30"

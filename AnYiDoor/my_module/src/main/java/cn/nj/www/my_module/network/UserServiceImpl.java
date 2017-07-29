@@ -91,8 +91,8 @@ public class UserServiceImpl
         param.put("password", password);
         param.put("loginType", "1");
         param.put("smsCode", "");
-//        param.put("model", "FP07");
-        param.put("model", android.os.Build.MODEL);
+        param.put("model", "FP07");
+//        param.put("model", android.os.Build.MODEL);
         new NetWork()
                 .startPost(URLUtil.LOGIN, param, tag);
     }
@@ -219,11 +219,11 @@ public class UserServiceImpl
                 .startPost(URLUtil.TRAIN_CONTENT, param, tag);
     }
 
-    public void startTrain(String trainingID, String cardNo,String userID, String tag)
+    public void startTrain(String trainingID, String outsidersID,String userID, String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
-        param.put("cardNo", cardNo);
+        param.put("outsidersID", outsidersID);
         param.put("userID",userID);
         new NetWork()
                 .startPost(URLUtil.START_TRAIN, param, tag);
@@ -262,11 +262,11 @@ public class UserServiceImpl
                 .startPost(URLUtil.TEST_DETAIL, param, tag);
     }
 
-    public void startOnlineTest(String trainingID, String cardNo, String userId,String tag)
+    public void startOnlineTest(String trainingID, String outsidersID, String userId,String tag)
     {
         Map<String, String> param = new HashMap<String, String>();
         param.put("trainingID", trainingID);
-        param.put("cardNo", cardNo);
+        param.put("outsidersID", outsidersID);
         param.put("userID",userId);
         new NetWork()
                 .startPost(URLUtil.ONLINE_TEST, param, tag);
