@@ -130,12 +130,9 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
         initAll();
         // 获取nfc适配器，判断设备是否支持NFC功能
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null)
-        {
+        if (nfcAdapter == null) {
             return;
-        }
-        else if (!nfcAdapter.isEnabled())
-        {
+        } else if (!nfcAdapter.isEnabled()) {
             return;
         }
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -147,27 +144,22 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 new String[]{MifareClassic.class.getName()},
                 new String[]{NfcA.class.getName()}};// 允许扫描的标签类型
     }
+
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        if (nfcAdapter == null)
-        {
+        if (nfcAdapter == null) {
             return;
-        }
-        else if (!nfcAdapter.isEnabled())
-        {
+        } else if (!nfcAdapter.isEnabled()) {
             return;
         }
         nfcAdapter.enableForegroundDispatch(TrainListActy.this, pendingIntent, mFilters,
                 mTechLists);
-        if (isFirst)
-        {
-            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction()))
-            {
+        if (isFirst) {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
                 String result = processIntent(getIntent());
                 String str = Util.hex2Decimal(result);
-                if(dialog!=null){
+                if (dialog != null) {
                     EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
                     etCard.setText(str + "");
                 }
@@ -177,15 +169,13 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
         super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))
-        {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             String result = processIntent(intent);
             String str = Util.hex2Decimal(result);
-            if(dialog!=null){
+            if (dialog != null) {
                 EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
                 etCard.setText(str + "");
             }
@@ -199,8 +189,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
      * @return
      */
     @SuppressLint("NewApi")
-    private String processIntent(Intent intent)
-    {
+    private String processIntent(Intent intent) {
         Intent intent1 = intent;
         String intentActionStr = intent1.getAction();
         String strId = "";
@@ -213,21 +202,17 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 //            byte[] bytesId = tag.getId();
         strId = Util.toHexString(bytesId, 0, bytesId.length);
 //        }
-        if (strId != null && !strId.equals(""))
-        {
+        if (strId != null && !strId.equals("")) {
             return strId;
         }
         Parcelable[] rawmsgs = intent
                 .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        if (rawmsgs != null && rawmsgs.length > 0)
-        {
+        if (rawmsgs != null && rawmsgs.length > 0) {
             NdefMessage msg = (NdefMessage) rawmsgs[0];
             NdefRecord[] records = msg.getRecords();
             String resultStr = new String(records[0].getPayload());
             return resultStr;
-        }
-        else
-        {
+        } else {
             final Parcelable p = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String str = (p != null) ? CardManager.load(p, getResources()) : null;
             return str;
@@ -309,17 +294,19 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 trainID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
                 fileType = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getFileType();
                 if (fromTest.equals("")) {
-                   dialog=DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
+                    dialog = DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
 
                 } else if (fromTest.equals("1")) {
                     selectedTestName = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getTrainingName();
-                    dialog=DialogUtil.startTestDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
+                    dialog = DialogUtil.startTestDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
                 }
                 return false;
             }
         });
     }
+
     Dialog dialog;
+
     private void trainList() {
         if (GeneralUtils.isNullOrZeroLenght(MainActivity.trainListDateResult)) {
             UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
@@ -360,7 +347,8 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     }
 
     private String[] nameArr;
-    private int nameIndex=0;
+    private int nameIndex = 0;
+
     @Override
     public void onEventMainThread(BaseResponse event) {
         if (event instanceof NoticeEvent) {
@@ -374,20 +362,18 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
             }
             if ("BTN_SEL_NAME".equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
-                List<OuterPeopleResponse.OutsidersListBean> outpeoples=GeneralUtils.getOuterPeopleList();
-                final EditText editText=((NoticeEvent) event).getTempTV();
+                List<OuterPeopleResponse.OutsidersListBean> outpeoples = GeneralUtils.getOuterPeopleList();
+                final EditText editText = ((NoticeEvent) event).getTempTV();
                 try {
-                    nameArr=new String[outpeoples.size()];
-                    for(int i=0;i<outpeoples.size();i++){
-                        nameArr[i]=outpeoples.get(i).getUserName();
+                    nameArr = new String[outpeoples.size()];
+                    for (int i = 0; i < outpeoples.size(); i++) {
+                        nameArr[i] = outpeoples.get(i).getUserName();
                     }
                     new AlertDialog.Builder(mContext).setTitle("请选择")
                             .setSingleChoiceItems(
                                     nameArr, nameIndex,
-                                    new DialogInterface.OnClickListener()
-                                    {
-                                        public void onClick(DialogInterface dialog, int which)
-                                        {
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
                                             editText.setText(nameArr[which]);
                                             dialog.dismiss();
                                         }
@@ -425,7 +411,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                         }
                     }
                 } else {
-                    UserServiceImpl.instance().getUserListByName(name,UserListByNameResponse.class.getName());
+                    UserServiceImpl.instance().getUserListByName(name, UserListByNameResponse.class.getName());
                 }
 
 //                String userId = GeneralUtils.isUserExistBackUserId(name);
@@ -483,7 +469,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                         }
                     }
                 } else {
-                    UserServiceImpl.instance().getUserListByName(name,UserListByNameResponse.class.getName());
+                    UserServiceImpl.instance().getUserListByName(name, UserListByNameResponse.class.getName());
                 }
             }
             if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
@@ -643,11 +629,35 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 }
             }
             if (tag.equals(UserListByNameResponse.class.getName())) {
-                UserListByNameResponse userListByNameResponse = GsonHelper.toType(result, UserListByNameResponse.class);
+                final UserListByNameResponse userListByNameResponse = GsonHelper.toType(result, UserListByNameResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    Log.e("sub","result="+result);
                     if (Constants.SUCESS_CODE.equals(userListByNameResponse.getResultCode())) {
+                        if (userListByNameResponse.getUserList() != null && userListByNameResponse.getUserList().size() > 0) {
+                            if (userListByNameResponse.getUserList().size() == 1) {
+                                UserServiceImpl.instance().startTrain(trainID, "", userListByNameResponse.getUserList().get(0).getUserID(), StartTrainResponse.class.getName());
+                            } else if (userListByNameResponse.getUserList().size() > 1) {
+                                try {
+                                    nameArr = new String[userListByNameResponse.getUserList().size()];
+                                    for (int i = 0; i < userListByNameResponse.getUserList().size(); i++) {
+                                        nameArr[i] = userListByNameResponse.getUserList().get(i).getUserName();
+                                    }
+                                    new AlertDialog.Builder(mContext).setTitle("请选择")
+                                            .setSingleChoiceItems(
+                                                    nameArr, nameIndex,
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            UserServiceImpl.instance().startTrain(trainID, "", userListByNameResponse.getUserList().get(nameIndex).getUserID(), StartTrainResponse.class.getName());
+                                                            dialog.dismiss();
+                                                        }
 
+                                                    }).show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                ToastUtil.makeText(mContext, "不存在该人员信息");
+                            }
+                        }
 
                     } else {
                         ErrorCode.doCode(this, userListByNameResponse.getResultCode(), userListByNameResponse.getDesc());
