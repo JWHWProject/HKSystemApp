@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.nj.www.my_module.bean.index.OuterPeopleResponse;
 import cn.nj.www.my_module.bean.index.UserListResponse;
 import cn.nj.www.my_module.constant.Constants;
 import cn.nj.www.my_module.constant.Global;
@@ -60,13 +61,11 @@ import cn.nj.www.my_module.tools.uuid.IdUtil;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public final class GeneralUtils
-{
+public final class GeneralUtils {
 
     public static String DATE_PATTERN = "yyyyMMddHHmmss";// 定义标准日期格式 used in parse
 
-    public static String getTime()
-    {
+    public static String getTime() {
         return formatDate(new Date(), DATE_PATTERN);
     }
 
@@ -76,8 +75,7 @@ public final class GeneralUtils
      * @param obj 被判断的对象
      * @return boolean
      */
-    public static boolean isNull(Object obj)
-    {
+    public static boolean isNull(Object obj) {
         return (null == obj) ? true : false;
     }
 
@@ -87,8 +85,7 @@ public final class GeneralUtils
      * @param obj 被判断的对象
      * @return boolean
      */
-    public static boolean isNotNull(Object obj)
-    {
+    public static boolean isNotNull(Object obj) {
         return !isNull(obj);
     }
 
@@ -98,22 +95,17 @@ public final class GeneralUtils
      * @param str 被判断的字符串
      * @return boolean
      */
-    public static boolean isNullOrZeroLenght(String str)
-    {
+    public static boolean isNullOrZeroLenght(String str) {
         return (null == str || "".equals(str.trim())) ? true : false;
     }
 
-    public static String isUserExistBackUserId(String str)
-    {
+    public static String isUserExistBackUserId(String str) {
         String result = SharePref.getString(Constants.USER_LIST, "");
-        if (GeneralUtils.isNotNullOrZeroLenght(result) && GeneralUtils.isNotNullOrZeroLenght(str))
-        {
+        if (GeneralUtils.isNotNullOrZeroLenght(result) && GeneralUtils.isNotNullOrZeroLenght(str)) {
             UserListResponse mUserListResponse = GsonHelper.toType(result, UserListResponse.class);
             List<UserListResponse.UserListBean> userList = mUserListResponse.getUserList();
-            for (int i = 0; i < userList.size(); i++)
-            {
-                if (userList.get(i).getNickName().equals(str))
-                {
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getNickName().equals(str)) {
                     return userList.get(i).getUserID();
                 }
             }
@@ -121,15 +113,50 @@ public final class GeneralUtils
         return "";
     }
 
+    /**
+     * 判断外部人员是否正确的接口
+     *
+     * @param str
+     * @return
+     */
+    public static String isOuterPeopleExistBackUserId(String str) {
+        String result = SharePref.getString(Constants.OUTER_PEOPLE, "");
+        if (GeneralUtils.isNotNullOrZeroLenght(result) && GeneralUtils.isNotNullOrZeroLenght(str)) {
+            OuterPeopleResponse mUserListResponse = GsonHelper.toType(result, OuterPeopleResponse.class);
+            List<OuterPeopleResponse.OutsidersListBean> userList = mUserListResponse.getOutsidersList();
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getUserName().equals(str)) {
+                    return userList.get(i).getUserID();
+                }
+            }
+        }
+        return "";
+    }
 
     /**
-     * 判断字符串是否为null或者0长度，字符串在判断长度时，先去除前后的空格,空或者0长度返回false,否则返回true
-     *
-     * @param str 被判断的字符串
-     * @return boolean
+     * 获取外部人员列表
+     * @return
      */
-    public static boolean isNotNullOrZeroLenght(String str)
-    {
+    public static List<OuterPeopleResponse.OutsidersListBean> getOuterPeopleList() {
+        String result = SharePref.getString(Constants.OUTER_PEOPLE, "");
+        List<OuterPeopleResponse.OutsidersListBean> listBeanList =new ArrayList<>();
+        if (GeneralUtils.isNotNullOrZeroLenght(result)) {
+            OuterPeopleResponse mUserListResponse = GsonHelper.toType(result, OuterPeopleResponse.class);
+            if (null!=mUserListResponse.getOutsidersList()){
+                listBeanList= mUserListResponse.getOutsidersList();
+            }
+        }
+        return listBeanList;
+    }
+
+        /**
+         * 判断字符串是否为null或者0长度，字符串在判断长度时，先去除前后的空格,空或者0长度返回false,否则返回true
+         *
+         * @param str 被判断的字符串
+         * @return boolean
+         */
+
+    public static boolean isNotNullOrZeroLenght(String str) {
         return !isNullOrZeroLenght(str);
     }
 
@@ -140,8 +167,7 @@ public final class GeneralUtils
      * @return boolean 布尔值
      * @see [类、类#方法、类#成员]
      */
-    public static boolean isNullOrZeroSize(Collection<? extends Object> c)
-    {
+    public static boolean isNullOrZeroSize(Collection<? extends Object> c) {
         return isNull(c) || c.isEmpty();
     }
 
@@ -152,8 +178,7 @@ public final class GeneralUtils
      * @return boolean 布尔值
      * @see [类、类#方法、类#成员]
      */
-    public static boolean isNotNullOrZeroSize(Collection<? extends Object> c)
-    {
+    public static boolean isNotNullOrZeroSize(Collection<? extends Object> c) {
         return !isNullOrZeroSize(c);
     }
 
@@ -163,10 +188,8 @@ public final class GeneralUtils
      * @param number 被判断的数字
      * @return boolean
      */
-    public static boolean isNullOrZero(Number number)
-    {
-        if (GeneralUtils.isNotNull(number))
-        {
+    public static boolean isNullOrZero(Number number) {
+        if (GeneralUtils.isNotNull(number)) {
             return (number.intValue() != 0) ? false : true;
         }
         return true;
@@ -178,8 +201,7 @@ public final class GeneralUtils
      * @param number 被判断的数字
      * @return boolean
      */
-    public static boolean isNotNullOrZero(Number number)
-    {
+    public static boolean isNotNullOrZero(Number number) {
         return !isNullOrZero(number);
     }
 
@@ -190,16 +212,14 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String retained2SignificantFigures(String num, int x)
-    {
+    public static String retained2SignificantFigures(String num, int x) {
         return new BigDecimal(num).setScale(x, RoundingMode.HALF_UP).toString();
     }
 
     /**
      * 判断本地的私有文件夹里面是否存在当前名字的文件
      */
-    public static boolean isFileExist(Context context, String fileName)
-    {
+    public static boolean isFileExist(Context context, String fileName) {
         String bitmapName = fileName.substring(fileName.lastIndexOf("/") + 1);
         File file = new File(FileSystemManager.getTemporaryPath(context) + bitmapName);
         return file.exists();
@@ -219,10 +239,8 @@ public final class GeneralUtils
      * @param scale 小数点后保留几位
      * @return 四舍五入后的结果
      */
-    public static double round(double v, int scale)
-    {
-        if (scale < 0)
-        {
+    public static double round(double v, int scale) {
+        if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
         BigDecimal b = new BigDecimal(Double.toString(v));
@@ -233,19 +251,15 @@ public final class GeneralUtils
     /**
      * 取整数
      */
-    public static String textInt(String money)
-    {
-        if (isNotNullOrZeroLenght(money))
-        {
-            if (money.indexOf(".") > 0)
-            {
+    public static String textInt(String money) {
+        if (isNotNullOrZeroLenght(money)) {
+            if (money.indexOf(".") > 0) {
                 money = money.replaceAll("0+?$", "");//去掉后面无用的零
                 money = money.replaceAll("[.]$", "");//如小数点后面全是零则去掉小数点
             }
             return money;
         }
-        else
-        {
+        else {
             return "0";
         }
     }
@@ -258,8 +272,7 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String subtract(String subt1, String subt2)
-    {
+    public static String subtract(String subt1, String subt2) {
         BigDecimal sub1 = new BigDecimal(subt1);
         BigDecimal sub2 = new BigDecimal(subt2);
         BigDecimal result = sub1.subtract(sub2);
@@ -275,8 +288,7 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String add(String addend1, String addend2)
-    {
+    public static String add(String addend1, String addend2) {
         BigDecimal add1 = new BigDecimal(addend1);
         BigDecimal add2 = new BigDecimal(addend2);
         BigDecimal result = add1.add(add2);
@@ -292,8 +304,7 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String multiply(String factor1, String factor2)
-    {
+    public static String multiply(String factor1, String factor2) {
         BigDecimal fac1 = new BigDecimal(factor1);
         BigDecimal fac2 = new BigDecimal(factor2);
         BigDecimal result = fac1.multiply(fac2);
@@ -309,8 +320,7 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String divide(String divisor1, String divisor2)
-    {
+    public static String divide(String divisor1, String divisor2) {
         BigDecimal div1 = new BigDecimal(divisor1);
         BigDecimal div2 = new BigDecimal(divisor2);
         BigDecimal result = div1.divide(div2, 2, RoundingMode.HALF_UP);
@@ -325,8 +335,7 @@ public final class GeneralUtils
      * @return String
      * @see [类、类#方法、类#成员]
      */
-    public static String dividePoint1(String divisor1, String divisor2)
-    {
+    public static String dividePoint1(String divisor1, String divisor2) {
         BigDecimal div1 = new BigDecimal(divisor1);
         BigDecimal div2 = new BigDecimal(divisor2);
         BigDecimal result = div1.divide(div2, 1, RoundingMode.HALF_UP);
@@ -336,20 +345,16 @@ public final class GeneralUtils
     /**
      * 规范经纬度的长度，8位数字，加上小数点后长度为9位
      */
-    public static String standard(String str)
-    {
+    public static String standard(String str) {
         String return_string = null;
         StringBuffer sb = new StringBuffer(str);
         int length = sb.length();
-        if (length < 9)
-        {
-            for (int i = length; i < 9; i++)
-            {
+        if (length < 9) {
+            for (int i = length; i < 9; i++) {
                 sb = sb.append("0");
             }
         }
-        if (length > 9)
-        {
+        if (length > 9) {
             sb.delete(9, length);
         }
         return_string = sb.toString();
@@ -362,16 +367,13 @@ public final class GeneralUtils
      * @return
      * @throws Exception
      */
-    public static String getVersionName(Context context)
-    {
-        try
-        {
+    public static String getVersionName(Context context) {
+        try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
             String version = packInfo.versionName;
             return version;
-        } catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
         }
         return "";
     }
@@ -384,8 +386,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean isEmail(String email)
-    {
+    public static boolean isEmail(String email) {
         String str =
                 "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
         Pattern p = Pattern.compile(str);
@@ -400,8 +401,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean isTel(String tel)
-    {
+    public static boolean isTel(String tel) {
         String str = "^[1][0-9]{10}$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(tel);
@@ -416,8 +416,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean isPost(String post)
-    {
+    public static boolean isPost(String post) {
         String patrn = "^[1-9][0-9]{5}$";
         Pattern p = Pattern.compile(patrn);
         Matcher m = p.matcher(post);
@@ -432,8 +431,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean IsPassword(String password)
-    {
+    public static boolean IsPassword(String password) {
 //        String str = "^[A-Za-z0-9]{6,16}$";
         String str = "^(?![0-9]+$)(?![_]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,16}$";
         Pattern p = Pattern.compile(str);
@@ -449,8 +447,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean IsPasswordDigit(String password)
-    {
+    public static boolean IsPasswordDigit(String password) {
         String str = "^[^ ]{6,20}$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(password);
@@ -465,8 +462,7 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static boolean Iscertificate(String certificate)
-    {
+    public static boolean Iscertificate(String certificate) {
         String str = "[0-9]{17}([0-9]|[xX])";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(certificate);
@@ -477,8 +473,7 @@ public final class GeneralUtils
      * <获取imei>
      * <功能详细描述>
      */
-    public static String getDeviceId()
-    {
+    public static String getDeviceId() {
 //        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 //        return telephonyManager.getDeviceId();
         return IdUtil.getId() + "";
@@ -489,21 +484,17 @@ public final class GeneralUtils
      *
      * @param listView
      */
-    public static void setListViewHeightBasedOnChildrenExtend(ListView listView)
-    {
+    public static void setListViewHeightBasedOnChildrenExtend(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-        {
+        if (listAdapter == null) {
             return;
         }
         int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.AT_MOST);
         int totalHeight = 0;
         View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++)
-        {
+        for (int i = 0; i < listAdapter.getCount(); i++) {
             view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-            {
+            if (i == 0) {
                 view.setLayoutParams(new LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
             }
             view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
@@ -516,28 +507,22 @@ public final class GeneralUtils
     }
 
     // 去除textview的排版问题
-    public static String ToDBC(String input)
-    {
+    public static String ToDBC(String input) {
         char[] c = input.toCharArray();
-        for (int i = 0; i < c.length; i++)
-        {
-            if (c[i] == 12288)
-            {
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] == 12288) {
                 c[i] = (char) 32;
                 continue;
             }
-            if (c[i] > 65280 && c[i] < 65375)
-            {
+            if (c[i] > 65280 && c[i] < 65375) {
                 c[i] = (char) (c[i] - 65248);
             }
         }
         return new String(c);
     }
 
-    public static String ToShortString(String text, int num)
-    {
-        if (num < 0)
-        {
+    public static String ToShortString(String text, int num) {
+        if (num < 0) {
             return text;
         }
         text = ToDBC(text);
@@ -545,19 +530,15 @@ public final class GeneralUtils
         int yu = length / num;
         String myString = "";
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < yu; i++)
-        {
+        for (int i = 0; i < yu; i++) {
             list.add(text.substring(i * num, (i + 1) * num));
         }
         list.add(text.substring(yu * num, text.length()));
-        for (int i = 0; i < list.size(); i++)
-        {
-            if (i == list.size() - 1)
-            {
+        for (int i = 0; i < list.size(); i++) {
+            if (i == list.size() - 1) {
                 myString = myString + list.get(i);
             }
-            else
-            {
+            else {
                 myString = myString + list.get(i) + "\n";
             }
         }
@@ -571,8 +552,7 @@ public final class GeneralUtils
      * @param context
      * @see [类、类#方法、类#成员]
      */
-    public static void setTel(Context context, String tel)
-    {
+    public static void setTel(Context context, String tel) {
         Intent intent = new Intent();
 //        intent.setAction(Intent.ACTION_DIAL);
         intent.setAction(Intent.ACTION_DIAL);
@@ -587,17 +567,13 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static String doUserName(String userName)
-    {
+    public static String doUserName(String userName) {
         String name = "";
-        if (GeneralUtils.isNotNullOrZeroLenght(userName))
-        {
-            if (userName.length() > 3)
-            {
+        if (GeneralUtils.isNotNullOrZeroLenght(userName)) {
+            if (userName.length() > 3) {
                 name = "**" + userName.substring(2, userName.length());
             }
-            else
-            {
+            else {
                 name = "*" + userName.substring(1, userName.length());
             }
 
@@ -608,17 +584,13 @@ public final class GeneralUtils
     /**
      * <处理银行卡>
      */
-    public static String doBankCardNumber(String bankCard)
-    {
+    public static String doBankCardNumber(String bankCard) {
         String number = "";
-        if (GeneralUtils.isNotNullOrZeroLenght(bankCard))
-        {
-            if (bankCard.length() > 4)
-            {
+        if (GeneralUtils.isNotNullOrZeroLenght(bankCard)) {
+            if (bankCard.length() > 4) {
                 number = "**** **** **** " + bankCard.substring(bankCard.length() - 4, bankCard.length());
             }
-            else
-            {
+            else {
                 number = "**** **** **** " + bankCard;
             }
 
@@ -629,21 +601,16 @@ public final class GeneralUtils
     /**
      * <处理银行卡>
      */
-    public static String doBankCardNumberOther(String bankCard)
-    {
+    public static String doBankCardNumberOther(String bankCard) {
         String number = "";
-        if (GeneralUtils.isNotNullOrZeroLenght(bankCard))
-        {
-            if (bankCard.length() > 8)
-            {
+        if (GeneralUtils.isNotNullOrZeroLenght(bankCard)) {
+            if (bankCard.length() > 8) {
                 number = bankCard.substring(0, 4) + " **** **** " + bankCard.substring(bankCard.length() - 4, bankCard.length());
             }
-            else if (bankCard.length() > 4)
-            {
+            else if (bankCard.length() > 4) {
                 number = "**** **** **** " + bankCard.substring(bankCard.length() - 4, bankCard.length());
             }
-            else
-            {
+            else {
                 number = "**** **** **** " + bankCard;
             }
 
@@ -658,13 +625,11 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static ArrayList<String> doSort(Map<String, String> param)
-    {
+    public static ArrayList<String> doSort(Map<String, String> param) {
         Set<String> keySet = param.keySet();
         Iterator<String> iterator = keySet.iterator();
         ArrayList<String> keys = new ArrayList<String>();
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             String key = iterator.next();
             keys.add(key);
         }
@@ -675,8 +640,7 @@ public final class GeneralUtils
     /**
      * 获取当前时间
      */
-    public static String splitToLocalDate()
-    {
+    public static String splitToLocalDate() {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String date = sDateFormat.format(new Date());
         return date.toString();
@@ -685,8 +649,7 @@ public final class GeneralUtils
     /**
      * 格式化时间
      */
-    public static String getFormatDate(Date date)
-    {
+    public static String getFormatDate(Date date) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return sDateFormat.format(date);
     }
@@ -694,11 +657,9 @@ public final class GeneralUtils
     /**
      * <将时间戳 转换为mm:ss> <功能详细描述>
      */
-    public static String splitToSecondTime(String str)
-    {
+    public static String splitToSecondTime(String str) {
 
-        if (isNullOrZeroLenght(str))
-        {
+        if (isNullOrZeroLenght(str)) {
             return str;
         }
         double abc = Double.parseDouble(str);
@@ -712,11 +673,9 @@ public final class GeneralUtils
     /**
      * <将毫秒 转换为mm:ss> <功能详细描述>
      */
-    public static String splitToSecondTimeMore(String str)
-    {
+    public static String splitToSecondTimeMore(String str) {
 
-        if (isNullOrZeroLenght(str))
-        {
+        if (isNullOrZeroLenght(str)) {
             return str;
         }
         long l = Double.valueOf(str).longValue();
@@ -729,10 +688,8 @@ public final class GeneralUtils
     /**
      * <将YYYY-MM-DD hh:mm:ss转换为 YYYY-MM-DD>
      */
-    public static String splitToshort(String str)
-    {
-        if (isNullOrZeroLenght(str) || str.length() != 19)
-        {
+    public static String splitToshort(String str) {
+        if (isNullOrZeroLenght(str) || str.length() != 19) {
             return str;
         }
         return str.substring(0, 10);
@@ -741,17 +698,14 @@ public final class GeneralUtils
     /**
      * 计算两个日期相隔天数
      */
-    public static String dateToDays(String startDate, String endDate)
-    {
+    public static String dateToDays(String startDate, String endDate) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date begin = null;
         Date end = null;
-        try
-        {
+        try {
             begin = df.parse(startDate);
             end = df.parse(endDate);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         int day = (int) ((end.getTime() - begin.getTime()) / 1000 / 60 / 60 / 24);
@@ -761,8 +715,7 @@ public final class GeneralUtils
     /**
      * 计算年化收益率
      */
-    public static String summerYearMoney(String money, String days, String percent)
-    {
+    public static String summerYearMoney(String money, String days, String percent) {
         String textOne = multiply(days, money);
         String textTwo = multiply(percent, textOne);
         String textThree = divide(textTwo, "365");
@@ -774,20 +727,17 @@ public final class GeneralUtils
      * smdate 较小的时间
      * bdate  较大的时间
      */
-    public static String daysBetween(String smdate, String bdate)
-    {
+    public static String daysBetween(String smdate, String bdate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         long time1 = 0;
         long time2 = 0;
-        try
-        {
+        try {
             cal.setTime(sdf.parse(smdate));
             time1 = cal.getTimeInMillis();
             cal.setTime(sdf.parse(bdate));
             time2 = cal.getTimeInMillis();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         long between_days = (time2 - time1) / (1000 * 3600 * 24);
@@ -797,18 +747,14 @@ public final class GeneralUtils
     /**
      * 百分比或千分比显示
      */
-    public static String doPercent(String number)
-    {
+    public static String doPercent(String number) {
         String percent = "0";
 
-        if (isNotNullOrZeroLenght(number))
-        {
-            if (Double.valueOf(multiply(number, "100")) >= 1)
-            {
+        if (isNotNullOrZeroLenght(number)) {
+            if (Double.valueOf(multiply(number, "100")) >= 1) {
                 percent = textInt(multiply(number, "100")) + "%";
             }
-            else
-            {
+            else {
                 percent = textInt(multiply(number, "1000")) + "‰";
             }
         }
@@ -819,22 +765,18 @@ public final class GeneralUtils
     /**
      * 月份间隔 YYYY-MM-DD hh:mm:ss
      */
-    public static int differenceMonth(String start, String end)
-    {
-        if (isNullOrZeroLenght(start) || start.length() != 19)
-        {
+    public static int differenceMonth(String start, String end) {
+        if (isNullOrZeroLenght(start) || start.length() != 19) {
             return 0;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date d = null;
         Date d1 = null;
-        try
-        {
+        try {
             d = sdf.parse(start);
             d1 = sdf.parse(end);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         Calendar c = Calendar.getInstance();
@@ -845,12 +787,10 @@ public final class GeneralUtils
         int year1 = c.get(Calendar.YEAR);
         int month1 = c.get(Calendar.MONTH);
         int result;
-        if (year == year1)
-        {
+        if (year == year1) {
             result = month1 - month;//两个日期相差几个月，即月份差
         }
-        else
-        {
+        else {
             result = 12 * (year1 - year) + month1 - month;//两个日期相差几个月，即月份差
         }
         return result == 0 ? 1 : Math.abs(result);
@@ -859,19 +799,15 @@ public final class GeneralUtils
     /**
      * 显示日期的下个月 YYYY-MM-DD
      */
-    public static String showNextMonth(String mDate, int amount)
-    {
-        if (isNullOrZeroLenght(mDate) || mDate.length() != 10)
-        {
+    public static String showNextMonth(String mDate, int amount) {
+        if (isNullOrZeroLenght(mDate) || mDate.length() != 10) {
             return mDate;
         }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
-        try
-        {
+        try {
             date = df.parse(mDate);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         Calendar calendar = Calendar.getInstance();
@@ -888,8 +824,7 @@ public final class GeneralUtils
      *
      * @return
      */
-    public static boolean isNetworkConnected(Context mContext)
-    {
+    public static boolean isNetworkConnected(Context mContext) {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
@@ -899,8 +834,7 @@ public final class GeneralUtils
     /**
      * <加法运算并保留三位位有效数字> <功能详细描述>
      */
-    public static String addThree(String addend1, String addend2)
-    {
+    public static String addThree(String addend1, String addend2) {
         BigDecimal add1 = new BigDecimal(addend1);
         BigDecimal add2 = new BigDecimal(addend2);
         BigDecimal result = add1.add(add2);
@@ -911,16 +845,13 @@ public final class GeneralUtils
     /**
      * 计算每期天数数组
      */
-    public static ArrayList<String> daysOfMonth(String startTime, String endTime)
-    {
+    public static ArrayList<String> daysOfMonth(String startTime, String endTime) {
         ArrayList<String> days = new ArrayList<>();
         int diff = GeneralUtils.differenceMonth(startTime, endTime);
         String sTime = "";//开始日期
         String eTime;//下月日期
-        for (int i = 0; i < diff; i++)
-        {
-            if (i == 0)
-            {
+        for (int i = 0; i < diff; i++) {
+            if (i == 0) {
                 sTime = GeneralUtils.splitToshort(startTime);
             }
             eTime = showNextMonth(sTime, 1);
@@ -931,15 +862,13 @@ public final class GeneralUtils
     }
 
     //如果字符串是科学：如123213e21，转化为字符串
-    public static String getStringOutE(String str)
-    {
+    public static String getStringOutE(String str) {
         BigDecimal bd = new BigDecimal(str);
         return bd.toPlainString();
     }
 
     //两位有效数字
-    public static String getCutTwo(double finalMoney)
-    {
+    public static String getCutTwo(double finalMoney) {
         DecimalFormat formater = new DecimalFormat();
         formater.setMaximumFractionDigits(2);
         formater.setGroupingSize(0);
@@ -953,19 +882,15 @@ public final class GeneralUtils
      * 小数点后最多两位
      * 最少保留一位小数
      */
-    public static String getDataIfWithZero(String dataStr)
-    {
+    public static String getDataIfWithZero(String dataStr) {
         DecimalFormat df2 = new DecimalFormat("#.##");
         String back = "";
-        if (GeneralUtils.isNotNullOrZeroLenght(dataStr))
-        {
-            try
-            {
+        if (GeneralUtils.isNotNullOrZeroLenght(dataStr)) {
+            try {
                 double dataFloat = Double.parseDouble(dataStr);
                 back = df2.format(dataFloat) + "";
                 return back;
-            } catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
                 return "";
             }
@@ -976,19 +901,15 @@ public final class GeneralUtils
     /**
      * 修改textview文字颜色
      */
-    public static void setTextViewColor(TextView textView)
-    {
+    public static void setTextViewColor(TextView textView) {
         String text = textView.getText().toString().trim();
         String myText = "";
-        for (int i = 0; i < text.length(); i++)
-        {
+        for (int i = 0; i < text.length(); i++) {
             String str = text.substring(i, i + 1);
-            if (isNumeric(str))
-            {
+            if (isNumeric(str)) {
                 myText = myText + "<font color=\"#e1524b\">" + str + "</font>";
             }
-            else
-            {
+            else {
                 myText = myText + "<font color=\"#777777\">" + str + "</font>";
             }
         }
@@ -998,8 +919,7 @@ public final class GeneralUtils
     /**
      * 判断文字是否为数字
      */
-    public static boolean isNumeric(String str)
-    {
+    public static boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         return pattern.matcher(str).matches();
     }
@@ -1011,8 +931,7 @@ public final class GeneralUtils
      * @param date2
      * @return
      */
-    public static long dayDiff(Date date1, Date date2)
-    {
+    public static long dayDiff(Date date1, Date date2) {
         return (date2.getTime() - date1.getTime()) / 86400000;
     }
 
@@ -1022,24 +941,20 @@ public final class GeneralUtils
      * @param dateStr
      * @return
      */
-    public static Date stringtoDate(String dateStr)
-    {
+    public static Date stringtoDate(String dateStr) {
         Date d = null;
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try
-        {
+        try {
             formater.setLenient(false);
             d = formater.parse(dateStr);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             // log.error(e);
             d = null;
         }
         return d;
     }
 
-    public static int dayDiffString(String str1, String str2)
-    {
+    public static int dayDiffString(String str1, String str2) {
         String[] one = str1.split(" ");
         String[] two = str2.split(" ");
         String oneMore = one[0] + " " + "00:00:00";
@@ -1058,10 +973,8 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static String hourMinute(String time)
-    {
-        if (GeneralUtils.isNullOrZeroLenght(time))
-        {
+    public static String hourMinute(String time) {
+        if (GeneralUtils.isNullOrZeroLenght(time)) {
             return time;
         }
         String[] arr1 = time.split(" ");
@@ -1077,10 +990,8 @@ public final class GeneralUtils
      * @return
      * @see [类、类#方法、类#成员]
      */
-    public static String monthDay(String time)
-    {
-        if (GeneralUtils.isNullOrZeroLenght(time))
-        {
+    public static String monthDay(String time) {
+        if (GeneralUtils.isNullOrZeroLenght(time)) {
             return time;
         }
         String[] arr1 = time.split(" ");
@@ -1092,8 +1003,7 @@ public final class GeneralUtils
     /**
      * 保留两位有效数字,不四舍五入
      */
-    public static String twoNumberEnd(Double money)
-    {
+    public static String twoNumberEnd(Double money) {
         DecimalFormat formater = new DecimalFormat();
         formater.setMaximumFractionDigits(2);
         formater.setGroupingSize(0);
@@ -1104,8 +1014,7 @@ public final class GeneralUtils
     /**
      * double 求余
      */
-    public static double twoNumberLast(String moneyOne, String moneyTwo)
-    {
+    public static double twoNumberLast(String moneyOne, String moneyTwo) {
         double val = Double.valueOf(moneyOne) % Double.valueOf(moneyTwo);
         BigDecimal bd = new BigDecimal(val);
         val = bd.setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
@@ -1120,14 +1029,11 @@ public final class GeneralUtils
      * @param pattern 格式模型
      * @return 返回字符串类型
      */
-    public static String formatDate(Date date, String pattern)
-    {
-        if (date == null)
-        {
+    public static String formatDate(Date date, String pattern) {
+        if (date == null) {
             return null;
         }
-        else
-        {
+        else {
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             return sdf.format(date);
         }
@@ -1138,12 +1044,10 @@ public final class GeneralUtils
      *
      * @param gridView
      */
-    public static void setListViewHeightBasedOnChildren(GridView gridView)
-    {
+    public static void setListViewHeightBasedOnChildren(GridView gridView) {
         // 获取listview的adapter
         ListAdapter listAdapter = gridView.getAdapter();
-        if (listAdapter == null)
-        {
+        if (listAdapter == null) {
             return;
         }
         // 固定列宽，有多少列
@@ -1151,8 +1055,7 @@ public final class GeneralUtils
         int totalHeight = 0;
         // i每次加4，相当于listAdapter.getCount()小于等于4时 循环一次，计算一次item的高度，
         // listAdapter.getCount()小于等于8时计算两次高度相加
-        for (int i = 0; i < listAdapter.getCount(); i += col)
-        {
+        for (int i = 0; i < listAdapter.getCount(); i += col) {
             // 获取listview的每一个item
             View listItem = listAdapter.getView(i, null, gridView);
             listItem.measure(0, 0);
@@ -1175,14 +1078,11 @@ public final class GeneralUtils
      *
      * @return
      */
-    public static boolean isLogin()
-    {
-        if (GeneralUtils.isNotNullOrZeroLenght(Global.getUserName()))
-        {
+    public static boolean isLogin() {
+        if (GeneralUtils.isNotNullOrZeroLenght(Global.getUserName())) {
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -1190,14 +1090,11 @@ public final class GeneralUtils
     /**
      * 判断是否登录，如果登录就跳转到toActy，否则跳转到otherActy
      */
-    public static void toActyIfLogin(Context context, Class toActy, Class otherActy)
-    {
-        if (isLogin())
-        {
+    public static void toActyIfLogin(Context context, Class toActy, Class otherActy) {
+        if (isLogin()) {
             context.startActivity(new Intent(context, toActy));
         }
-        else
-        {
+        else {
             context.startActivity(new Intent(context, otherActy));
         }
     }
@@ -1210,10 +1107,8 @@ public final class GeneralUtils
      *
      * @return
      */
-    public static boolean isActivityISNull(Activity context)
-    {
-        if (null != context && !context.isFinishing())
-        {
+    public static boolean isActivityISNull(Activity context) {
+        if (null != context && !context.isFinishing()) {
             return false;
         }
         return true;
@@ -1225,8 +1120,7 @@ public final class GeneralUtils
      * @param ctx
      * @param file
      */
-    public static void installApk(Context ctx, File file)
-    {
+    public static void installApk(Context ctx, File file) {
         Intent intent = new Intent();
 
         intent.addFlags(268435456);
@@ -1235,68 +1129,55 @@ public final class GeneralUtils
         ctx.startActivity(intent);
     }
 
-    public static String getMIMEType(File file)
-    {
+    public static String getMIMEType(File file) {
         String type = "";
         String fName = file.getName();
 
         String end = fName.substring(fName.lastIndexOf(".") + 1, fName.length()).toLowerCase();
 
-        if ((end.equals("m4a")) || (end.equals("mp3")) || (end.equals("mid")) || (end.equals("xmf")) || (end.equals("ogg")) || (end.equals("wav")))
-        {
+        if ((end.equals("m4a")) || (end.equals("mp3")) || (end.equals("mid")) || (end.equals("xmf")) || (end.equals("ogg")) || (end.equals("wav"))) {
             type = "audio";
         }
-        else if ((end.equals("3gp")) || (end.equals("mp4")))
-        {
+        else if ((end.equals("3gp")) || (end.equals("mp4"))) {
             type = "video";
         }
-        else if ((end.equals("jpg")) || (end.equals("gif")) || (end.equals("png")) || (end.equals("jpeg")) || (end.equals("bmp")))
-        {
+        else if ((end.equals("jpg")) || (end.equals("gif")) || (end.equals("png")) || (end.equals("jpeg")) || (end.equals("bmp"))) {
             type = "image";
         }
-        else if (end.equals("apk"))
-        {
+        else if (end.equals("apk")) {
             type = "application/vnd.android.package-archive";
         }
-        else
-        {
+        else {
             type = "*";
         }
 
-        if (!end.equals("apk"))
-        {
+        if (!end.equals("apk")) {
             type = type + "/*";
         }
         return type;
     }
 
 
-    public static void saveImageToGallery(Context context, Bitmap bmp, String path)
-    {
+    public static void saveImageToGallery(Context context, Bitmap bmp, String path) {
         // 首先保存图片
         String fileName = System.currentTimeMillis() + ".jpg";
         File file = new File(FileSystemManager.getImgPath(context), fileName);
-        try
-        {
+        try {
             FileOutputStream fos = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-        } catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         // 其次把文件插入到系统图库
-        try
-        {
+        try {
             MediaStore.Images.Media.insertImage(context.getContentResolver(),
                     file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         // 最后通知图库更新
@@ -1309,20 +1190,16 @@ public final class GeneralUtils
      * @param str 加密后的报文
      * @return
      */
-    public static String getSHA256StrJava(String str)
-    {
+    public static String getSHA256StrJava(String str) {
         MessageDigest messageDigest;
         String encodeStr = "";
-        try
-        {
+        try {
             messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(str.getBytes("UTF-8"));
             encodeStr = byte2Hex(messageDigest.digest());
-        } catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return encodeStr;
@@ -1334,15 +1211,12 @@ public final class GeneralUtils
      * @param bytes
      * @return
      */
-    private static String byte2Hex(byte[] bytes)
-    {
+    private static String byte2Hex(byte[] bytes) {
         StringBuffer stringBuffer = new StringBuffer();
         String temp = null;
-        for (int i = 0; i < bytes.length; i++)
-        {
+        for (int i = 0; i < bytes.length; i++) {
             temp = Integer.toHexString(bytes[i] & 0xFF);
-            if (temp.length() == 1)
-            {
+            if (temp.length() == 1) {
                 //1得到一位的进行补0操作
                 stringBuffer.append("0");
             }
