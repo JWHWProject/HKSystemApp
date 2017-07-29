@@ -1,5 +1,7 @@
 package cn.nj.www.my_module.bean;
 
+import android.widget.EditText;
+
 public class NoticeEvent extends BaseResponse {
     private String tag;
 
@@ -8,6 +10,17 @@ public class NoticeEvent extends BaseResponse {
     private String text;
     private String url1;
     private String url2;
+
+
+    private EditText tempTV;
+
+    public EditText getTempTV() {
+        return tempTV;
+    }
+
+    public void setTempTV(EditText tempTV) {
+        this.tempTV = tempTV;
+    }
 
     public long getDuration() {
         return duration;
@@ -21,6 +34,10 @@ public class NoticeEvent extends BaseResponse {
     private long duration;
     public NoticeEvent(String tag) {
         this.setTag(tag);
+    }
+    public NoticeEvent(String tag,EditText tempTV) {
+        this.setTag(tag);
+        this.tempTV=tempTV;
     }
     public NoticeEvent(String tag,long duration) {
         this.setTag(tag);
@@ -47,7 +64,12 @@ public class NoticeEvent extends BaseResponse {
         this.url1 = url1;
         this.url2 = url2;
     }
-
+    public NoticeEvent(String tag,int position, String url1, String url2) {
+        this.setTag(tag);
+        this.position=position;
+        this.url1 = url1;
+        this.url2 = url2;
+    }
     public String getText() {
         return text;
     }

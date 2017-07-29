@@ -9,7 +9,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.nj.www.my_module.R;
@@ -121,7 +123,7 @@ public class DialogUtil
     {
         startTrainOrExamDialog(context, tag, "确定开始培训");
     }
-
+    static int type=0;//0。内部人员 1.外来人员
     public static void startTrainOrExamDialog(final Context context, final String tag, String title)
     {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
@@ -134,6 +136,43 @@ public class DialogUtil
         Button bnCancel = (Button) dialog.findViewById(R.id.transfer_cancel_bn);
         final Button bnOk = (Button) dialog.findViewById(R.id.transfer_ok_bn);
         tvName.setText(title);
+        LinearLayout ll_nbry=(LinearLayout)dialog.findViewById(R.id.ll_nbry);
+        final CheckBox cb_nbry=(CheckBox)dialog.findViewById(R.id.cb_nbry);
+        LinearLayout ll_wlry=(LinearLayout)dialog.findViewById(R.id.ll_wlry);
+        final CheckBox cb_wlry=(CheckBox)dialog.findViewById(R.id.cb_wlry);
+        final LinearLayout ll_card_num=(LinearLayout)dialog.findViewById(R.id.ll_card_num);
+        final LinearLayout ll_people=(LinearLayout)dialog.findViewById(R.id.ll_people);
+        final TextView btn_sel=(TextView)dialog.findViewById(R.id.btn_sel);
+        ll_nbry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cb_nbry.setChecked(true);
+                cb_wlry.setChecked(false);
+                ll_card_num.setVisibility(View.GONE);
+                btn_sel.setVisibility(View.GONE);
+                etName.setHint("输入企业内部人员姓名");
+                etName.setText("");
+                type=0;
+            }
+        });
+        ll_wlry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cb_nbry.setChecked(false);
+                cb_wlry.setChecked(true);
+                ll_card_num.setVisibility(View.VISIBLE);
+                btn_sel.setVisibility(View.VISIBLE);
+                etName.setHint("输入外部人员姓名");
+                etName.setText("");
+                type=1;
+            }
+        });
+        cb_nbry.setChecked(true);
+        cb_wlry.setChecked(false);
+        ll_card_num.setVisibility(View.GONE);
+        btn_sel.setVisibility(View.GONE);
+        etName.setHint("输入企业内部人员姓名");
+
         dialog.show();
         TextWatcher textWatcher = new TextWatcher()
         {
@@ -182,13 +221,19 @@ public class DialogUtil
             {
                 if (GeneralUtils.isNotNullOrZeroLenght(etCard.getText().toString()) || GeneralUtils.isNotNullOrZeroLenght(etName.getText().toString()))
                 {
-                    EventBus.getDefault().post(new NoticeEvent(tag, etCard.getText().toString(), etName.getText().toString()));
+                    EventBus.getDefault().post(new NoticeEvent(tag,type, etCard.getText().toString(), etName.getText().toString()));
                     dialog.dismiss();
                 }
                 else
                 {
                     ToastUtil.makeText(context, "请填写任一信息");
                 }
+            }
+        });
+        btn_sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new NoticeEvent("BTN_SEL_NAME",etName));
             }
         });
     }
