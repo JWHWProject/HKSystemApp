@@ -54,7 +54,7 @@ public class URLUtil
 
     public static final String outerType = SERVER_BASE + "card/outsidersTypeList";
 
-    public static final String outerPeople = SERVER_BASE + "card/outsidersUserList ";
+    public static final String outerPeople = SERVER_BASE + "card/outsidersUserList";
 
     public static final String CANCEL_TRAIN = SERVER_BASE + "onlineTraining/cancel";
 
