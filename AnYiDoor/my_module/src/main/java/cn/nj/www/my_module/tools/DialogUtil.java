@@ -114,17 +114,19 @@ public class DialogUtil
         });
     }
 
-    public static void startTestDialog(final Context context, final String tag)
+    public static Dialog startTestDialog(final Context context, final String tag)
     {
-        startTrainOrExamDialog(context, tag, "确定开始考核");
+        Dialog dialog=startTrainOrExamDialog(context, tag, "确定开始考核");
+        return dialog;
     }
 
-    public static void startTrainDialog(final Context context, final String tag)
+    public static Dialog startTrainDialog(final Context context, final String tag)
     {
-        startTrainOrExamDialog(context, tag, "确定开始培训");
+        Dialog dialog=startTrainOrExamDialog(context, tag, "确定开始培训");
+        return dialog;
     }
     static int type=0;//0。内部人员 1.外来人员
-    public static void startTrainOrExamDialog(final Context context, final String tag, String title)
+    public static Dialog startTrainOrExamDialog(final Context context, final String tag, String title)
     {
         final Dialog dialog = new Dialog(context, R.style.main_dialog);
         dialog.setContentView(R.layout.start_train_dialog);
@@ -171,6 +173,7 @@ public class DialogUtil
         cb_wlry.setChecked(false);
         ll_card_num.setVisibility(View.GONE);
         btn_sel.setVisibility(View.GONE);
+        type=0;
         etName.setHint("输入企业内部人员姓名");
 
         dialog.show();
@@ -236,6 +239,7 @@ public class DialogUtil
                 EventBus.getDefault().post(new NoticeEvent("BTN_SEL_NAME",etName));
             }
         });
+        return dialog;
     }
 
     public static void showNoTipTwoBnttonDialog(Context context, String title, String left, String right, final String leftTag, final String rightTag)
