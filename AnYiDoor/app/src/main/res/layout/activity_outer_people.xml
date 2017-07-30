@@ -9,14 +9,56 @@
     <include
         android:id="@+id/common_back"
         layout="@layout/layout_top" />
-    <ListView
+    <LinearLayout
+        android:id="@+id/searchBarContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/cl_titleBar"
+        android:background="@drawable/search_bg" >
+
+        <FrameLayout
+            android:id="@+id/chang_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/search_puin"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_margin="5dip">
+            <TextView
+                android:id="@+id/hint_txt"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="根据姓名进行搜索"
+                android:textSize="14sp"
+                android:textColor="#9a9a9a"
+                android:layout_gravity="center"/>
+            <com.anyi.door.choosecity.ClearEditText
+                android:id="@+id/input_search_query"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/transparent"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:paddingLeft="5dip"
+                android:paddingRight="25dip"
+                android:singleLine="true"
+                android:textSize="15dip" />
+        </FrameLayout>
+    </LinearLayout>
+    <com.anyi.door.choosecity.widget.ContactListViewImpl
         android:id="@+id/my_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ffffff"
+        android:cacheColorHint="#00000000"
         android:divider="@color/line"
         android:dividerHeight="1px"
-        android:scrollbars="none">
-    </ListView>
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:listSelector="#00000000"
+        android:smoothScrollbar="true" />
 
 </LinearLayout>
