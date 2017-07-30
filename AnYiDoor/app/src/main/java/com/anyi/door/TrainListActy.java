@@ -391,6 +391,11 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                     e.printStackTrace();
                 }
             }
+            if ("SEL_OUT_PEOPLE".equals(tag)) {
+                String str= ((NoticeEvent) event).getText();
+                EditText etName = (EditText) dialog.findViewById(R.id.et_name);
+                etName.setText(str);
+            }
             if (NotiTag.TAG_START_TRAIN_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 NetLoadingDialog.getInstance().loading(mContext);
                 int type = ((NoticeEvent) event).getPosition();//0内部人员 1外来人员
