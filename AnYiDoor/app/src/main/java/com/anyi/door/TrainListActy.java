@@ -395,6 +395,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 String str= ((NoticeEvent) event).getText();
                 EditText etName = (EditText) dialog.findViewById(R.id.et_name);
                 etName.setText(str);
+                etName.setSelection(str.length());
             }
             if (NotiTag.TAG_START_TRAIN_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
                 NetLoadingDialog.getInstance().loading(mContext);
