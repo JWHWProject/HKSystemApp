@@ -44,6 +44,7 @@ public class LoginActy extends BaseActivity implements View.OnClickListener {
         if (GeneralUtils.isNotNullOrZeroLenght(Global.getLoginData()))
         {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
         setContentView(R.layout.activity_login_acty);
         initAll();
