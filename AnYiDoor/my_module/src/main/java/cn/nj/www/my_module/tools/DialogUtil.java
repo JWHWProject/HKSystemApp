@@ -3,6 +3,7 @@ package cn.nj.www.my_module.tools;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -14,12 +15,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import cn.nj.www.my_module.R;
 import cn.nj.www.my_module.bean.NoticeEvent;
 import cn.nj.www.my_module.bean.index.CancelResponse;
-import cn.nj.www.my_module.bean.index.OuterPeopleResponse;
 import cn.nj.www.my_module.constant.Global;
 import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.network.UserServiceImpl;
@@ -261,7 +259,12 @@ public class DialogUtil
         btn_sel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new NoticeEvent("BTN_SEL_NAME",etName));
+//                EventBus.getDefault().post(new NoticeEvent("BTN_SEL_NAME",etName));
+                try {
+                    context.startActivity(new Intent(context,Class.forName("com.anyi.door.OuterPeopleActivity")));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         return dialog;

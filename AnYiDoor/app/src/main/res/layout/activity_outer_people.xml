@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.anyi.door.OuterPeopleActivity"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/common_back"
+        layout="@layout/layout_top" />
+    <ListView
+        android:id="@+id/my_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:divider="@color/line"
+        android:dividerHeight="1px"
+        android:scrollbars="none">
+    </ListView>
+
+</LinearLayout>
