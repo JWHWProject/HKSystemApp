@@ -25,7 +25,7 @@ import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.GeneralUtils;
 
 /**
- * Created by jwei on 2016/7/16.
+ * Created by hq on 2016/7/16.
  */
 public class UpdateUtils {
     private static final String sjFule = "updateapk.apk";

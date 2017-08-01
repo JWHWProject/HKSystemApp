@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.FileSystemManager;
 import cn.nj.www.my_module.view.imagepicker.util.ImageUtils;
 
@@ -58,11 +59,11 @@ public class TakePicMethod {
                 if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                     //获取摄像头
                     if (openFacingFrontCamera()) {
-                        Log.i("jwei", "openCameraSuccess");
+                        CMLog.i("hq", "openCameraSuccess");
                         //进行对焦
                         autoFocus();
                     } else {
-                        Log.i("jwei", "openCameraFailed");
+                        CMLog.i("hq", "openCameraFailed");
                     }
 
                 }
@@ -130,14 +131,14 @@ public class TakePicMethod {
                 Toast.makeText(context, "拍照失败", Toast.LENGTH_SHORT)
                         .show();
 
-                Log.i("jwei", "保存照片失败" + error.toString());
+                CMLog.i("hq", "保存照片失败" + error.toString());
                 error.printStackTrace();
                 myCamera.stopPreview();
                 myCamera.release();
                 myCamera = null;
             }
 
-            Log.i("jwei", "获取照片成功");
+            CMLog.i("hq", "获取照片成功");
             myCamera.stopPreview();
             myCamera.release();
             myCamera = null;
@@ -152,7 +153,7 @@ public class TakePicMethod {
             Camera.getCameraInfo(camIdx, cameraInfo);
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 try {
-                    Log.i("jwei", "tryToOpenCamera");
+                    CMLog.i("hq", "tryToOpenCamera");
                     myCamera = Camera.open(camIdx);
                 } catch (RuntimeException e) {
                     e.printStackTrace();
