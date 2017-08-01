@@ -61,7 +61,7 @@ public class JudgeAdapter extends BaseAdapter
             answer.setUserAnswer(getItem(i).current+"");
             answer.setCreateTimeStr(time);
             answerList.add(answer);
-            CMLog.e("hq","判断："+answer.toString());
+//            CMLog.e("hq","判断："+answer.toString());
         }
         return answerList;
     }
@@ -141,7 +141,7 @@ public class JudgeAdapter extends BaseAdapter
         if (list.get(position).current != Model.NONE)
         {
             try {
-                RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current);
+                RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current-1);
                 r.setChecked(true);
             } catch (Exception e) {
                 e.printStackTrace();
