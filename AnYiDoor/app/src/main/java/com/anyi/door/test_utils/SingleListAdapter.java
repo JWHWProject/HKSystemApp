@@ -18,6 +18,7 @@ import java.util.List;
 import cn.nj.www.my_module.bean.index.ExamBean;
 import cn.nj.www.my_module.bean.index.OnlineTrainingAnswer;
 import cn.nj.www.my_module.tools.CMLog;
+import cn.nj.www.my_module.tools.DialogUtil;
 
 /**
  * 单选
@@ -36,8 +37,10 @@ public class SingleListAdapter extends BaseAdapter
 
     private String time;
     private String examID;
+    Context context;
     public SingleListAdapter(Context context, List<ExamBean.ExamDetailBean> data,String examID)
     {
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.list = data;
         this.examID = examID;
@@ -67,9 +70,12 @@ public class SingleListAdapter extends BaseAdapter
             OnlineTrainingAnswer answer = getItem(i).getOnlineTrainingAnswer();
             answer.setExamID(examID);
             answer.setUserAnswer(getItem(i).current+"");
+            //TODO:
+            if (getItem(i).current>getItem(i).getOptionList().size()){
+                DialogUtil.showCloseDialogOneButton(context,"客户端答案传错了","知道了","");
+            }
             answer.setCreateTimeStr(time);
             answerList.add(answer);
-            CMLog.e("hq","单选："+answer.toString());
         }
         return answerList;
     }

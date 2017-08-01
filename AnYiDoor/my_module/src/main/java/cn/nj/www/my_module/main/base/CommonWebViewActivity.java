@@ -27,7 +27,6 @@ public class CommonWebViewActivity extends BaseActivity
 
     private String mTag;
 
-    private View viewError;
 
     private boolean showError;
 
@@ -43,7 +42,6 @@ public class CommonWebViewActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_web_view);
         initAll();
-        viewError = findViewById(R.id.error);
     }
 
     @Override
@@ -126,22 +124,16 @@ public class CommonWebViewActivity extends BaseActivity
             if (NotiTag.TAG_WEB_VIEW_ERROR.equals(tag))
             {
                 showError = true;
-                viewError.setVisibility(View.VISIBLE);
                 NetLoadingDialog.getInstance().dismissDialog();
             }
             if (NotiTag.TAG_WEB_VIEW_START.equals(tag))
 
             {
-                NetLoadingDialog.getInstance().dismissDialog();
                 NetLoadingDialog.getInstance().loading(this);
             }
             if (NotiTag.TAG_WEB_VIEW_FINISH.equals(tag))
             {
-                if (!showError)
-                {
-                    viewError.setVisibility(View.GONE);
-                }
-                showError = false;
+
                 NetLoadingDialog.getInstance()
                         .dismissDialog();
                 if (clear)
