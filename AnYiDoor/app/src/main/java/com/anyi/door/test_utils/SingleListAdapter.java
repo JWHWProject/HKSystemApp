@@ -72,6 +72,7 @@ public class SingleListAdapter extends BaseAdapter
             answer.setUserAnswer(getItem(i).current+"");
             //TODO:
             if (getItem(i).current>getItem(i).getOptionList().size()){
+                CMLog.e("hq",getItem(i).current+"  "+getItem(i).getOptionList().size());
                 DialogUtil.showCloseDialogOneButton(context,"客户端答案传错了","知道了","");
             }
             answer.setCreateTimeStr(time);
@@ -176,7 +177,7 @@ public class SingleListAdapter extends BaseAdapter
 
         if (list.get(position).current != Model.NONE)
         {
-            RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current);
+            RadioButton r = (RadioButton) holder.group.getChildAt(list.get(position).current-1);
             r.setChecked(true);
         }
         else
