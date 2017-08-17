@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.anyi.door.MainActivity;
 import com.anyi.door.R;
+import com.anyi.door.TrainListActy;
 import com.anyi.door.utils.TakePicMethod;
 import com.anyi.door.utils.signature.HandWriteActivity;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
@@ -41,7 +42,6 @@ import cn.nj.www.my_module.constant.NotiTag;
 import cn.nj.www.my_module.network.GsonHelper;
 import cn.nj.www.my_module.network.NetWorkResponse;
 import cn.nj.www.my_module.network.UserServiceImpl;
-import cn.nj.www.my_module.tools.CMLog;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.FileSystemManager;
 import cn.nj.www.my_module.tools.GeneralUtils;
@@ -80,6 +80,8 @@ public class TinyWindowPlayActivity extends AppCompatActivity
     private String timeStamp = "";
 
     private String signatureUrl;
+
+    private FinishTrainResponse finishTrainResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -140,26 +142,28 @@ public class TinyWindowPlayActivity extends AppCompatActivity
         mNiceVideoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
         mNiceVideoPlayer.setUp(mTrainContentResponse.getFileUrl(), null);
         TxVideoPlayerController controller = new TxVideoPlayerController(this);
-        controller.setGetDuration(new TxVideoPlayerController.IGetDuration()
-        {
-            @Override
-            public void getDuration()
-            {
-                CMLog.e("hq", mNiceVideoPlayer.getDuration() + "获取到的时长");
-                if (!isWatched)
-                {
-                    long d = mNiceVideoPlayer.getDuration();
-                    if (d < 10)
-                    {
-                        startTime(10);
-                    }
-                    else
-                    {
-                        startTime(d);
-                    }
-                }
-            }
-        });
+//        controller.setGetDuration(new TxVideoPlayerController.IGetDuration()
+//        {
+//            @Override
+//            public void getDuration()
+//            {
+//                CMLog.e("hq", mNiceVideoPlayer.getDuration() + "获取到的时长");
+//                if (!isWatched)
+//                {
+////                    long d = mNiceVideoPlayer.getDuration();
+////                    if (d < 10)
+////                    {
+////                        startTime(10);
+////                    }
+////                    else
+////                    {
+////                        startTime(d);
+////                    }
+//
+//                }
+//            }
+//        });
+        startTime(mTrainContentResponse.getTraining().getTrainingDuration());
         controller.setTitle(mTrainContentResponse.getTraining().getTrainingName());
         mNiceVideoPlayer.setController(controller);
         //初始化surface
@@ -731,7 +735,7 @@ public class TinyWindowPlayActivity extends AppCompatActivity
                                                             NetLoadingDialog.getInstance().dismissDialog();
                                                             if (GeneralUtils.isNotNullOrZeroLenght(result))
                                                             {
-                                                                FinishTrainResponse finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                                                                 finishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                                                                 if (Constants.SUCESS_CODE.equals(finishTrainResponse.getResultCode()))
                                                                 {
                                                                     runOnUiThread(new Runnable()
@@ -799,10 +803,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity
         }
     }
 
-    private void startTime(long time)
+    private void startTime(double time)
     {
         cancelTime();
-        myTime = new MyTime(time, Constants.Countdown_end);
+        myTime = new MyTime((long)time*1000, Constants.Countdown_end);
         myTime.start();
     }
 
@@ -817,7 +821,10 @@ public class TinyWindowPlayActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy()
+    { if ((finishTrainResponse != null) && finishTrainResponse.getNeedExam() == 1)
     {
+        TrainListActy.needExamMethod();
+    }
         super.onDestroy();
         flag = false;
         cancelTime();

@@ -74,6 +74,8 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
 
     private String signatureUrl;
 
+    private FinishTrainResponse mFinishTrainResponse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -137,15 +139,16 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         takePicMethod = new TakePicMethod(TrainH5Activity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
-        double d = Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + "");
-        if (d < 10)
-        {
-            startTime(10d);
-        }
-        else
-        {
-            startTime(d);
-        }
+//        double d = Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + "");
+//        if (d < 10)
+//        {
+//            startTime(10d);
+//        }
+//        else
+//        {
+//            startTime(d);
+//        }
+        startTime(mTrainContentResponse.getTraining().getTrainingDuration());
         flag = true;
         new Thread(new Runnable()
         {
@@ -322,7 +325,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                                 else
                                 {
                                     NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                                    UserServiceImpl.instance().finishTrain(trainId, null,signatureUrl, FinishTrainResponse.class.getName());
+                                    UserServiceImpl.instance().finishTrain(trainId, null, signatureUrl, FinishTrainResponse.class.getName());
                                 }
                             }
                         } catch (Exception e)
@@ -377,7 +380,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(FinishTrainResponse.class.getName()))
             {
-                FinishTrainResponse mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
                     if (Constants.SUCESS_CODE.equals(mFinishTrainResponse.getResultCode()))
@@ -405,7 +408,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
                     if (Constants.SUCESS_CODE.equals(uploadFileResponse.getResultCode()))
                     {
                         NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                        UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), signatureUrl,FinishTrainResponse.class.getName());
+                        UserServiceImpl.instance().finishTrain(trainId, uploadFileResponse.getUrlList(), signatureUrl, FinishTrainResponse.class.getName());
                     }
                     else
                     {
@@ -470,7 +473,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         {
             NetLoadingDialog.getInstance().loading(TrainH5Activity.this);
-            UserServiceImpl.instance().finishTrain(trainId, null,signatureUrl, FinishTrainResponse.class.getName());
+            UserServiceImpl.instance().finishTrain(trainId, null, signatureUrl, FinishTrainResponse.class.getName());
         }
         else
         {
@@ -512,7 +515,7 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
             else
             {
                 NetLoadingDialog.getInstance().loading(mContext, "提交中,请稍后");
-                UserServiceImpl.instance().finishTrain(trainId, null, signatureUrl,FinishTrainResponse.class.getName());
+                UserServiceImpl.instance().finishTrain(trainId, null, signatureUrl, FinishTrainResponse.class.getName());
             }
         }
     }
@@ -561,6 +564,10 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onDestroy()
     {
+        if ((mFinishTrainResponse != null) && mFinishTrainResponse.getNeedExam() == 1)
+        {
+            TrainListActy.needExamMethod();
+        }
         super.onDestroy();
         flag = false;
         cancelTime();
@@ -571,7 +578,8 @@ public class TrainH5Activity extends BaseActivity implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (resultCode == 100)
-        { signatureUrl =data.getStringExtra("url");
+        {
+            signatureUrl = data.getStringExtra("url");
             submitClick();
         }
     }

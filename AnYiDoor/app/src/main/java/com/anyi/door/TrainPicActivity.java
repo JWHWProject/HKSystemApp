@@ -78,6 +78,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
 
     private String signatureUrl;
 
+    private FinishTrainResponse mFinishTrainResponse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -162,15 +164,16 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
         takePicMethod = new TakePicMethod(TrainPicActivity.this, mySurfaceView, myHolder);
         picCount = 1;
         TakePicture();
-        double d = Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + "");
-        if (d < 10)
-        {
-            startTime(10d);
-        }
-        else
-        {
-            startTime(d);
-        }
+//        double d = Double.parseDouble(mTrainContentResponse.getImageBeans().size() * 4 + "");
+//        if (d < 10)
+//        {
+//            startTime(10d);
+//        }
+//        else
+//        {
+//            startTime(d);
+//        }
+        startTime(mTrainContentResponse.getTraining().getTrainingDuration());
         flag = true;
         new Thread(new Runnable()
         {
@@ -388,6 +391,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             }
             if (NotiTag.TAG_CLOSE.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
             {
+
                 finish();
             }
             if (NotiTag.TAG_SIGNATURE_URL.equals(tag))
@@ -402,7 +406,7 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
             String result = ((NetResponseEvent) event).getResult();
             if (tag.equals(FinishTrainResponse.class.getName()))
             {
-                FinishTrainResponse mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
+                mFinishTrainResponse = GsonHelper.toType(result, FinishTrainResponse.class);
                 if (GeneralUtils.isNotNullOrZeroLenght(result))
                 {
                     if (Constants.SUCESS_CODE.equals(mFinishTrainResponse.getResultCode()))
@@ -587,6 +591,11 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy()
     {
+
+        if ((mFinishTrainResponse!=null)&&mFinishTrainResponse.getNeedExam()==1)
+        {
+           TrainListActy.needExamMethod();
+        }
         super.onDestroy();
         flag = false;
         cancelTime();
@@ -597,7 +606,8 @@ public class TrainPicActivity extends BaseActivity implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (resultCode == 100)
-        { signatureUrl =data.getStringExtra("url");
+        {
+            signatureUrl = data.getStringExtra("url");
             submitClick();
         }
     }

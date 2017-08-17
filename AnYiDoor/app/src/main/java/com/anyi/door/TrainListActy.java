@@ -62,14 +62,17 @@ import cn.nj.www.my_module.network.UserServiceImpl;
 import cn.nj.www.my_module.tools.DialogUtil;
 import cn.nj.www.my_module.tools.GeneralUtils;
 import cn.nj.www.my_module.tools.NetLoadingDialog;
+import cn.nj.www.my_module.tools.SharePref;
 import cn.nj.www.my_module.tools.ToastUtil;
+import de.greenrobot.event.EventBus;
 
 import static cn.nj.www.my_module.constant.IntentCode.TRAIN_ID;
 
 /**
  * train list
  */
-public class TrainListActy extends BaseActivity implements View.OnClickListener {
+public class TrainListActy extends BaseActivity implements View.OnClickListener
+{
 
     public String tagStr = "";
 
@@ -98,7 +101,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     private View topView;
 
-    private String outId = "";
+    private static String outId = "";
 
     private String selectedTestName;
 
@@ -113,27 +116,36 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     private boolean isFirst = true;
 
+    private static String testName, testCard;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_list);
         ButterKnife.bind(this);
-        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT))) {
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(IntentCode.TEST_INTENT)))
+        {
             fromTest = getIntent().getStringExtra(IntentCode.TEST_INTENT);
         }
-        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(TRAIN_ID))) {
+        if (GeneralUtils.isNotNullOrZeroLenght(getIntent().getStringExtra(TRAIN_ID)))
+        {
             trainID = getIntent().getStringExtra(IntentCode.TRAIN_ID);
             outId = getIntent().getStringExtra(IntentCode.CARD_NUM);
         }
-
+        SharePref.saveString("recordID","");
+        SharePref.saveString("outsidersID","");
+        SharePref.saveString("userID","");
 
         initAll();
         // 获取nfc适配器，判断设备是否支持NFC功能
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
+        if (nfcAdapter == null)
+        {
             return;
         }
-        else if (!nfcAdapter.isEnabled()) {
+        else if (!nfcAdapter.isEnabled())
+        {
             return;
         }
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -147,21 +159,27 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-        if (nfcAdapter == null) {
+        if (nfcAdapter == null)
+        {
             return;
         }
-        else if (!nfcAdapter.isEnabled()) {
+        else if (!nfcAdapter.isEnabled())
+        {
             return;
         }
         nfcAdapter.enableForegroundDispatch(TrainListActy.this, pendingIntent, mFilters,
                 mTechLists);
-        if (isFirst) {
-            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+        if (isFirst)
+        {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction()))
+            {
                 String result = processIntent(getIntent());
                 String str = Util.hex2Decimal(result);
-                if (dialog != null) {
+                if (dialog != null)
+                {
                     EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
                     etCard.setText(str + "");
                 }
@@ -171,13 +189,16 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent)
+    {
         // TODO Auto-generated method stub
         super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))
+        {
             String result = processIntent(intent);
             String str = Util.hex2Decimal(result);
-            if (dialog != null) {
+            if (dialog != null)
+            {
                 EditText etCard = (EditText) dialog.findViewById(R.id.et_card);
                 etCard.setText(str + "");
             }
@@ -191,7 +212,8 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
      * @return
      */
     @SuppressLint("NewApi")
-    private String processIntent(Intent intent) {
+    private String processIntent(Intent intent)
+    {
         Intent intent1 = intent;
         String intentActionStr = intent1.getAction();
         String strId = "";
@@ -204,38 +226,45 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 //            byte[] bytesId = tag.getId();
         strId = Util.toHexString(bytesId, 0, bytesId.length);
 //        }
-        if (strId != null && !strId.equals("")) {
+        if (strId != null && !strId.equals(""))
+        {
             return strId;
         }
         Parcelable[] rawmsgs = intent
                 .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        if (rawmsgs != null && rawmsgs.length > 0) {
+        if (rawmsgs != null && rawmsgs.length > 0)
+        {
             NdefMessage msg = (NdefMessage) rawmsgs[0];
             NdefRecord[] records = msg.getRecords();
             String resultStr = new String(records[0].getPayload());
             return resultStr;
         }
-        else {
+        else
+        {
             final Parcelable p = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String str = (p != null) ? CardManager.load(p, getResources()) : null;
             return str;
         }
     }
 
-    private void initTitle() {
+    private void initTitle()
+    {
         topView = findViewById(R.id.common_back);
         HeadView headView = new HeadView((ViewGroup) topView);
         headView.setTitleText("培训");
         headView.setLeftImage(R.mipmap.app_title_back);
-        if (fromTest.equals("1")) {
+        if (fromTest.equals("1"))
+        {
             headView.setRightText("搜索");
             headView.setTitleText("考核列表");
         }
-        else {
+        else
+        {
             headView.setTitleText("培训");
             headView.setRightText("搜索");
             //从发卡成功界面进入的
-            if (GeneralUtils.isNotNullOrZeroLenght(trainID) && GeneralUtils.isNotNullOrZeroLenght(outId)) {
+            if (GeneralUtils.isNotNullOrZeroLenght(trainID) && GeneralUtils.isNotNullOrZeroLenght(outId))
+            {
                 DialogUtil.showNoTipTwoBnttonDialog(mContext, "确定开始培训", "取消", "确定", NotiTag.TAG_DLG_CANCEL, NotiTag.TAG_DLG_OK);
             }
         }
@@ -243,31 +272,40 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
 
     @Override
-    public void initView() {
+    public void initView()
+    {
         initTitle();
-        findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 findViewById(R.id.search_view).setVisibility(View.GONE);
                 topView.setVisibility(View.VISIBLE);
                 trainList();
             }
         });
-        ivSearchClear.setOnClickListener(new View.OnClickListener() {
+        ivSearchClear.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 etSearch.setText("");
             }
         });
-        tvSearch.setOnClickListener(new View.OnClickListener() {
+        tvSearch.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                if (GeneralUtils.isNotNullOrZeroLenght(etSearch.getText().toString())) {
+            public void onClick(View view)
+            {
+                if (GeneralUtils.isNotNullOrZeroLenght(etSearch.getText().toString()))
+                {
                     NetLoadingDialog.getInstance().loading(mContext);
                     UserServiceImpl.instance().trainList(etSearch.getText().toString(),
                             TrainListResponse.class.getName());
                 }
-                else {
+                else
+                {
                     ToastUtil.makeText(mContext, "请输入搜索内容");
                 }
             }
@@ -277,12 +315,16 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
         listView.setGroupIndicator(null);
 
         //只展开一个
-        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
+        {
 
             @Override
-            public void onGroupExpand(int groupPosition) {
-                for (int i = 0; i < 4; i++) {
-                    if (groupPosition != i) {
+            public void onGroupExpand(int groupPosition)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (groupPosition != i)
+                    {
                         listView.collapseGroup(i);
                     }
                 }
@@ -292,17 +334,21 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
         });
 
         //点击跳转
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
+        {
 
             @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id)
+            {
                 trainID = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getId();
                 fileType = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getFileType();
-                if (fromTest.equals("")) {
+                if (fromTest.equals(""))
+                {
                     dialog = DialogUtil.startTrainDialog(mContext, NotiTag.TAG_START_TRAIN_DIALOG);
 
                 }
-                else if (fromTest.equals("1")) {
+                else if (fromTest.equals("1"))
+                {
                     selectedTestName = trainBeanList.get(groupPosition).getTrainBeanDetailList().get(childPosition).getTrainingName();
                     dialog = DialogUtil.startTestDialog(mContext, NotiTag.TAG_START_TEST_DIALOG);
                 }
@@ -313,18 +359,24 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     Dialog dialog;
 
-    private void trainList() {
-        if (GeneralUtils.isNullOrZeroLenght(MainActivity.trainListDateResult)) {
+    private void trainList()
+    {
+        if (GeneralUtils.isNullOrZeroLenght(MainActivity.trainListDateResult))
+        {
             UserServiceImpl.instance().trainList(BaseTrainListResponse.class.getName());
         }
-        else {
+        else
+        {
             trainBeanList.clear();
-            try {
+            try
+            {
                 JSONObject jsonObject = new JSONObject(MainActivity.trainListDateResult);
-                Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>() {
+                Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                {
                 }.getType());
                 Iterator entries = map.entrySet().iterator();
-                while (entries.hasNext()) {
+                while (entries.hasNext())
+                {
                     Map.Entry entry = (Map.Entry) entries.next();
                     String key = (String) entry.getKey();
                     List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
@@ -332,24 +384,28 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                 }
                 final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
                 listView.setAdapter(adapter);
-            } catch (JSONException e) {
+            } catch (JSONException e)
+            {
                 e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void initViewData() {
+    public void initViewData()
+    {
         trainList();
     }
 
     @Override
-    public void initEvent() {
+    public void initEvent()
+    {
 
     }
 
     @Override
-    public void netResponse(BaseResponse event) {
+    public void netResponse(BaseResponse event)
+    {
 
     }
 
@@ -358,91 +414,129 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     private int nameIndex = 0;
 
     @Override
-    public void onEventMainThread(BaseResponse event) {
-        if (event instanceof NoticeEvent) {
+    public void onEventMainThread(BaseResponse event)
+    {
+        if (event instanceof NoticeEvent)
+        {
             String tag = ((NoticeEvent) event).getTag();
-            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_CLOSE_ACTIVITY.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 finish();
             }
-            if (NotiTag.TAG_DO_RIGHT.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_DO_RIGHT.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 topView.setVisibility(View.GONE);
                 findViewById(R.id.search_view).setVisibility(View.VISIBLE);
 
             }
-            if ("BTN_SEL_NAME".equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_NEED_EXAM.equals(tag))
+            {
+                DialogUtil.showTwoBnttonDialog(this,
+                        "是否立即考核", "取消", "确定", "aaaaaaaaaaaaaaa");
+            }
+
+            if ("aaaaaaaaaaaaaaa".equals(tag))
+            {
+                UserServiceImpl.instance().startOnlineTest( SharePref.getString("recordID",""),  SharePref.getString("outsidersID",""),SharePref.getString("userID",""), StartTestResponse.class.getName());
+            }
+            if ("BTN_SEL_NAME".equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 List<OuterPeopleResponse.OutsidersListBean> outpeoples = GeneralUtils.getOuterPeopleList();
                 final EditText editText = ((NoticeEvent) event).getTempTV();
-                try {
+                try
+                {
                     nameArr = new String[outpeoples.size()];
-                    for (int i = 0; i < outpeoples.size(); i++) {
+                    for (int i = 0; i < outpeoples.size(); i++)
+                    {
                         nameArr[i] = outpeoples.get(i).getUserName();
                     }
                     new AlertDialog.Builder(mContext).setTitle("请选择")
                             .setSingleChoiceItems(
                                     nameArr, nameIndex,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                    new DialogInterface.OnClickListener()
+                                    {
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
                                             editText.setText(nameArr[which]);
                                             dialog.dismiss();
                                         }
 
                                     }).show();
-                } catch (Exception e) {
+                } catch (Exception e)
+                {
                     e.printStackTrace();
                 }
             }
-            if ("SEL_OUT_PEOPLE".equals(tag)) {
-                String str= ((NoticeEvent) event).getText();
+            if ("SEL_OUT_PEOPLE".equals(tag))
+            {
+                String str = ((NoticeEvent) event).getText();
                 EditText etName = (EditText) dialog.findViewById(R.id.et_name);
                 etName.setText(str);
                 etName.setSelection(str.length());
             }
-            if (NotiTag.TAG_START_TRAIN_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_START_TRAIN_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 NetLoadingDialog.getInstance().loading(mContext);
                 int type = ((NoticeEvent) event).getPosition();//0内部人员 1外来人员
                 String card = ((NoticeEvent) event).getUrl1();
                 String name = ((NoticeEvent) event).getUrl2();
                 NetLoadingDialog.getInstance().loading(mContext);
-                if (type == 1) {//外来人员
+                if (type == 1)
+                {//外来人员
+                    testCard= card;
+                    testName= name;
                     UserServiceImpl.instance().startTrain(trainID, card, name, StartTrainResponse.class.getName());
                 }
-                else {
+                else
+                {
                     UserServiceImpl.instance().getUserListByName(name, UserListByNameResponse.class.getName());
                 }
 
             }
-            if (NotiTag.TAG_START_TEST_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_START_TEST_DIALOG.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 NetLoadingDialog.getInstance().loading(mContext);
                 int type = ((NoticeEvent) event).getPosition();//0内部人员 1外来人员
                 String card = ((NoticeEvent) event).getUrl1();
                 String name = ((NoticeEvent) event).getUrl2();
                 NetLoadingDialog.getInstance().loading(mContext);
-                if (type == 1) {
+                if (type == 1)
+                {
+                    testCard = card;
+                    testName = name;
                     UserServiceImpl.instance().startOnlineTest(trainID, card, name, StartTestResponse.class.getName());
                 }
-                else {
+                else
+                {
                     UserServiceImpl.instance().getUserListByName(name, UserListByNameResponse.class.getName());
                 }
             }
-            if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName())) {
+            if (NotiTag.TAG_DLG_OK.equals(tag) && BaseApplication.currentActivity.equals(this.getClass().getName()))
+            {
                 //调用开始培训的接口
                 NetLoadingDialog.getInstance().loading(mContext);
-                if (fromTest.equals("")) {
+                if (fromTest.equals(""))
+                {
                     UserServiceImpl.instance().startTrain(trainID, outId, "", StartTrainResponse.class.getName());
                 }
-                else if (fromTest.equals("1")) {
+                else if (fromTest.equals("1"))
+                {
                     UserServiceImpl.instance().startOnlineTest(trainID, outId, "", StartTestResponse.class.getName());
                 }
             }
         }
-        else if (event instanceof NetResponseEvent) {
+        else if (event instanceof NetResponseEvent)
+        {
             NetLoadingDialog.getInstance().dismissDialog();
             String tag = ((NetResponseEvent) event).getTag();
             String result = ((NetResponseEvent) event).getResult();
-            if (tag.equals(StartTestResponse.class.getName())) {
+            if (tag.equals(StartTestResponse.class.getName()))
+            {
                 StartTestResponse mStartTestResponse = GsonHelper.toType(result, StartTestResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mStartTestResponse.getResultCode()))
+                    {
                         Intent testIntent = new Intent(mContext, TestListActivity.class);
                         testIntent.putExtra(IntentCode.EXAM_ID, mStartTestResponse.getExamID());
                         testIntent.putExtra(IntentCode.TRAIN_ID, trainID);
@@ -450,55 +544,73 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                         testIntent.putExtra(IntentCode.EXAM_NAME, selectedTestName);
                         startActivity(testIntent);
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mStartTestResponse.getResultCode(), mStartTestResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(StartTrainResponse.class.getName())) {
+            if (tag.equals(StartTrainResponse.class.getName()))
+            {
                 StartTrainResponse mStartTrainResponse = GsonHelper.toType(result, StartTrainResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mStartTrainResponse.getResultCode()))
+                    {
                         //因为视频页面没有集成EventBus，就在该页面获取到数据后再传过去
                         recordID = mStartTrainResponse.getRecordID();
-                        if (GeneralUtils.isNotNullOrZeroLenght(recordID)) {
+
+                        if (GeneralUtils.isNotNullOrZeroLenght(recordID))
+                        {   SharePref.saveString("recordID",trainID);
+                            SharePref.saveString("outsidersID",testCard);
+                            SharePref.saveString("userID",testName);
                             NetLoadingDialog.getInstance().loading(mContext);
                             UserServiceImpl.instance().trainContent(trainID, TrainContentResponse.class.getName());
                         }
-                        else {
+                        else
+                        {
                             ToastUtil.makeText(mContext, "无培训记录的ID");
                         }
 
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mStartTrainResponse.getResultCode(), mStartTrainResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(TrainContentResponse.class.getName())) {
+            if (tag.equals(TrainContentResponse.class.getName()))
+            {
                 TrainContentResponse mTrainContentResponse = GsonHelper.toType(result, TrainContentResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
+                    {
 
-                        if (mTrainContentResponse.getTraining().getFileType() == 1) {//图片
+                        if (mTrainContentResponse.getTraining().getFileType() == 1)
+                        {//图片
                             Intent intent = new Intent(mContext, TrainPicActivity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.RECORD_ID, recordID);
                             startActivity(new Intent(intent));
                         }
-                        else if (mTrainContentResponse.getTraining().getFileType() == 2) {
+                        else if (mTrainContentResponse.getTraining().getFileType() == 2)
+                        {
                             Intent intent = new Intent(mContext, TinyWindowPlayActivity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
                             startActivity(new Intent(intent));
                         }
-                        else {
+                        else
+                        {
                             Intent intent = new Intent(mContext, TrainH5Activity.class);
                             intent.putExtra(IntentCode.CHOOSE_ID, result);
                             intent.putExtra(IntentCode.TRAIN_ID, recordID);
@@ -507,39 +619,52 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                         }
 
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(TrainVideoResponse.class.getName())) {
+            if (tag.equals(TrainVideoResponse.class.getName()))
+            {
                 TrainVideoResponse mTrainContentResponse = GsonHelper.toType(result, TrainVideoResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainContentResponse.getResultCode()))
+                    {
 
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mTrainContentResponse.getResultCode(), mTrainContentResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(TrainListResponse.class.getName())) {
+            if (tag.equals(TrainListResponse.class.getName()))
+            {
                 TrainListResponse mTrainListResponse = GsonHelper.toType(result, TrainListResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                    {
                         trainBeanList.clear();
-                        try {
+                        try
+                        {
                             JSONObject jsonObject = new JSONObject(result);
-                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>() {
+                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                            {
                             }.getType());
                             Iterator entries = map.entrySet().iterator();
-                            while (entries.hasNext()) {
+                            while (entries.hasNext())
+                            {
                                 Map.Entry entry = (Map.Entry) entries.next();
                                 String key = (String) entry.getKey();
                                 List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
@@ -547,33 +672,44 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                             }
                             final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
                             listView.setAdapter(adapter);
-                        } catch (JSONException e) {
+                        } catch (JSONException e)
+                        {
                             e.printStackTrace();
-                        } finally {
-                            if (trainBeanList.size() == 0) {
+                        } finally
+                        {
+                            if (trainBeanList.size() == 0)
+                            {
                                 ToastUtil.makeText(mContext, "无相关记录");
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(BaseTrainListResponse.class.getName())) {
+            if (tag.equals(BaseTrainListResponse.class.getName()))
+            {
                 BaseTrainListResponse mTrainListResponse = GsonHelper.toType(result, BaseTrainListResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode())) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(mTrainListResponse.getResultCode()))
+                    {
                         trainBeanList.clear();
-                        try {
+                        try
+                        {
                             JSONObject jsonObject = new JSONObject(result);
-                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>() {
+                            Map<String, List<TrainBean.TrainBeanDetail>> map = new Gson().fromJson(jsonObject.getString("typeMap"), new TypeToken<Map<String, List<TrainBean.TrainBeanDetail>>>()
+                            {
                             }.getType());
                             Iterator entries = map.entrySet().iterator();
-                            while (entries.hasNext()) {
+                            while (entries.hasNext())
+                            {
                                 Map.Entry entry = (Map.Entry) entries.next();
                                 String key = (String) entry.getKey();
                                 List<TrainBean.TrainBeanDetail> valueList = (List<TrainBean.TrainBeanDetail>) entry.getValue();
@@ -581,53 +717,75 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                             }
                             final MyExpandableListAdapter adapter = new MyExpandableListAdapter(mContext, trainBeanList);
                             listView.setAdapter(adapter);
-                        } catch (JSONException e) {
+                        } catch (JSONException e)
+                        {
                             e.printStackTrace();
-                        } finally {
-                            if (trainBeanList.size() == 0) {
+                        } finally
+                        {
+                            if (trainBeanList.size() == 0)
+                            {
                                 ToastUtil.makeText(mContext, "无相关记录");
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, mTrainListResponse.getResultCode(), mTrainListResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
-            if (tag.equals(UserListByNameResponse.class.getName())) {
+            if (tag.equals(UserListByNameResponse.class.getName()))
+            {
                 final UserListByNameResponse userListByNameResponse = GsonHelper.toType(result, UserListByNameResponse.class);
-                if (GeneralUtils.isNotNullOrZeroLenght(result)) {
-                    if (Constants.SUCESS_CODE.equals(userListByNameResponse.getResultCode())) {
-                        if (userListByNameResponse.getUserList() != null && userListByNameResponse.getUserList().size() > 0) {
-                            if (userListByNameResponse.getUserList().size() == 1) {
-                                if (fromTest.equals("1")) {
+                if (GeneralUtils.isNotNullOrZeroLenght(result))
+                {
+                    if (Constants.SUCESS_CODE.equals(userListByNameResponse.getResultCode()))
+                    {
+                        if (userListByNameResponse.getUserList() != null && userListByNameResponse.getUserList().size() > 0)
+                        {
+                            if (userListByNameResponse.getUserList().size() == 1)
+                            {
+                                if (fromTest.equals("1"))
+                                {
                                     UserServiceImpl.instance().startOnlineTest(trainID, "", userListByNameResponse.getUserList().get(0).getUserID(), StartTestResponse.class.getName());
-                                }else {
+                                }
+                                else
+                                {
                                     UserServiceImpl.instance().startTrain(trainID, "", userListByNameResponse.getUserList().get(0).getUserID(), StartTrainResponse.class.getName());
                                 }
                             }
-                            else if (userListByNameResponse.getUserList().size() > 1) {
-                                try {
+                            else if (userListByNameResponse.getUserList().size() > 1)
+                            {
+                                try
+                                {
                                     nameArr = new String[userListByNameResponse.getUserList().size()];
-                                    for (int i = 0; i < userListByNameResponse.getUserList().size(); i++) {
-                                        String jobNum ="";
-                                        if (GeneralUtils.isNotNullOrZeroLenght(userListByNameResponse.getUserList().get(i).getJobNumber())){
-                                            jobNum = "("+userListByNameResponse.getUserList().get(i).getJobNumber()+")";
+                                    for (int i = 0; i < userListByNameResponse.getUserList().size(); i++)
+                                    {
+                                        String jobNum = "";
+                                        if (GeneralUtils.isNotNullOrZeroLenght(userListByNameResponse.getUserList().get(i).getJobNumber()))
+                                        {
+                                            jobNum = "(" + userListByNameResponse.getUserList().get(i).getJobNumber() + ")";
                                         }
-                                        nameArr[i] = userListByNameResponse.getUserList().get(i).getNickName()+jobNum;
+                                        nameArr[i] = userListByNameResponse.getUserList().get(i).getNickName() + jobNum;
                                     }
                                     new AlertDialog.Builder(mContext).setTitle("请选择")
                                             .setSingleChoiceItems(
                                                     nameArr, nameIndex,
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int which) {
+                                                    new DialogInterface.OnClickListener()
+                                                    {
+                                                        public void onClick(DialogInterface dialog, int which)
+                                                        {
                                                             //这里判断是培训或者是考核
-                                                            if (fromTest.equals("1")) {
+                                                            if (fromTest.equals("1"))
+                                                            {
                                                                 UserServiceImpl.instance().startOnlineTest(trainID, "", userListByNameResponse.getUserList().get(nameIndex).getUserID(), StartTestResponse.class.getName());
-                                                            }else {
+                                                            }
+                                                            else
+                                                            {
                                                                 UserServiceImpl.instance().startTrain(trainID, "", userListByNameResponse.getUserList().get(nameIndex).getUserID(), StartTrainResponse.class.getName());
                                                             }
 
@@ -635,24 +793,29 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
                                                         }
 
                                                     }).show();
-                                } catch (Exception e) {
+                                } catch (Exception e)
+                                {
                                     e.printStackTrace();
                                 }
                             }
-                            else {
+                            else
+                            {
                                 ToastUtil.makeText(mContext, "不存在该人员信息");
                             }
                         }
-                        else {
+                        else
+                        {
                             ToastUtil.makeText(mContext, "不存在该人员信息");
                         }
 
                     }
-                    else {
+                    else
+                    {
                         ErrorCode.doCode(this, userListByNameResponse.getResultCode(), userListByNameResponse.getDesc());
                     }
                 }
-                else {
+                else
+                {
                     ToastUtil.showError(this);
                 }
             }
@@ -660,12 +823,26 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
 
     }
 
+    public static void needExamMethod()
+    {
+
+
+
+        if(GeneralUtils.isNotNullOrZeroLenght(SharePref.getString("recordID","")) )
+        {
+            EventBus.getDefault().post(new NoticeEvent(NotiTag.TAG_NEED_EXAM));
+        }
+    }
+
     @Override
-    public void onBackPressed() {
-        if (topView.getVisibility() == View.VISIBLE) {
+    public void onBackPressed()
+    {
+        if (topView.getVisibility() == View.VISIBLE)
+        {
             super.onBackPressed();
         }
-        else {
+        else
+        {
             findViewById(R.id.search_view).setVisibility(View.GONE);
             topView.setVisibility(View.VISIBLE);
             trainList();
@@ -673,6 +850,7 @@ public class TrainListActy extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
     }
 }

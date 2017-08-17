@@ -4,6 +4,7 @@ package cn.nj.www.my_module.bean.index;
 import java.util.List;
 
 import cn.nj.www.my_module.bean.BaseResponse;
+import cn.nj.www.my_module.tools.GeneralUtils;
 
 public class TrainVideoResponse extends BaseResponse
 {
@@ -76,6 +77,30 @@ public class TrainVideoResponse extends BaseResponse
         private String companyID;
 
         private String companyName;
+
+
+        public double getTrainingDuration()
+        {
+            if (GeneralUtils.isNullOrZeroLenght(trainingDuration)||trainingDuration.equals("0")){
+                return 10.0;
+            }
+            double duration = 0;
+            try
+            {
+                duration = Double.parseDouble(trainingDuration);
+            } catch (NumberFormatException e)
+            {
+                return 10.0;
+            }
+            return duration;
+        }
+
+        public void setTrainingDuration(String trainingDuration)
+        {
+            this.trainingDuration = trainingDuration;
+        }
+
+        private String trainingDuration;
 
         private String trainingName;
 

@@ -24,6 +24,7 @@ public class NotiTag
     public static final String TAG_EXIT_ACCOUNT = "TAG_EXIT_ACCOUNT";
     public static final String TAG_COMFIRM_CLOSE = "TAG_COMFIRM_CLOSE";
     public static final String TAG_BACK_ACTIVITY = "TAG_BACK_ACTIVITY";
+    public static final String TAG_NEED_EXAM = "TAG_NEED_EXAM";
 
     /**
      * 错误页面
